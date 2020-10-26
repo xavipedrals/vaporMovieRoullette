@@ -18,6 +18,7 @@ class TelegramController {
     let updateMoviesId = "updateNetflixMovies"
     let rebootId = "reboot"
     let answerTextId = "fraseBadi"
+    let serverStatusId = "serverStatus"
     
     let xaviUserId: Int64 = 8930441
     
@@ -29,6 +30,7 @@ class TelegramController {
     
     func setupRoutes() {
         setupHelp()
+        setupServerStatus()
         setupTextAction()
         setupReboot()
         startListening()
@@ -37,11 +39,20 @@ class TelegramController {
     func setupHelp() {
         router["help"] = { context in
             let actions = """
+                /\(self.serverStatusId) -> Prints server info (temperature)
                 /\(self.updateMoviesId) -> Updates Netflix movies
                 /\(self.rebootId) -> Reboot the server (only admin)
                 /\(self.answerTextId) -> Answers one of Badi's statements
             """
             context.respondAsync(actions)
+            return true
+        }
+    }
+    
+    func setupServerStatus() {
+        router[serverStatusId] = { context in
+            let info = self.shell("sensors")
+            context.respondAsync(info)
             return true
         }
     }
@@ -82,5 +93,20 @@ class TelegramController {
     
     func isAdmin(id: Int64) -> Bool {
         return id == xaviUserId
+    }
+    
+    func shell(_ command: String) -> String {
+        let task = Process()
+        let pipe = Pipe()
+        
+        task.standardOutput = pipe
+        task.arguments = ["-c", command]
+        task.launchPath = "/bin/bash"
+        task.launch()
+        
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)!
+        
+        return output
     }
 }
