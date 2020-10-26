@@ -51,7 +51,7 @@ class TelegramController {
     
     func setupServerStatus() {
         router[serverStatusId] = { context in
-            let info = self.shell("sensors")
+            let info = self.shell("landscape-sysinfo")
             context.respondAsync(info)
             return true
         }
@@ -65,7 +65,7 @@ class TelegramController {
                 return false
             }
             context.respondAsync("I will now reboot the raspbi, please wait 🙇🏻‍♂️") { _,_  in
-                reboot(0)
+                self.shell("sudo reboot")
             }
             return true
         }
