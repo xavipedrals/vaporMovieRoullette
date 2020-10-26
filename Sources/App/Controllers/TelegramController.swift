@@ -15,39 +15,72 @@ class TelegramController {
     var myChat: ChatId
     let router: Router
     
+    let updateMoviesId = "updateNetflixMovies"
+    let rebootId = "reboot"
+    let answerTextId = "fraseBadi"
+    
+    let xaviUserId: Int64 = 8930441
+    
     init(token: String) {
         self.bot = TelegramBot(token: token)
-        self.myChat = .chat(8930441) // your user id
+        self.myChat = .chat(xaviUserId) // your user id
         self.router = Router(bot: bot)
     }
     
-    func sayHello() {
-        bot.sendMessageSync(chatId: myChat, text: "Hello master it's \(Date())")
+    func setupRoutes() {
+        setupHelp()
+        setupTextAction()
+        setupReboot()
+        startListening()
     }
     
-    func setupTimer() {
-//        Jobs.add(interval: .seconds(20)) {
-//            print("👋 I'm printed every 20 seconds!")
-//            self.sayHello()
-//        }
-    }
-    
-    func startListening() {
-        router["greet"] = { context in
-            guard let from = context.message?.from else { return false }
-            context.respondAsync("Hello, \(from.firstName)!")
+    func setupHelp() {
+        router["help"] = { context in
+            let actions = """
+                /\(self.updateMoviesId) -> Updates Netflix movies
+                /\(self.rebootId) -> Reboot the server (only admin)
+                /\(self.answerTextId) -> Answers one of Badi's statements
+            """
+            context.respondAsync(actions)
             return true
         }
-        router["randomFact"] = { context in
-            guard let from = context.message?.from else { return false }
-            let facts = ["Berga no mola", "El Corona no esiste", "El Madrid la chupa", "La raspbi mola", "Ningú vol anar a buscar bolets amb mi"]
+    }
+    
+    func setupReboot() {
+        router[rebootId] = { context in
+            guard let fromId = context.fromId,
+                  self.isAdmin(id: fromId) else {
+                context.respondAsync("You are not my master, I will not reboot ❌")
+                return false
+            }
+            context.respondAsync("I will now reboot the raspbi, please wait 🙇🏻‍♂️") { _,_  in
+                reboot(0)
+            }
+            return true
+        }
+    }
+
+    func setupTextAction() {
+        router[answerTextId] = { context in
+            let facts = [
+                "Si les putes no maduressin jo no seria un bon préssec",
+                "Adadada dedede Ferrero Rocher",
+                "A partir d'ara dogueu-me Don Pajote",
+                "Vaig tard perquè estava rentant els plats",
+                "Aquest estiu anem als karts"
+            ]
             context.respondAsync(facts.randomElement()!)
             return true
         }
+    }
+    
+    func startListening() {
         while let update = bot.nextUpdateSync() {
             try? router.process(update: update)
         }
     }
-
     
+    func isAdmin(id: Int64) -> Bool {
+        return id == xaviUserId
+    }
 }
