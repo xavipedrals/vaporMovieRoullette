@@ -19,6 +19,7 @@ class TelegramController {
     let rebootId = "reboot"
     let answerTextId = "fraseBadi"
     let serverStatusId = "serverStatus"
+    let weeklyUpdateId = "updateWeeklyNetflixMovies"
     
     let xaviUserId: Int64 = 8930441
     
@@ -65,7 +66,7 @@ class TelegramController {
                 return false
             }
             context.respondAsync("I will now reboot the raspbi, please wait 🙇🏻‍♂️") { _,_  in
-                self.shell("sudo reboot")
+                _ = self.shell("sudo reboot")
             }
             return true
         }
@@ -85,9 +86,22 @@ class TelegramController {
         }
     }
     
+    func setupGetWeeklyUpdate() {
+        router[weeklyUpdateId] = { context in
+            let option = WeeklyUpdateOption() { success in
+                let answer = success
+                    ? "Got the new weekly update ✅"
+                    : "Error when retrieving the new weekly update ❌"
+                context.respondAsync(answer)
+            }
+            option.run()
+            return true
+        }
+    }
+    
     func startListening() {
         while let update = bot.nextUpdateSync() {
-            try? router.process(update: update)
+            _ = try? router.process(update: update)
         }
     }
     
