@@ -70,7 +70,7 @@ import Foundation
 //        case .getNewAdditionsSince(let days, let country):
 //            return [
 //                URLQueryItem(name: "q", value: "get:new\(days):\(country.uppercased())"),
-//                URLQueryItem(name: "q", value: "1"),
+//                URLQueryItem(name: "p", value: "1"),
 //                URLQueryItem(name: "t", value: "ns"),
 //                URLQueryItem(name: "st", value: "adv")
 //            ]
