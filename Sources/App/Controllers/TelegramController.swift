@@ -34,6 +34,7 @@ class TelegramController {
         setupServerStatus()
         setupTextAction()
         setupReboot()
+        setupGetWeeklyUpdate()
         startListening()
     }
     
