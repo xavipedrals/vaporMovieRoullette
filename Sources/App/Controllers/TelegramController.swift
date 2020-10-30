@@ -74,16 +74,17 @@ class TelegramController {
 
     func setupTextAction() {
         router[answerTextId] = { context in
-//            let facts = [
-//                "Si les putes no maduressin jo no seria un bon préssec",
-//                "Adadada dedede Ferrero Rocher",
-//                "A partir d'ara dogueu-me Don Pajote",
-//                "Vaig tard perquè estava rentant els plats",
-//                "Aquest estiu anem als karts"
-//            ]
-//            context.respondAsync(facts.randomElement()!)
-            let caca = CCurlHelper()
+            let facts = [
+                "Si les putes no maduressin jo no seria un bon préssec",
+                "Adadada dedede Ferrero Rocher",
+                "A partir d'ara dogueu-me Don Pajote",
+                "Vaig tard perquè estava rentant els plats",
+                "Aquest estiu anem als karts"
+            ]
+            context.respondAsync(facts.randomElement()!)
+//            let caca = CCurlHelper()
 //            caca.sida()
+//            let opt = WeeklyUpdateOption()
             return true
         }
     }
