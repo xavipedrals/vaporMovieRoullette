@@ -63,33 +63,20 @@ class UnoGSService {
     }
     
     private func requestNetflixMovieWrapper<T: Codable>(_ req: String, completion: @escaping (T) -> Void) {
-//        let task = URLSession.shared.dataTask(with: req) {(data, response, error) in
-//            self.printAPILimits(response: response)
-//            guard let data = data, error == nil else {
-//                print(error ?? "Uh oh, something went wrong getting the data from the HTTP req")
-//                return
-//            }
-//            let result = Parser<T>().parse(data: data)
-//            switch result {
-//            case .success(let wrapper):
-//                completion(wrapper)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//        task.resume()
+        let header = "X-RapidAPI-Key: \(apiKey)"
         let helper = CCurlHelper()
-        helper.doRequest(endpoint: req, apiKey: apiKey) { data in
+        helper.doRequest(endpoint: req, headers: [header]) { data in
             guard let data = data else {
                 print("Uh oh, something went wrong getting the data from the HTTP req")
                 return
             }
-            let result = Parser<T>().parse(data: data)
-            switch result {
-            case .success(let wrapper):
+            do {
+                let wrapper = try JSONDecoder().decode(T.self, from: data)
                 completion(wrapper)
-            case .failure(let error):
+            } catch {
                 print(error)
+                print("DATA ERROR")
+                print(data.toString())
             }
         }
     }

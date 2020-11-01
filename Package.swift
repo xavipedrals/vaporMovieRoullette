@@ -7,11 +7,11 @@ let package = Package(
        .macOS(.v10_15)
     ],
     dependencies: [
-        // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
+        .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
+        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
         .package(name: "TelegramBotSDK", url: "https://github.com/zmeyc/telegram-bot-swift.git", from: "2.0.0"),
         .package(name: "Jobs", url: "https://github.com/BrettRToomey/Jobs.git", from: "1.1.1"),
-//        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "4.8.0"),
         .package(url: "https://github.com/JohnSundell/Files.git", from: "2.0.0"),
     ],
     targets: [
@@ -19,9 +19,10 @@ let package = Package(
             name: "App",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
+                .product(name: "Fluent", package: "fluent"),
+                .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
                 "TelegramBotSDK",
                 "Jobs",
-//                "Alamofire",
                 "Files"
             ],
             swiftSettings: [

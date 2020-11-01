@@ -38,6 +38,33 @@
         }
       },
       {
+        "package": "fluent",
+        "repositoryURL": "https://github.com/vapor/fluent.git",
+        "state": {
+          "branch": null,
+          "revision": "e681c93df3201a2d8ceef15e8a9a0634578df233",
+          "version": "4.0.0"
+        }
+      },
+      {
+        "package": "fluent-kit",
+        "repositoryURL": "https://github.com/vapor/fluent-kit.git",
+        "state": {
+          "branch": null,
+          "revision": "f0cc72ab101b88dfbdbe0b042da62386e1aa8195",
+          "version": "1.8.0"
+        }
+      },
+      {
+        "package": "fluent-postgres-driver",
+        "repositoryURL": "https://github.com/vapor/fluent-postgres-driver.git",
+        "state": {
+          "branch": null,
+          "revision": "f310f8843fafa3134cf89d81b8b3480f16967f37",
+          "version": "2.1.0"
+        }
+      },
+      {
         "package": "Jobs",
         "repositoryURL": "https://github.com/BrettRToomey/Jobs.git",
         "state": {
@@ -47,12 +74,39 @@
         }
       },
       {
+        "package": "postgres-kit",
+        "repositoryURL": "https://github.com/vapor/postgres-kit.git",
+        "state": {
+          "branch": null,
+          "revision": "bb1493ed7b45af4eda3b4d7308e6b7cf15039be6",
+          "version": "2.2.1"
+        }
+      },
+      {
+        "package": "postgres-nio",
+        "repositoryURL": "https://github.com/vapor/postgres-nio.git",
+        "state": {
+          "branch": null,
+          "revision": "3cf24967e54e3e63809593273b45b4e8135da6aa",
+          "version": "1.4.0"
+        }
+      },
+      {
         "package": "routing-kit",
         "repositoryURL": "https://github.com/vapor/routing-kit.git",
         "state": {
           "branch": null,
           "revision": "4cf052b78aebaf1b23f2264ce04d57b4b6eb5254",
           "version": "4.2.0"
+        }
+      },
+      {
+        "package": "sql-kit",
+        "repositoryURL": "https://github.com/vapor/sql-kit.git",
+        "state": {
+          "branch": null,
+          "revision": "ea9928b7f4a801b175a00b982034d9c54ecb6167",
+          "version": "3.7.0"
         }
       },
       {

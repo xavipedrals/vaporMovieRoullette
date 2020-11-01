@@ -31,10 +31,13 @@ class WeeklyUpdateOption {
         print("Countries left -> \(countriesLeft.count)")
         guard countriesLeft.count > 0 else {
             print("Finished with success!")
-            exit(0)
+            completion(true)
+            return
         }
         guard let country = countriesLeft.popFirst() else {
-            fatalError("Error: Couldn't pop the first country")
+            print("ERROR: Couldn't pop the first country")
+            completion(false)
+            return
         }
         currentCountry = country
     }
