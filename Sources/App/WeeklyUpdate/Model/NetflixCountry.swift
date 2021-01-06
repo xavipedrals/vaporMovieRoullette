@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct NetflixCountry: Codable {
-    var name: String
-    var code: String
-    var id: String
-    
-    enum CodingKeys: String, CodingKey {
-        case name = "country"
-        case code = "ccode"
-        case id = "cid"
-    }
-}
+//struct NetflixCountry: Codable {
+//    var name: String
+//    var code: String
+//    var id: String
+//    
+//    enum CodingKeys: String, CodingKey {
+//        case name = "country"
+//        case code = "ccode"
+//        case id = "cid"
+//    }
+//}

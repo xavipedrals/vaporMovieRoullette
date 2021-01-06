@@ -13,7 +13,7 @@ enum UnoGSCurlUrl {
     case search(country: String, page: Int)
     case getAll(page: Int)
     case getDetails(netflixId: String)
-    case getNewAdditionsSince(days: Int, country: String)
+    case getNewAdditionsSince(days: Int, country: String, page: Int)
     case getNewDeletionsSince(days: Int, country: String)
     
     private var baseUrl: String {
@@ -52,10 +52,10 @@ enum UnoGSCurlUrl {
                 "t": "loadvideo",
                 "q": netflixId
             ]
-        case .getNewAdditionsSince(let days, let country):
+        case .getNewAdditionsSince(let days, let country, let page):
             return [
                 "q": "get:new\(days):\(country.uppercased())",
-                "p": "1",
+                "p": ":\(page)",
                 "t": "ns",
                 "st": "adv"
             ]

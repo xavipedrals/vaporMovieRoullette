@@ -14,7 +14,7 @@ class TMDBEnricher {
     
     private let rateLimit = RateLimit(calls: 30, timeInSecs: 13)
     var input: Set<NetfilxMovie>
-    var output = Set<EnrichedNetflixMovie>()
+//    var output = Set<EnrichedNetflixMovie>()
     var failures = Set<NetfilxMovie>()
     
     var currentBatch = [NetfilxMovie]()
@@ -23,7 +23,7 @@ class TMDBEnricher {
     let lowQueue = DispatchQueue.global(qos: .background)
     
     var batchIndex: Int = 0
-    var delegate: TMDBEnricherDelegate?
+//    var delegate: TMDBEnricherDelegate?
     
     init(input: Set<NetfilxMovie>, batchIndex: Int, fileNamePrefix: String, notFoundName: String, directory: FileDirectory) {
         self.input = input
@@ -42,7 +42,7 @@ class TMDBEnricher {
         group.notify(queue: topQueue) {
             print("------------GOT ALL TMDB ENRICHED INFO------------")
             self.writeEnrichedBatch()
-            self.delegate?.finishedEnriching()
+//            self.delegate?.finishedEnriching()
         }
     }
     
@@ -60,47 +60,47 @@ class TMDBEnricher {
             currentBatch.append(movie)
             input.remove(movie)
         }
-        let batchController = TMDBatchController(input: currentBatch, queue: lowQueue)
-        batchController.delegate = self
-        batchController.run()
+//        let batchController = TMDBatchController(input: currentBatch, queue: lowQueue)
+//        batchController.delegate = self
+//        batchController.run()
     }
     
     func writeEnrichedBatch() {
-        writeFailures(items: failures)
-        guard writeBatch(items: output, batchIndex: batchIndex) else { return }
-        output.removeAll()
-        batchIndex += 1
+//        writeFailures(items: failures)
+//        guard writeBatch(items: output, batchIndex: batchIndex) else { return }
+//        output.removeAll()
+//        batchIndex += 1
     }
 }
 
-extension TMDBEnricher: BatchWriter {
-    var writeFilenamePrefix: String {
-        return filePrefix
-    }
-    var notFoundFilename: String {
-        return fileNotFound
-    }
-    var directory: FileDirectory {
-        return fileDirectory
-    }
-}
-
-extension TMDBEnricher: TMDBatchDelegate {
-    func batchFinished(output: Set<EnrichedNetflixMovie>, failures: Set<NetfilxMovie>) {
-        for movie in output {
-            self.output.insert(movie)
-        }
-        for movie in failures {
-            self.failures.insert(movie)
-        }
-        writeEnrichedBatch()
-        print("Going to sleep for \(rateLimit.timeInSecs) seconds")
-        topQueue.asyncAfter(deadline: .now() + TimeInterval(rateLimit.timeInSecs)) {
-            self.doNextBatch()
-        }
-    }
-}
-
-protocol TMDBEnricherDelegate {
-    func finishedEnriching()
-}
+//extension TMDBEnricher: BatchWriter {
+//    var writeFilenamePrefix: String {
+//        return filePrefix
+//    }
+//    var notFoundFilename: String {
+//        return fileNotFound
+//    }
+//    var directory: FileDirectory {
+//        return fileDirectory
+//    }
+//}
+//
+//extension TMDBEnricher: TMDBatchDelegate {
+//    func batchFinished(output: Set<EnrichedNetflixMovie>, failures: Set<NetfilxMovie>) {
+//        for movie in output {
+//            self.output.insert(movie)
+//        }
+//        for movie in failures {
+//            self.failures.insert(movie)
+//        }
+//        writeEnrichedBatch()
+//        print("Going to sleep for \(rateLimit.timeInSecs) seconds")
+//        topQueue.asyncAfter(deadline: .now() + TimeInterval(rateLimit.timeInSecs)) {
+//            self.doNextBatch()
+//        }
+//    }
+//}
+//
+//protocol TMDBEnricherDelegate {
+//    func finishedEnriching()
+//}

@@ -10,12 +10,12 @@ import Foundation
 class ProdFormatter {
     var countriesLeft = Set<String>()
     var currentCountry = ""
-    var result = [WeeklyUpdatePerCountry]()
+//    var result = [WeeklyUpdatePerCountry]()
     var allMovies = [CompressedNetflixMovie]()
     
     func run() {
         countriesLeft = Set(CompressFinalMovies().supportedCountryCodes)
-        getAllMovies()
+//        getAllMovies()
         doNextCountry()
     }
     
@@ -36,17 +36,20 @@ class ProdFormatter {
     
     func doNextCountry() {
         moveToNextCountry()
-        let moviesToAdd = getMoviesToAdd()
-        let moviesToDelete = getMoviesToDelete() //Netflix Ids
-        updateAllMovies(add: moviesToAdd, delete: moviesToDelete)
-        let countryResult = WeeklyUpdatePerCountry(
-            add: moviesToAdd,
-            delete: moviesToDelete
-        )
-        CustomFileManager.instance.write(
-            obj: countryResult,
-            directory: .prodReady(date: Date()),
-            filename: "\(currentCountry).json")
+//        let moviesToAdd = getMoviesToAdd()
+//        let moviesToDelete = getMoviesToDelete() //Netflix Ids
+//        updateAllMovies(add: moviesToAdd, delete: moviesToDelete)
+        
+        
+        
+//        let countryResult = WeeklyUpdatePerCountry(
+//            add: moviesToAdd,
+//            delete: moviesToDelete
+//        )
+//        CustomFileManager.instance.write(
+//            obj: countryResult,
+//            directory: .prodReady(date: Date()),
+//            filename: "\(currentCountry).json")
         doNextCountry()
     }
     
@@ -93,30 +96,30 @@ class ProdFormatter {
     
     //MARK: - Loading inputs
     
-    func getAllMovies() {
-        let store = NetflixMoviesStore()
-        allMovies = store.getAllMovies()
-    }
-    
-    func getMoviesToDelete() -> [String] {
-        let netflixMovieStore = NetflixMoviesStore()
-        let netflixMovies = netflixMovieStore.getWeeklyUpdatesToDelete(country: currentCountry)
-        return netflixMovies
-    }
-    
-    func getMoviesToAdd() -> [CompressedNetflixMovie] {
-        let rawMoviesToAdd = getInputFor(country: currentCountry)
-        var moviesToAdd = Set<CompressedNetflixMovie>()
-        for (i, movie) in rawMoviesToAdd.enumerated() {
-            moviesToAdd.insert(CompressedNetflixMovie(movie: movie))
-            print("\(i) of \(rawMoviesToAdd.count)")
-        }
-        return moviesToAdd.compactMap { $0 }
-    }
-    
-    func getInputFor(country: String) -> [EnrichedNetflixMovie] {
-        let netflixMovieStore = NetflixMoviesStore()
-        let netflixMovies = netflixMovieStore.getEnrichedWeeklyUpdates(country: country)
-        return netflixMovies
-    }
+//    func getAllMovies() {
+//        let store = NetflixMoviesStore()
+//        allMovies = store.getAllMovies()
+//    }
+//    
+//    func getMoviesToDelete() -> [String] {
+//        let netflixMovieStore = NetflixMoviesStore()
+//        let netflixMovies = netflixMovieStore.getWeeklyUpdatesToDelete(country: currentCountry)
+//        return netflixMovies
+//    }
+//    
+//    func getMoviesToAdd() -> [CompressedNetflixMovie] {
+//        let rawMoviesToAdd = getInputFor(country: currentCountry)
+//        var moviesToAdd = Set<CompressedNetflixMovie>()
+//        for (i, movie) in rawMoviesToAdd.enumerated() {
+//            moviesToAdd.insert(CompressedNetflixMovie(movie: movie))
+//            print("\(i) of \(rawMoviesToAdd.count)")
+//        }
+//        return moviesToAdd.compactMap { $0 }
+//    }
+//    
+//    func getInputFor(country: String) -> [EnrichedNetflixMovie] {
+//        let netflixMovieStore = NetflixMoviesStore()
+//        let netflixMovies = netflixMovieStore.getEnrichedWeeklyUpdates(country: country)
+//        return netflixMovies
+//    }
 }

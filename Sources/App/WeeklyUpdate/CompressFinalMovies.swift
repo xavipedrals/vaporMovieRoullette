@@ -44,28 +44,28 @@ class CompressFinalMovies {
         "us"
     ]
     
-    func run() {
-        let store = NetflixMoviesStore()
-        let finalOnes = store.fetchFinalNetflixMovies()
-        
-        var treatedOnes = Set<CompressedNetflixMovie>()
-        for (i, movie) in finalOnes.enumerated() {
-            treatedOnes.insert(CompressedNetflixMovie(movie: movie))
-            print("\(i) of \(finalOnes.count)")
-        }
-        let toWrite = treatedOnes.compactMap { $0 }
-        let batchSize = 500
-        var i = 0
-        while i < toWrite.count {
-            var upperBound = i + batchSize
-            if upperBound > toWrite.count { upperBound = toWrite.count }
-            let batch = toWrite[i..<upperBound]
-            writeToFile(batch: Array(batch), filename: "s-clean-tmdb-batch-\(i).json")
-            i += batchSize
-        }
-    }
-    
-    func writeToFile<T: Codable>(batch: [T], filename: String) {
-        CustomFileManager.instance.write(array: batch, directory: .netflixFinalCompressedMovies, filename: filename)
-    }
+//    func run() {
+//        let store = NetflixMoviesStore()
+//        let finalOnes = store.fetchFinalNetflixMovies()
+//        
+//        var treatedOnes = Set<CompressedNetflixMovie>()
+//        for (i, movie) in finalOnes.enumerated() {
+//            treatedOnes.insert(CompressedNetflixMovie(movie: movie))
+//            print("\(i) of \(finalOnes.count)")
+//        }
+//        let toWrite = treatedOnes.compactMap { $0 }
+//        let batchSize = 500
+//        var i = 0
+//        while i < toWrite.count {
+//            var upperBound = i + batchSize
+//            if upperBound > toWrite.count { upperBound = toWrite.count }
+//            let batch = toWrite[i..<upperBound]
+//            writeToFile(batch: Array(batch), filename: "s-clean-tmdb-batch-\(i).json")
+//            i += batchSize
+//        }
+//    }
+//    
+//    func writeToFile<T: Codable>(batch: [T], filename: String) {
+//        CustomFileManager.instance.write(array: batch, directory: .netflixFinalCompressedMovies, filename: filename)
+//    }
 }

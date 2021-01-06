@@ -18,20 +18,20 @@ struct CompressedNetflixMovie: Codable {
     var genres: [Int]
     var releaseYear: Int?
     
-    init(movie: EnrichedNetflixMovie) {
-        self.imdbId = movie.imdbId.trimmingCharacters(in: .whitespacesAndNewlines)
-        self.tmdbId = movie.tmdbId
-        self.netflixId = movie.netflixId
-        self.title = movie.title
-        if let rating = movie.netflixRating {
-            self.netflixRating = Double(rating)
-        }
-        availableCountries = movie.availableCountries.compactMap({ $0.code })
-        genres = movie.genres
-        if let year = movie.releaseYear {
-            self.releaseYear = Int(year)
-        }
-    }
+//    init(movie: EnrichedNetflixMovie) {
+//        self.imdbId = movie.imdbId.trimmingCharacters(in: .whitespacesAndNewlines)
+//        self.tmdbId = movie.tmdbId
+//        self.netflixId = movie.netflixId
+//        self.title = movie.title
+//        if let rating = movie.netflixRating {
+//            self.netflixRating = Double(rating)
+//        }
+//        availableCountries = movie.availableCountries.compactMap({ $0.code })
+//        genres = movie.genres
+//        if let year = movie.releaseYear {
+//            self.releaseYear = Int(year)
+//        }
+//    }
 }
 
 extension CompressedNetflixMovie: Hashable {
