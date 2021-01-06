@@ -5,10 +5,30 @@
 //  Created by Xavier Pedrals Camprubí on 28/10/2020.
 //
 
-import Foundation
+import Vapor
 import Fluent
 import FluentPostgresDriver
 
+
+class Sida {
+    
+    static let shared = Sida()
+    
+    var db: Database?
+    
+    private init() {}
+    
+    func dida() {
+        guard let db = db else {
+            print("NO DB TO WRITE")
+            return
+        }
+        let movie = AudioVisual()
+        movie.id = "prova"
+        movie.netflixId = "sida"
+        movie.create(on: db)
+    }
+}
 
 //class NetflixMoviesStore: FileStore {
 //    var fileManager = CustomFileManager.instance
