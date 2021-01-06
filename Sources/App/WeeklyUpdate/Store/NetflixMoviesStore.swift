@@ -29,7 +29,11 @@ class Sida {
         print("I AM going to insert something MODAFUCKAAAAAAAAAA")
 //        let s = movie.save(on: db)
         print(db.inTransaction)
-        movie.create(on: db)
+        do {
+            try movie.create(on: db).wait()
+        } catch {
+            print(error)
+        }
     }
 }
 
