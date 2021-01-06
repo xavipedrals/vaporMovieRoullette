@@ -26,6 +26,9 @@ class Sida {
         let movie = AudioVisual()
         movie.id = "prova"
         movie.netflixId = "sida"
+        print("I AM going to insert something MODAFUCKAAAAAAAAAA")
+//        let s = movie.save(on: db)
+        print(db.inTransaction)
         movie.create(on: db)
     }
 }

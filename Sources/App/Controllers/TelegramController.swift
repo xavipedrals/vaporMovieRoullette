@@ -83,6 +83,7 @@ class TelegramController {
                 "Aquest estiu anem als karts"
             ]
             context.respondAsync(facts.randomElement()!)
+            Sida.shared.dida()
 //            let caca = CCurlHelper()
 //            caca.sida()
 //            let opt = WeeklyUpdateOption()

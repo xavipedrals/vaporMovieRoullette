@@ -33,16 +33,16 @@ final class AudioVisual: Model {
     @Field(key: "imdb_rating")
     var imdbRating: Double?
     
-    @Field(key: "rottenTomatoesRating")
+    @Field(key: "rotten_tomatoes_rating")
     var rottenTomatoesRating: Double?
     
-    @Field(key: "availableCountries")
+    @Field(key: "available_countries")
     var availableCountries: [String]
     
     @Field(key: "genres")
     var genres: [Int]
     
-    @Field(key: "releaseYear")
+    @Field(key: "release_year")
     var releaseYear: Int?
     
     @Field(key: "type")
