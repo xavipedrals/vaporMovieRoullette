@@ -82,11 +82,9 @@ class TelegramController {
                 "Vaig tard perquè estava rentant els plats",
                 "Aquest estiu anem als karts"
             ]
-            context.respondAsync(facts.randomElement()!)
-            Sida.shared.dida()
-//            let caca = CCurlHelper()
-//            caca.sida()
-//            let opt = WeeklyUpdateOption()
+            WeeklyUpdateOption(completion: { _ in
+                context.respondAsync(facts.randomElement()!)
+            }).run()
             return true
         }
     }

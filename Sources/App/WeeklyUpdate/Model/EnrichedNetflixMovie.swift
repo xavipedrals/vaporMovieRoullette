@@ -9,7 +9,6 @@ import Vapor
 import Fluent
 
 final class AudioVisual: Model {
-    
     static let schema = "audiovisuals"
     
     @ID(custom: "imdb_id", generatedBy: .user)
@@ -50,65 +49,56 @@ final class AudioVisual: Model {
     
     @Field(key: "duration")
     var duration: String?
-}
-
-//
-//    init(movie: NetfilxMovie) {
-//        self.imdbId = movie.imdbId.trimmingCharacters(in: .whitespacesAndNewlines)
-//        self.netflixId = movie.netflixId
-//        self.title = movie.title
-//        if let rating = movie.netflixRating {
-//            self.netflixRating = Double(rating)
-//        }
-//        availableCountries = []
-//        genres = []
-//        if let year = movie.releaseYear {
-//            self.releaseYear = Int(year)
-//        }
-//    }
-//
-//    mutating func enrich(from movie: TMDBMovie) {
-//        self.title = movie.title ?? self.title
-//        self.tmdbId = String(movie.id)
-//        self.genres = movie.genres
-//        self.tmdbRating = movie.rating
-//        self.releaseYear = movie.releaseYear ?? self.releaseYear
-//    }
-//}
-//
-//extension EnrichedNetflixMovie: Hashable {
-//    static func == (lhs: EnrichedNetflixMovie, rhs: EnrichedNetflixMovie) -> Bool {
-//        return lhs.netflixId == rhs.netflixId
-//    }
-//
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine("\(imdbId)\(netflixId)")
-//    }
-//}
-
-
-//Migrations only run once: Once they run in a database, they never execute again. So, Fluent won’t attempt to recreate a table if you change the migration.
-struct CreateMoviesSchema: Migration {
-    func prepare(on database: Database) -> EventLoopFuture<Void> {
-        database.schema("audiovisuals")
-//            .id()
-            .field("imdb_id", .string, .identifier(auto: false))
-            .field("netflix_id", .string, .required)
-            .field("tmdb_id", .string)
-            .field("title", .string)
-            .field("netflix_rating", .double)
-            .field("tmdb_rating", .double)
-            .field("imdb_rating", .double)
-            .field("rotten_tomatoes_rating", .double)
-            .field("available_countries", .array(of: .string))
-            .field("genres", .array(of: .int))
-            .field("release_year", .int)
-            .field("type", .string)
-            .field("duration", .string)
-            .create()
+    
+    init() {}
+    
+    init(item: NetfilxMovie) {
+        self.id = item.imdbId
+        self.netflixId = item.netflixId
+        self.title = item.title
+        if let r = item.netflixRating, let n = Double(r) {
+            self.netflixRating = n
+        }
     }
-        
-    func revert(on database: Database) -> EventLoopFuture<Void> {
-        database.schema("audiovisuals").delete()
+    
+    //TODO: Write different combine funcs per netflix and TMDB
+    func combined(with: AudioVisual, country: String?) {
+        if let c = country {
+            add(country: c)
+        }
+        self.netflixId = with.netflixId
+        self.tmdbId = with.tmdbId ?? self.tmdbId
+        self.title = with.title ?? self.title
+        if let r = with.netflixRating, r > 0 {
+            self.netflixRating = with.netflixRating
+        }
+        self.tmdbRating = with.tmdbRating ?? self.tmdbRating
+        self.imdbRating = with.imdbRating ?? self.imdbRating
+        self.rottenTomatoesRating = with.rottenTomatoesRating ?? self.rottenTomatoesRating
+        var genreSet = Set(self.genres)
+        for g in with.genres {
+            genreSet.insert(g)
+        }
+        self.genres = genreSet.compactMap { $0 }
+        self.releaseYear = with.releaseYear ?? self.releaseYear
+        self.type = with.type ?? self.type
+        self.duration = with.duration ?? self.duration
+    }
+    
+    func add(country: String) {
+        guard !availableCountries.contains(country) else {
+            return
+        }
+        availableCountries.append(country)
+    }
+    
+    func remove(country: String) {
+        guard availableCountries.contains(country) else {
+            return
+        }
+        var countries = Set(availableCountries)
+        countries.remove(country)
+        availableCountries = countries.compactMap{ $0 }
     }
 }
+

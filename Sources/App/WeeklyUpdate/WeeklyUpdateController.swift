@@ -62,12 +62,10 @@ class WeeklyUpdateOption {
     }
     
     func getNewAdditions() {
+        //TODO: Save in files the last update date per country
         service.getNewAdditions(countryCode: currentCountry, since: 7) { (wrapper) in
             let filteredMovies = wrapper.movies.filter{ $0.realType == .movie }
-            CustomFileManager.instance.write(
-                array: filteredMovies,
-                directory: .weeklyUpdates,
-                filename: "add-\(self.currentCountry)")
+            DatabaseHelper.shared.insertOrUpdateNetflix(items: filteredMovies, country: self.currentCountry)
             print("Leaving group 1")
             self.group.leave()
         }
@@ -76,10 +74,9 @@ class WeeklyUpdateOption {
     func getNewDeletions() {
         service.getNewDeletions(countryCode: currentCountry, since: 7) { (wrapper) in
             let ids = wrapper.movies.compactMap{ $0.netflixId }
-            CustomFileManager.instance.write(
-                array: ids,
-                directory: .weeklyUpdates,
-                filename: "delete-\(self.currentCountry)")
+            for id in ids {
+                DatabaseHelper.shared.delete(netflixId: id, country: self.currentCountry)
+            }
             print("Leaving group 2")
             self.group.leave()
         }

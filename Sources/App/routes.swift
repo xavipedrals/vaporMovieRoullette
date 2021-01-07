@@ -5,9 +5,6 @@ func routes(_ app: Application) throws {
 //    controller.setupTimer()
     controller.setupRoutes()
     
-//    app.db
-//    app.databases.
-    
     app.get { req in
         return "It works!"
     }

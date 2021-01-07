@@ -9,7 +9,6 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateMoviesSchema())
     app.logger.logLevel = .debug
     try app.autoMigrate().wait()
-    Sida.shared.db = app.db
-    Sida.shared.dida()
+    DatabaseHelper.shared.db = app.db
     try routes(app)
 }
