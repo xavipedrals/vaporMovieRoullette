@@ -17,48 +17,54 @@ final class AudioVisual: Model {
     @Field(key: "netflix_id")
     var netflixId: String
     
-    @Field(key: "tmdb_id")
+    @OptionalField(key: "tmdb_id")
     var tmdbId: String?
     
-    @Field(key: "title")
+    @OptionalField(key: "title")
     var title: String?
     
-    @Field(key: "netflix_rating")
+    @OptionalField(key: "netflix_rating")
     var netflixRating: Double?
     
-    @Field(key: "tmdb_rating")
+    @OptionalField(key: "tmdb_rating")
     var tmdbRating: Double?
     
-    @Field(key: "imdb_rating")
+    @OptionalField(key: "imdb_rating")
     var imdbRating: Double?
     
-    @Field(key: "rotten_tomatoes_rating")
+    @OptionalField(key: "rotten_tomatoes_rating")
     var rottenTomatoesRating: Double?
     
-    @Field(key: "available_countries")
+    @OptionalField(key: "available_countries")
     var availableCountries: [String]
     
     @Field(key: "genres")
     var genres: [Int]
     
-    @Field(key: "release_year")
+    @OptionalField(key: "release_year")
     var releaseYear: Int?
     
-    @Field(key: "type")
+    @OptionalField(key: "type")
     var type: String? //movie or series
     
-    @Field(key: "duration")
+    @OptionalField(key: "duration")
     var duration: String?
     
     init() {}
     
-    init(item: NetfilxMovie) {
-        self.id = item.imdbId
+    init?(item: NetfilxMovie) {
+        guard let id = item.imdbId,
+              id != "",
+              id != "notfound" else { return nil }
+        self.id = id
         self.netflixId = item.netflixId
         self.title = item.title
         if let r = item.netflixRating, let n = Double(r) {
             self.netflixRating = n
+        } else {
+            self.netflixRating = nil
         }
+        //Empty properties
         self.availableCountries = []
         self.genres = []
     }
