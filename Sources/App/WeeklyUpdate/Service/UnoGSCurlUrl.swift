@@ -55,7 +55,7 @@ enum UnoGSCurlUrl {
         case .getNewAdditionsSince(let days, let country, let page):
             return [
                 "q": "get:new\(days):\(country.uppercased())",
-                "p": ":\(page)",
+                "p": "\(page)",
                 "t": "ns",
                 "st": "adv"
             ]
