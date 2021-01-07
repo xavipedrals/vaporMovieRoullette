@@ -53,15 +53,18 @@ class UnoGSService {
         
         requestNetflixMovieWrapper(request) { (result: NetflixMovieWrapper?) in
             guard let r = result else {
+                print("ERROR: Could not interpret result")
                 completion(base)
                 return
             }
             let combined = NetflixMovieWrapper.combined(base, r)
             guard !combined.isEndPage else {
+                print("INFO: Combined is end page")
                 completion(combined)
                 return
             }
             guard !combined.isComplete else {
+                print("INFO: Combined is complete")
                 completion(combined)
                 return
             }
