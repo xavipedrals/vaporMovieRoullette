@@ -14,23 +14,23 @@ enum NetflixItemType: String {
 }
 
 struct NetfilxMovie: Codable {
-    var imdbId: String
+    var imdbId: String?
     var netflixId: String
-    var title: String
+    var title: String?
     var type: String?
     var realType: NetflixItemType {
         return NetflixItemType(rawValue: type ?? "movie") ?? .movie
     }
     var netflixRating: String? //Most new additions have rating = 0
-    var releaseYear: String?
+//    var releaseYear: String?
     
     enum CodingKeys: String, CodingKey {
         case imdbId = "imdbid"
         case netflixId = "netflixid"
-        case title
-        case type
+        case title = "title"
+        case type = "type"
         case netflixRating = "rating"
-        case releaseYear = "released"
+//        case releaseYear = "released"
     }
 }
 
