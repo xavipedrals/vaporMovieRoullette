@@ -59,6 +59,8 @@ final class AudioVisual: Model {
         if let r = item.netflixRating, let n = Double(r) {
             self.netflixRating = n
         }
+        self.availableCountries = []
+        self.genres = []
     }
     
     //TODO: Write different combine funcs per netflix and TMDB
