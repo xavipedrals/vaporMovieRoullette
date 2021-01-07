@@ -9,38 +9,38 @@ import Foundation
 
 class CompressFinalMovies {
     let supportedCountryCodes = [
-        "ar", //Argentina
-        "au",
-        "be",
-        "br", //Brazil
-        "ca",
-        "cz", //Czech Republic
-        "fr",
-        "de",
-        "gr", //Greece
-        "hk", //Hong Kong
-        "hu",
-        "is", //Iceland
-        "in",
-        "il", //Israel
-        "it",
-        "jp",
-        "lt", //Lithuania
-        "mx",
-        "nl",
-        "pl",
-        "pt",
-        "ro",
-        "ru",
-        "sg", //Singapore
-        "sk", //Slovakia
-        "za", //South Africa
-        "kr", //Korea
-        "es",
-        "se", //Sweden
-        "ch", //Switzerland
-        "th", //Thailand
-        "gb", //United kingdom
+//        "ar", //Argentina
+//        "au",
+//        "be",
+//        "br", //Brazil
+//        "ca",
+//        "cz", //Czech Republic
+//        "fr",
+//        "de",
+//        "gr", //Greece
+//        "hk", //Hong Kong
+//        "hu",
+//        "is", //Iceland
+//        "in",
+//        "il", //Israel
+//        "it",
+//        "jp",
+//        "lt", //Lithuania
+//        "mx",
+//        "nl",
+//        "pl",
+//        "pt",
+//        "ro",
+//        "ru",
+//        "sg", //Singapore
+//        "sk", //Slovakia
+//        "za", //South Africa
+//        "kr", //Korea
+//        "es",
+//        "se", //Sweden
+//        "ch", //Switzerland
+//        "th", //Thailand
+//        "gb", //United kingdom
         "us"
     ]
     

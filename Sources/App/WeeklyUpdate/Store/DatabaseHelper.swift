@@ -52,11 +52,13 @@ class DatabaseHelper {
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {
         guard let dbItem = dbItem else {
+            print("INSERTING NEW ITEM WITH IMDB \(newItem.id)")
             newItem.add(country: country)
             save(newItem)
             return
         }
         dbItem.combined(with: newItem, country: country)
+        print("UPDATING EXISTING ITEM WITH IMDB \(newItem.id)")
         save(dbItem)
     }
     

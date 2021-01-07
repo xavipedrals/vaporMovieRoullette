@@ -27,26 +27,27 @@ class WeeklyUpdateOption {
         doNextCountry()
     }
     
-    func moveToNextCountry() {
+    func canMoveToNextCountry() -> Bool {
         print("Countries left -> \(countriesLeft.count)")
         guard countriesLeft.count > 0 else {
             print("Finished with success!")
             completion(true)
-            return
+            return false
         }
         guard let country = countriesLeft.popFirst() else {
             print("ERROR: Couldn't pop the first country")
             completion(false)
-            return
+            return false
         }
         currentCountry = country
+        return true
     }
     
     func doNextCountry() {
         print("Doing next country")
         group = DispatchGroup()
         let queue = DispatchQueue.global(qos: .userInitiated)
-        moveToNextCountry()
+        guard canMoveToNextCountry() else { return }
         group.enter()
         queue.async {
             self.getNewAdditions()
@@ -65,6 +66,7 @@ class WeeklyUpdateOption {
         //TODO: Save in files the last update date per country
         service.getNewAdditions(countryCode: currentCountry, since: 7) { (wrapper) in
             let filteredMovies = wrapper.movies.filter{ $0.realType == .movie }
+            print("GOT \(filteredMovies.count) NEW ITEMS TO INSERT")
             DatabaseHelper.shared.insertOrUpdateNetflix(items: filteredMovies, country: self.currentCountry)
             print("Leaving group 1")
             self.group.leave()
