@@ -57,8 +57,10 @@ class UnoGSService {
                 completion(base)
                 return
             }
+            print(r)
+            print(r.movies.count)
             let combined = NetflixMovieWrapper.combined(base, r)
-            guard !combined.isEndPage else {
+            guard !r.isEndPage else {
                 print("INFO: Combined is end page")
                 completion(combined)
                 return

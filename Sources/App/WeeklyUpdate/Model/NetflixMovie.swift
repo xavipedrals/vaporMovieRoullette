@@ -61,8 +61,10 @@ struct NetflixMovieWrapper: Codable {
     }
     
     static func combined(_ n1: NetflixMovieWrapper, _ n2: NetflixMovieWrapper) -> NetflixMovieWrapper {
+        var count = n1.count
+        if n2.count > n1.count { count = n2.count }
         return NetflixMovieWrapper(
-            count: n1.count,
+            count: count,
             movies: n1.movies + n2.movies
         )
     }
