@@ -35,7 +35,7 @@ final class AudioVisual: Model {
     @OptionalField(key: "rotten_tomatoes_rating")
     var rottenTomatoesRating: Double?
     
-    @OptionalField(key: "available_countries")
+    @Field(key: "available_countries")
     var availableCountries: [String]
     
     @Field(key: "genres")
