@@ -82,9 +82,13 @@ class TelegramController {
                 "Vaig tard perquè estava rentant els plats",
                 "Aquest estiu anem als karts"
             ]
-            WeeklyUpdateOption(completion: { _ in
+            TMDBService().getDetailsFrom(imdbId: "tt0020589") { (movie) in
+                print(movie)
                 context.respondAsync(facts.randomElement()!)
-            }).run()
+            }
+//            WeeklyUpdateOption(completion: { _ in
+//                context.respondAsync(facts.randomElement()!)
+//            }).run()
             return true
         }
     }

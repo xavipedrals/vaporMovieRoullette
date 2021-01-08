@@ -47,6 +47,13 @@ class DatabaseHelper {
         }
     }
     
+    func getItemsToEnrich() -> [AudioVisual] {
+        let audiovisualsToEnrich = try? AudioVisual.query(on: db)
+            .filter(\.$tmdbId == nil)
+            .all()
+            .wait()
+        return audiovisualsToEnrich ?? []
+    }
     
     //MARK: - Private
     

@@ -9,29 +9,6 @@ import Foundation
 
 class TMDBService {
     
-//    var session: URLSession
-    
-    init() {
-//        let sessionConfig = URLSessionConfiguration.default
-//        sessionConfig.timeoutIntervalForRequest = 10.0
-//        sessionConfig.timeoutIntervalForResource = 10.0
-//        session = URLSession(configuration: sessionConfig)
-    }
-    
-    func getMovieDetails(id: String, lang: String, completion: @escaping (MinifiedMovie) -> Void) {
-//        let task = URLSession.shared.dataTask(with: TMDBRouter.getDetails(id: id, lang: lang).urlRequest) {(data, response, error) in
-//            guard let data = data else { return }
-//            let result = Parser<MinifiedMovie>().parse(data: data)
-//            switch result {
-//            case .success(let movie):
-//                completion(movie)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//        task.resume()
-    }
-    
     func getDetailsFrom(imdbId: String, completion: @escaping (TMDBMovie?) -> Void) {
 //        print("Getting details for -> \(imdbId)")
 //        let request = TMDBRouter.getDetailsFrom(imdbId: imdbId).urlRequest
@@ -60,5 +37,24 @@ class TMDBService {
 //            }
 //        }
 //        task.resume()
+        
+        let req = TMDBCurlUrl.getDetailsFrom(imdbId: imdbId).urlString
+        let helper = CCurlHelper()
+        helper.doRequest(endpoint: req, headers: []) { data in
+            guard let data = data else {
+                print("Uh oh, something went wrong getting the data from the HTTP req")
+                return
+            }
+            print(data.toString())
+            do {
+                let wrapper = try JSONDecoder().decode(TDMMovieWrapper.self, from: data)
+                completion(wrapper.results.first)
+            } catch {
+                print(error)
+                print("DATA ERROR")
+                print(data.toString())
+                completion(nil)
+            }
+        }
     }
 }

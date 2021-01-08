@@ -45,24 +45,24 @@ enum CountryCodes: String {
     static let all: [CountryCodes] = [
 //        .argentina, //08/01/2021
 //        .australia, //08/01/2021
-//    case "be",
+//        .belgium
 //        .brazil, //08/01/2021
-//    case "ca",
+//        .canada
 //        .czechRepublic, //08/01/2021
 //        .france, //08/01/2021
-//    case "de",
+//        .germany
 //        .greece, //08/01/2021
 //        .hongKong, //08/01/2021
-//    case "hu",
+//        .hungary
 //        .iceland, //08/01/2021
-//    case "in",
+//        .india
 //        .israel, //08/01/2021
 //        .italia, //08/01/2021
 //        .japan, //08/01/2021
 //        .lithuania, //08/01/2021
 //        .mexico, //08/01/2021
 //        .netherlands, //08/01/2021
-//    case "pl",
+//        .poland
 //        .portugal, //08/01/2021
 //        .romania, //08/01/2021
 //        .russia, //08/01/2021
@@ -78,44 +78,6 @@ enum CountryCodes: String {
 //        .unitedStates //08/01/2021
     ]
 }
-
-
-//class CompressFinalMovies {
-//    let supportedCountryCodes = [
-//        "ar", //Argentina
-//        "au", //Australia
-//        "be",
-//        "br", //Brazil
-//        "ca",
-//        "cz", //Czech Republic
-//        "fr", //France
-//        "de",
-//        "gr", //Greece
-//        "hk", //Hong Kong
-//        "hu",
-//        "is", //Iceland
-//        "in",
-//        "il", //Israel
-//        "it", //Italia
-//        "jp", //Japan
-//        "lt", //Lithuania
-//        "mx", //Mexico
-//        "nl", //Netherlands
-//        "pl",
-//        "pt", //Portugal
-//        "ro", //Romania
-//        "ru", //Russia
-//        "sg", //Singapore
-//        "sk", //Slovakia
-//        "za", //South Africa
-//        "kr", //Korea
-//        "es", //Spain
-//        "se", //Sweden
-//        "ch", //Switzerland
-//        "th", //Thailand
-//        "gb", //United kingdom
-//        "us"
-//    ]
     
 //    func run() {
 //        let store = NetflixMoviesStore()
