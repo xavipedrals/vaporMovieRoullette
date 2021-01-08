@@ -14,7 +14,7 @@ class ProdFormatter {
     var allMovies = [CompressedNetflixMovie]()
     
     func run() {
-        countriesLeft = Set(CompressFinalMovies().supportedCountryCodes)
+        countriesLeft = Set(CountryCodes.all.compactMap{ $0.rawValue })
 //        getAllMovies()
         doNextCountry()
     }

@@ -23,7 +23,7 @@ class WeeklyUpdateOption {
     }
     
     func run() {
-        countriesLeft = Set(CompressFinalMovies().supportedCountryCodes)
+        countriesLeft = Set(CountryCodes.all.compactMap{ $0.rawValue })
         doNextCountry()
     }
     
@@ -64,7 +64,7 @@ class WeeklyUpdateOption {
     
     func getNewAdditions() {
         //TODO: Save in files the last update date per country
-        service.getNewAdditions(countryCode: currentCountry, since: 7) { (wrapper) in
+        service.getNewAdditions(countryCode: currentCountry, since: 60) { (wrapper) in
             let filteredMovies = wrapper.movies.filter{ $0.realType == .movie }
             print("GOT \(filteredMovies.count) NEW ITEMS TO INSERT")
             DatabaseHelper.shared.insertOrUpdateNetflix(items: filteredMovies, country: self.currentCountry)

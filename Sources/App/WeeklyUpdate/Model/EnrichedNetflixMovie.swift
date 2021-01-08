@@ -59,6 +59,7 @@ final class AudioVisual: Model {
         self.id = id
         self.netflixId = item.netflixId
         self.title = item.title
+        self.type = item.type
         if let r = item.netflixRating, let n = Double(r) {
             self.netflixRating = n
         } else {
