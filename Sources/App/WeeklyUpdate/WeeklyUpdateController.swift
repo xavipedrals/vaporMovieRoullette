@@ -64,10 +64,9 @@ class WeeklyUpdateOption {
     
     func getNewAdditions() {
         //TODO: Save in files the last update date per country
-        service.getNewAdditions(countryCode: currentCountry, since: 60) { (wrapper) in
-            let filteredMovies = wrapper.movies.filter{ $0.realType == .movie }
-            print("GOT \(filteredMovies.count) NEW ITEMS TO INSERT")
-            DatabaseHelper.shared.insertOrUpdateNetflix(items: filteredMovies, country: self.currentCountry)
+        service.getNewAdditions(countryCode: currentCountry, since: 90) { (wrapper) in
+            print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
+            DatabaseHelper.shared.insertOrUpdateNetflix(items: wrapper.movies, country: self.currentCountry)
             print("Leaving group 1")
             self.group.leave()
         }
