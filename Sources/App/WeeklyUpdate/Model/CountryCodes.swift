@@ -49,9 +49,9 @@ enum CountryCodes: String {
 //        .brazil, //08/01/2021
 //    case "ca",
 //        .czechRepublic, //08/01/2021
-        .france,
+//        .france, //08/01/2021
 //    case "de",
-//        .greece,
+        .greece,
 //        .hongKong,
 //    case "hu",
 //        .iceland,
