@@ -57,15 +57,15 @@ enum CountryCodes: String {
 //        .iceland, //08/01/2021
 //    case "in",
 //        .israel, //08/01/2021
-        .italia,
-//        .japan,
-//        .lithuania,
-//        .mexico,
-//        .netherlands,
+//        .italia, //08/01/2021
+        .japan,
+        .lithuania,
+        .mexico,
+        .netherlands,
 //    case "pl",
-//        .portugal,
-//        .romania,
-//        .russia,
+        .portugal,
+        .romania,
+        .russia,
 //        .singapore,
 //        .slovakia,
 //        .southAfrica,
