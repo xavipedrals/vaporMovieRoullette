@@ -43,13 +43,13 @@ enum CountryCodes: String {
     case unitedStates = "us"
     
     static let all: [CountryCodes] = [
-        .argentina,
+//        .argentina,
 //        .australia,
 //    case "be",
 //        .brazil,
 //    case "ca",
 //        .czechRepublic,
-        .france,
+//        .france,
 //    case "de",
 //        .greece,
 //        .hongKong,
