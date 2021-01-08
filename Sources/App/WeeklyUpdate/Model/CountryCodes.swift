@@ -66,12 +66,12 @@ enum CountryCodes: String {
 //        .portugal, //08/01/2021
 //        .romania, //08/01/2021
 //        .russia, //08/01/2021
-        .singapore,
-        .slovakia,
-        .southAfrica,
-        .korea,
+//        .singapore, //08/01/2021
+//        .slovakia, //08/01/2021
+//        .southAfrica, //08/01/2021
+//        .korea, //08/01/2021
 //        .spain, //08/01/2021
-        .sweden,
+//        .sweden, //08/01/2021
 //        .switzerland,
 //        .thailand,
 //        .unitedKingdom, //08/01/2021
