@@ -54,9 +54,9 @@ enum CountryCodes: String {
 //        .greece, //08/01/2021
 //        .hongKong, //08/01/2021
 //    case "hu",
-        .iceland,
+//        .iceland, //08/01/2021
 //    case "in",
-//        .israel,
+        .israel,
 //        .italia,
 //        .japan,
 //        .lithuania,
