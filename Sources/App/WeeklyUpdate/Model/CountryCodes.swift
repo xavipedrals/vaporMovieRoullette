@@ -43,10 +43,10 @@ enum CountryCodes: String {
     case unitedStates = "us"
     
     static let all: [CountryCodes] = [
-//        .argentina, //08/01/1994
-        .australia,
+//        .argentina, //08/01/2021
+//        .australia, //08/01/2021
 //    case "be",
-//        .brazil,
+        .brazil,
 //    case "ca",
 //        .czechRepublic,
 //        .france,
