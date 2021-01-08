@@ -10,24 +10,24 @@ import Foundation
 enum CountryCodes: String {
     case argentina = "ar"
     case australia = "au"
-//    case "be",
+    case belgium = "be"
     case brazil = "br"
-//    case "ca",
+    case canada = "ca"
     case czechRepublic = "cz"
     case france = "fr"
-//    case "de",
+    case germany = "de"
     case greece = "gr"
     case hongKong = "hk"
-//    case "hu",
+    case hungary = "hu"
     case iceland = "is"
-//    case "in",
+    case india = "in"
     case israel = "il"
     case italia = "it"
     case japan = "jp"
     case lithuania = "lt"
     case mexico = "mx"
     case netherlands = "nl"
-//    case "pl",
+    case poland = "pl"
     case portugal = "pt"
     case romania = "ro"
     case russia = "ru"
@@ -58,20 +58,20 @@ enum CountryCodes: String {
 //    case "in",
 //        .israel, //08/01/2021
 //        .italia, //08/01/2021
-        .japan,
-        .lithuania,
-        .mexico,
-        .netherlands,
+//        .japan, //08/01/2021
+//        .lithuania, //08/01/2021
+//        .mexico, //08/01/2021
+//        .netherlands, //08/01/2021
 //    case "pl",
-        .portugal,
-        .romania,
-        .russia,
-//        .singapore,
-//        .slovakia,
-//        .southAfrica,
-//        .korea,
+//        .portugal, //08/01/2021
+//        .romania, //08/01/2021
+//        .russia, //08/01/2021
+        .singapore,
+        .slovakia,
+        .southAfrica,
+        .korea,
 //        .spain, //08/01/2021
-//        .sweden,
+        .sweden,
 //        .switzerland,
 //        .thailand,
 //        .unitedKingdom, //08/01/2021
