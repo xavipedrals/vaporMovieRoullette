@@ -94,6 +94,18 @@ final class AudioVisual: Model {
         self.duration = with.duration ?? self.duration
     }
     
+    func combined(with tmdbItem: TMDBMovie) {
+        self.tmdbId = String(tmdbItem.id)
+        self.title = tmdbItem.title ?? self.title
+        self.tmdbRating = tmdbItem.rating ?? self.tmdbRating
+        var genreSet = Set(self.genres)
+        for g in tmdbItem.genres {
+            genreSet.insert(g)
+        }
+        self.genres = genreSet.compactMap { $0 }
+        self.releaseYear = tmdbItem.releaseYear ?? self.releaseYear
+    }
+    
     func add(country: String) {
         guard !availableCountries.contains(country) else {
             return

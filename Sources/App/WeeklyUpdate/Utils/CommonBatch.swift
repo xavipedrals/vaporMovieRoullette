@@ -9,19 +9,17 @@ import Foundation
 
 protocol CommonBatch: class {
     
-    associatedtype Input: Hashable
-    associatedtype Output: Hashable
-    
+    associatedtype Input
+
     var group: DispatchGroup { get set }
     var queue: DispatchQueue { get set }
     var syncQueue: DispatchQueue { get set }
     var countCompleted: Int { get set }
     var input: [Input] { get set }
     
-    var output: Set<Output> { get set }
-    var failures: Set<Input> { get set }
+    var output: [Input] { get set }
     
-    func enrich<T>(original: Input, addition: T) -> Output
+    func enrich<T>(original: Input, addition: T) -> Input
     func doAsyncJob(target: Input)
     func run()
     func finished()
@@ -32,14 +30,14 @@ extension CommonBatch {
         self.countCompleted += 1
         print("Completed -> \(self.countCompleted) of \(self.input.count)")
         guard let aux = obj else {
-            failures.insert(original)
+            print("Failed to retrieve info for \(original)")
             group.leave()
             return
         }
         let result = enrich(original: original, addition: aux)
         //Solved bug segmentation fault when inserting multiple items at the same moment
         let _ = syncQueue.sync {
-            output.insert(result)
+            output.append(result)
         }
         group.leave()
     }

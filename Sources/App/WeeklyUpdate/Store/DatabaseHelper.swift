@@ -55,6 +55,12 @@ class DatabaseHelper {
         return audiovisualsToEnrich ?? []
     }
     
+    func update(items: [AudioVisual]) {
+        for item in items {
+            save(item)
+        }
+    }
+    
     //MARK: - Private
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {

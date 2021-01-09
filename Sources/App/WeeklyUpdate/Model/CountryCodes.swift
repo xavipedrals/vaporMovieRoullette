@@ -45,24 +45,24 @@ enum CountryCodes: String {
     static let all: [CountryCodes] = [
 //        .argentina, //08/01/2021
 //        .australia, //08/01/2021
-//        .belgium
+        .belgium,
 //        .brazil, //08/01/2021
-//        .canada
+        .canada,
 //        .czechRepublic, //08/01/2021
 //        .france, //08/01/2021
-//        .germany
+        .germany,
 //        .greece, //08/01/2021
 //        .hongKong, //08/01/2021
-//        .hungary
+        .hungary,
 //        .iceland, //08/01/2021
-//        .india
+        .india,
 //        .israel, //08/01/2021
 //        .italia, //08/01/2021
 //        .japan, //08/01/2021
 //        .lithuania, //08/01/2021
 //        .mexico, //08/01/2021
 //        .netherlands, //08/01/2021
-//        .poland
+        .poland,
 //        .portugal, //08/01/2021
 //        .romania, //08/01/2021
 //        .russia, //08/01/2021
@@ -72,8 +72,8 @@ enum CountryCodes: String {
 //        .korea, //08/01/2021
 //        .spain, //08/01/2021
 //        .sweden, //08/01/2021
-//        .switzerland,
-//        .thailand,
+        .switzerland,
+        .thailand,
 //        .unitedKingdom, //08/01/2021
 //        .unitedStates //08/01/2021
     ]
