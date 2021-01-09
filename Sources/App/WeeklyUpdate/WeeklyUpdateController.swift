@@ -64,7 +64,7 @@ class WeeklyUpdateOption {
     
     func getNewAdditions() {
         //TODO: Save in files the last update date per country
-        service.getNewAdditions(countryCode: currentCountry, since: 90) { (wrapper) in
+        service.getNewAdditions(countryCode: currentCountry, since: 1) { (wrapper) in
             print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
             DatabaseHelper.shared.insertOrUpdateNetflix(items: wrapper.movies, country: self.currentCountry)
             print("Leaving group 1")
