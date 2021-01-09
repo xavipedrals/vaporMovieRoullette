@@ -9,8 +9,8 @@ import Foundation
 
 class UnoGSAPIKeyManager {
     private let defaults = [
-        UnoGSAPIKeyWithLimit(type: .main, date: Date()),
-//        UnoGSAPIKeyWithLimit(type: .second, date: Date()),
+//        UnoGSAPIKeyWithLimit(type: .main, date: Date()),
+        UnoGSAPIKeyWithLimit(type: .second, date: Date()),
 //        UnoGSAPIKeyWithLimit(type: .third, date: Date())
     ]
     var savedKeys: [UnoGSAPIKeyWithLimit] {
