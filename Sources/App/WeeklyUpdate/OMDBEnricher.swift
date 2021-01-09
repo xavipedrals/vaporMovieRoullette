@@ -13,7 +13,7 @@ class OMDBEnricher {
     let service = OMDBService()
     var group = DispatchGroup()
     var completion: (_ success: Bool) -> ()
-    var currentIndex = 0
+    var currentIndex = -1
     
     init(completion: @escaping (_ success: Bool) -> ()) {
         self.completion = completion
@@ -26,12 +26,12 @@ class OMDBEnricher {
     
     func moveToNextItem() {
         print("Items left -> \(input.count - currentIndex)")
+        currentIndex += 1
         guard currentIndex < input.count else {
             print("Finished with success!")
             completion(true)
             return
         }
-        currentIndex += 1
     }
     
     func getNextRating() {
@@ -62,12 +62,5 @@ class OMDBEnricher {
             audiovisual.combined(with: o)
             DatabaseHelper.shared.update(items: [audiovisual])
         }
-        
-//        service.getNewAdditions(countryCode: currentCountry, since: 1) { (wrapper) in
-//            print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
-//            DatabaseHelper.shared.insertOrUpdateNetflix(items: wrapper.movies, country: self.currentCountry)
-//            print("Leaving group 1")
-//            self.group.leave()
-//        }
     }
 }
