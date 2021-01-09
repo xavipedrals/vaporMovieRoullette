@@ -66,6 +66,14 @@ class DatabaseHelper {
         }
     }
     
+    func getItemsWithoutRating() -> [AudioVisual] {
+        let audiovisualsWithoutRating = try? AudioVisual.query(on: db)
+            .filter(\.$rottenTomatoesRating == nil)
+            .all()
+            .wait()
+        return audiovisualsWithoutRating ?? []
+    }
+    
     //MARK: - Private
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {

@@ -82,9 +82,12 @@ class TelegramController {
                 "Vaig tard perquè estava rentant els plats",
                 "Aquest estiu anem als karts"
             ]
-            TMDBEnricher().run {
+            OMDBEnricher (completion: { _ in
                 context.respondAsync(facts.randomElement()!)
-            }
+            }).run()
+//            TMDBEnricher().run {
+//                context.respondAsync(facts.randomElement()!)
+//            }
 //            WeeklyUpdateOption(completion: { _ in
 //                context.respondAsync(facts.randomElement()!)
 //            }).run()
