@@ -58,7 +58,7 @@ class OMDBEnricher {
             guard let o = omdbMovie else {
                 return
             }
-            let audiovisual = self.input[currentIndex]
+            let audiovisual = self.input[self.currentIndex]
             audiovisual.combined(with: o)
             DatabaseHelper.shared.update(items: [audiovisual])
         }

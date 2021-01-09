@@ -113,8 +113,8 @@ final class AudioVisual: Model {
         self.duration = omdb.runtime
         self.imdbRating = omdb.imdbRating ?? self.imdbRating
         self.rottenTomatoesRating = omdb.rottenTomatoesRating ?? self.rottenTomatoesRating
-        
-//        self.releaseYear = omdb.releaseDate ?? self.releaseYear
+        self.metacriticRating = omdb.metacriticRating ?? self.metacriticRating
+        self.releaseYear = self.releaseYear ?? omdb.year
     }
     
     func add(country: String) {

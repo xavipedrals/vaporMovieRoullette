@@ -19,6 +19,13 @@ struct OMDBMovie: Codable {
     var imdbId: String?
     var dvdReleaseDate: String?
     
+    var year: Int? {
+        guard let split = releaseDate?.split(separator: " ").last else {
+            return nil
+        }
+        let s = String(split)
+        return Int(s)
+    }
     var imdbRating: Double? {
         if let imdbScore = imdbScore {
             return Double(imdbScore)
