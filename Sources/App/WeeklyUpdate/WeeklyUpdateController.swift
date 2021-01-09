@@ -48,10 +48,10 @@ class WeeklyUpdateOption {
         group = DispatchGroup()
         let queue = DispatchQueue.global(qos: .userInitiated)
         guard canMoveToNextCountry() else { return }
-        group.enter()
-        queue.async {
-            self.getNewAdditions()
-        }
+//        group.enter()
+//        queue.async {
+//            self.getNewAdditions()
+//        }
         group.enter()
         queue.async {
             self.getNewDeletions()
@@ -73,13 +73,13 @@ class WeeklyUpdateOption {
     }
     
     func getNewDeletions() {
-//        service.getNewDeletions(countryCode: currentCountry, since: 7) { (wrapper) in
-//            let ids = wrapper.movies.compactMap{ $0.netflixId }
-//            for id in ids {
-//                DatabaseHelper.shared.delete(netflixId: id, country: self.currentCountry)
-//            }
+        service.getNewDeletions(countryCode: currentCountry, since: 90) { (wrapper) in
+            let ids = wrapper.movies.compactMap{ $0.netflixId }
+            for id in ids {
+                DatabaseHelper.shared.delete(netflixId: id, country: self.currentCountry)
+            }
             print("Leaving group 2")
             self.group.leave()
-//        }
+        }
     }
 }

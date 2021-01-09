@@ -42,39 +42,40 @@ enum CountryCodes: String {
     case unitedKingdom = "gb"
     case unitedStates = "us"
     
+    //Updated to 09/01/2021
     static let all: [CountryCodes] = [
-        .argentina, //08/01/2021
-        .australia, //08/01/2021
+        .argentina,
+//        .australia,
 //        .belgium,
-        .brazil, //08/01/2021
+//        .brazil,
 //        .canada,
-        .czechRepublic, //08/01/2021
-        .france, //08/01/2021
+//        .czechRepublic,
+//        .france,
 //        .germany,
-        .greece, //08/01/2021
-        .hongKong, //08/01/2021
+//        .greece,
+//        .hongKong,
 //        .hungary,
-        .iceland, //08/01/2021
+//        .iceland,
 //        .india,
-        .israel, //08/01/2021
-        .italia, //08/01/2021
-        .japan, //08/01/2021
-        .lithuania, //08/01/2021
-        .mexico, //08/01/2021
-        .netherlands, //08/01/2021
+//        .israel,
+//        .italia,
+//        .japan,
+//        .lithuania,
+//        .mexico,
+//        .netherlands,
 //        .poland,
-        .portugal, //08/01/2021
-        .romania, //08/01/2021
-        .russia, //08/01/2021
-        .singapore, //08/01/2021
-        .slovakia, //08/01/2021
-        .southAfrica, //08/01/2021
-        .korea, //08/01/2021
-        .spain, //08/01/2021
-        .sweden, //08/01/2021
+//        .portugal,
+//        .romania,
+//        .russia,
+//        .singapore,
+//        .slovakia,
+//        .southAfrica,
+//        .korea,
+//        .spain,
+//        .sweden,
 //        .switzerland,
 //        .thailand,
-        .unitedKingdom, //08/01/2021
-        .unitedStates //08/01/2021
+//        .unitedKingdom,
+//        .unitedStates
     ]
 }

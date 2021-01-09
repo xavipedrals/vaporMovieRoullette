@@ -8,8 +8,8 @@
 import Foundation
 
 enum UnoGSAPIKey: String, Codable {
-    case main = "557617c510msh1b7951ecbeb795ap108561jsnae39c29b0d02" //simple.beautiful.apps
-//    case second = "Pg39B9YjdemshbfsF4A9Zadzn129p19HO7wjsnDtkTLedgooCl" //xavi.pedrals
+//    case main = "557617c510msh1b7951ecbeb795ap108561jsnae39c29b0d02" //simple.beautiful.apps
+    case second = "Pg39B9YjdemshbfsF4A9Zadzn129p19HO7wjsnDtkTLedgooCl" //xavi.pedrals
 //    case third = "sida"
 }
 

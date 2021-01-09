@@ -35,12 +35,17 @@ class DatabaseHelper {
                 .filter(\.$netflixId == netflixId)
                 .first()
                 .wait()
-            guard let i = item else { return }
+            guard let i = item else {
+                print("Movie with netflixId \(netflixId) not found, ignoring delete")
+                return
+            }
             i.remove(country: country)
             guard i.availableCountries.count > 0 else {
+                print("Deleting all record from movie with netflixId -> \(netflixId)")
                 try? i.delete(force: true, on: db).wait()
                 return
             }
+            print("Removing country \(country) from movie with netflixId \(netflixId)")
             save(i)
         } catch {
             print(error)
