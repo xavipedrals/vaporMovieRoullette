@@ -10,34 +10,6 @@ import Foundation
 class TMDBService {
     
     func getDetailsFrom(imdbId: String, completion: @escaping (TMDBMovie?) -> Void) {
-//        print("Getting details for -> \(imdbId)")
-//        let request = TMDBRouter.getDetailsFrom(imdbId: imdbId).urlRequest
-//        let task = session.dataTask(with: request) { data, response, error in
-//            guard error == nil else {
-//                print(error)
-//                completion(nil)
-//                return
-//            }
-//            guard let data = data else {
-//                completion(nil)
-//                return
-//            }
-//            let result = Parser<TDMMovieWrapper>().parse(data: data)
-//            switch result {
-//            case .success(let wrapper):
-//                guard let movie = wrapper.results.first else {
-//                    print("ERROR: MOVIE NOT FOOOOOOOOOOOOOOOOOOUND")
-//                    completion(nil)
-//                    return
-//                }
-//                completion(movie)
-//            case .failure(let error):
-//                print(error)
-//                completion(nil)
-//            }
-//        }
-//        task.resume()
-        
         let req = TMDBCurlUrl.getDetailsFrom(imdbId: imdbId).urlString
         let helper = CCurlHelper()
         helper.doRequest(endpoint: req, headers: []) { data in
