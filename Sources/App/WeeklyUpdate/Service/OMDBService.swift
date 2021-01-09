@@ -2,14 +2,14 @@
 //  File.swift
 //  
 //
-//  Created by Xavier Pedrals Camprubí on 01/11/2020.
+//  Created by Xavier Pedrals Camprubí on 9/1/21.
 //
 
 import Foundation
 
-class TMDBService {
-    func getDetailsFrom(imdbId: String, completion: @escaping (TMDBMovie?) -> Void) {
-        let req = TMDBCurlUrl.getDetailsFrom(imdbId: imdbId).urlString
+class OMDBService {
+    func getDetailsFrom(imdbId: String, completion: @escaping (OMDBMovie?) -> Void) {
+        let req = OMDBCurlUrl.getDetail(imdbId: imdbId).urlString
         let helper = CCurlHelper()
         helper.doRequest(endpoint: req, headers: []) { data in
             guard let data = data else {
@@ -18,8 +18,8 @@ class TMDBService {
             }
             print(data.toString())
             do {
-                let wrapper = try JSONDecoder().decode(TDMMovieWrapper.self, from: data)
-                completion(wrapper.allItems.first)
+                let wrapper = try JSONDecoder().decode(OMDBMovie.self, from: data)
+                completion(wrapper)
             } catch {
                 print(error)
                 print("DATA ERROR")

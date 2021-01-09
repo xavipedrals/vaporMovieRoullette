@@ -32,6 +32,9 @@ final class AudioVisual: Model {
     @OptionalField(key: "imdb_rating")
     var imdbRating: Double?
     
+    @OptionalField(key: "metacritic_rating")
+    var metacriticRating: Double?
+    
     @OptionalField(key: "rotten_tomatoes_rating")
     var rottenTomatoesRating: Double?
     
@@ -104,6 +107,14 @@ final class AudioVisual: Model {
         }
         self.genres = genreSet.compactMap { $0 }
         self.releaseYear = tmdbItem.releaseYear ?? self.releaseYear
+    }
+    
+    func combined(with omdb: OMDBMovie) {
+        self.duration = omdb.runtime
+        self.imdbRating = omdb.imdbRating ?? self.imdbRating
+        self.rottenTomatoesRating = omdb.rottenTomatoesRating ?? self.rottenTomatoesRating
+        
+//        self.releaseYear = omdb.releaseDate ?? self.releaseYear
     }
     
     func add(country: String) {

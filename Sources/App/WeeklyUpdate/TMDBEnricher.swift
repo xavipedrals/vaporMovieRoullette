@@ -10,7 +10,6 @@ import Foundation
 class TMDBEnricher {
     private let rateLimit = RateLimit(calls: 30, timeInSecs: 13)
     var input = [AudioVisual]()
-
     var currentBatch = [AudioVisual]()
     var group = DispatchGroup()
     let topQueue = DispatchQueue.global(qos: .userInitiated)

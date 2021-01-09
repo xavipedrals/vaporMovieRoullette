@@ -44,7 +44,7 @@ enum CountryCodes: String {
     
     //Updated to 09/01/2021
     static let all: [CountryCodes] = [
-//        .argentina,
+        .argentina,
         .australia,
         .belgium,
         .brazil,

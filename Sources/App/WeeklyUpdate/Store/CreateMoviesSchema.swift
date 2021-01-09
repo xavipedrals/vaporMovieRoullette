@@ -31,3 +31,17 @@ struct CreateMoviesSchema: Migration {
         database.schema("audiovisuals").delete()
     }
 }
+
+struct UpdateMoviesSchema: Migration {
+    func prepare(on database: Database) -> EventLoopFuture<Void> {
+        database.schema("audiovisuals")
+            .field("metacritic_rating", .string)
+            .update()
+    }
+        
+    func revert(on database: Database) -> EventLoopFuture<Void> {
+        database.schema("audiovisuals")
+            .deleteField("metacritic_rating")
+            .update()
+    }
+}
