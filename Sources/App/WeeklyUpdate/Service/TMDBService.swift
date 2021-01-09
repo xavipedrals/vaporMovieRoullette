@@ -48,7 +48,7 @@ class TMDBService {
             print(data.toString())
             do {
                 let wrapper = try JSONDecoder().decode(TDMMovieWrapper.self, from: data)
-                completion(wrapper.results.first)
+                completion(wrapper.allItems.first)
             } catch {
                 print(error)
                 print("DATA ERROR")
