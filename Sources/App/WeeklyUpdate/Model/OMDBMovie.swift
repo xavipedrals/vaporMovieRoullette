@@ -7,6 +7,7 @@
 
 import Foundation
 
+//Used mainly for movie ratings, except Netflix rating
 struct OMDBMovie: Codable {
     var title: String?
     var releaseDate: String?

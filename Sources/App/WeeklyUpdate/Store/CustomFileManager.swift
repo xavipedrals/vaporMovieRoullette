@@ -26,26 +26,12 @@ class CustomFileManager {
     
     static let instance = CustomFileManager()
     
-    var movieScriptsFolder: Folder
-    var inputFolder: Folder
-    var topListsOutputFolder: Folder
-    var netflixFolder: Folder
-    var netflixBaseFolder: Folder
-    var netflixFinalFolder: Folder
-    var netflixCompressedFinalFolder: Folder
-    var netflixTMDBEnrichedFolder: Folder
-    var weeklyUpdatesFolder: Folder
+    var serverStoreFolder: Folder
+    var outputFolder: Folder
     
     private init() {
-        movieScriptsFolder = try! Folder.home.createSubfolderIfNeeded(withName: "movieScriptsFolder")
-        inputFolder = try! movieScriptsFolder.createSubfolderIfNeeded(withName: "topListsInput")
-        netflixFolder = try! movieScriptsFolder.createSubfolderIfNeeded(withName: "netflix")
-        netflixBaseFolder = try! netflixFolder.createSubfolderIfNeeded(withName: "baseMovies")
-        netflixTMDBEnrichedFolder = try! netflixFolder.createSubfolderIfNeeded(withName: "tmdbEnrichedMovies")
-        netflixFinalFolder = try! netflixFolder.createSubfolderIfNeeded(withName: "finalMovies")
-        netflixCompressedFinalFolder = try! netflixFolder.createSubfolderIfNeeded(withName: "finalCompressed")
-        topListsOutputFolder = try! movieScriptsFolder.createSubfolderIfNeeded(withName: "topListsOutput")
-        weeklyUpdatesFolder = try! movieScriptsFolder.createSubfolderIfNeeded(withName: "weeklyUpdates")
+        serverStoreFolder = try! Folder.home.createSubfolderIfNeeded(withName: "serverStore")
+        outputFolder = try! serverStoreFolder.createSubfolderIfNeeded(withName: "outputFiles")
     }
     
     func formatJSONDataToString(_ data: Data) -> String {
@@ -78,7 +64,7 @@ class CustomFileManager {
     }
     
     func getInputListFileNames() -> [String] {
-        return getFileNames(in: inputFolder)
+        return getFileNames(in: outputFolder)
     }
     
     func getFileNames(in directory: FileDirectory) -> [String] {
@@ -86,7 +72,7 @@ class CustomFileManager {
     }
     
     func readTopList(with name: String) -> Data {
-        return readFile(from: inputFolder, name: name)
+        return readFile(from: outputFolder, name: name)
     }
     
     func readFile(from directory: FileDirectory, name: String) -> Data {
@@ -124,39 +110,11 @@ class CustomFileManager {
     private func getFolder(from directory: FileDirectory) -> Folder {
         switch directory {
         case .root:
-            return movieScriptsFolder
+            return serverStoreFolder
         case .input:
-            return inputFolder
-        case .netflixBaseMovies:
-            return netflixBaseFolder
-        case .topListsOutput:
-            return topListsOutputFolder
-        case .netflixTMDBEnrichedMovies:
-            return netflixTMDBEnrichedFolder
-        case .netflixFinalMovies:
-            return netflixFinalFolder
-        case .netflixFinalCompressedMovies:
-            return netflixCompressedFinalFolder
-        case .weeklyUpdates:
-            return weeklyUpdatesFolder
-        case .realWeekUpdate(let date):
-            let calendar = Calendar(identifier: .gregorian)
-            let comp = calendar.dateComponents([.year, .weekOfYear], from: date)
-            guard let year = comp.year else {
-                fatalError("Could not get week components")
-            }
-            return try! movieScriptsFolder.createSubfolderIfNeeded(withName: "\(year)")
-        case .prodReady(let date):
-            let yearFolder = getFolder(from: .realWeekUpdate(date: date))
-            let calendar = Calendar(identifier: .gregorian)
-            let comp = calendar.dateComponents([.year, .weekOfYear], from: date)
-            guard let weekOfYear = comp.weekOfYear else {
-                fatalError("Could not get week components")
-            }
-            return try! yearFolder.createSubfolderIfNeeded(withName: "\(weekOfYear)")
-        case .prodAllMovies:
-            let yearFolder = getFolder(from: .realWeekUpdate(date: Date()))
-            return try! yearFolder.createSubfolderIfNeeded(withName: "all")
+            return outputFolder
+        default:
+            return serverStoreFolder
         }
     }
 }

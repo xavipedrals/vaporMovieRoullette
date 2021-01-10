@@ -45,3 +45,18 @@ struct UpdateMoviesSchema: Migration {
             .update()
     }
 }
+
+struct CreateNetflixCountryOperationSchema: Migration {
+    func prepare(on database: Database) -> EventLoopFuture<Void> {
+        database.schema("netflix_operations")
+            .field("id_auto", .string, .identifier(auto: false))
+            .field("country_id", .string, .required)
+            .field("operation", .string, .required)
+            .field("updated_at", .string)
+            .create()
+    }
+        
+    func revert(on database: Database) -> EventLoopFuture<Void> {
+        database.schema("netflix_operations").delete()
+    }
+}

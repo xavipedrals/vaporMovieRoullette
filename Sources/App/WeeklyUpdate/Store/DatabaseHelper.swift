@@ -74,6 +74,14 @@ class DatabaseHelper {
         return audiovisualsWithoutRating ?? []
     }
     
+    func save<T: Model>(_ item: T) {
+        do {
+            try item.save(on: db).wait()
+        } catch {
+            print(error)
+        }
+    }
+    
     //MARK: - Private
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {
@@ -88,11 +96,4 @@ class DatabaseHelper {
         save(dbItem)
     }
     
-    private func save(_ item: AudioVisual) {
-        do {
-            try item.save(on: db).wait()
-        } catch {
-            print(error)
-        }
-    }
 }
