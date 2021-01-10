@@ -74,12 +74,14 @@ class DatabaseHelper {
         return audiovisualsWithoutRating ?? []
     }
     
-    func save<T: Model>(_ item: T) {
-        do {
-            try item.save(on: db).wait()
-        } catch {
-            print(error)
+    func insertOrUpdate(operation: OperationPerCountry) {
+        guard let dbItem = try? OperationPerCountry.find(operation.id, on: db).wait() else {
+            save(operation)
+            return
         }
+        //This change does nothing except updating the timestamp
+        dbItem.operation = operation.operation
+        save(dbItem)
     }
     
     //MARK: - Private
@@ -96,4 +98,11 @@ class DatabaseHelper {
         save(dbItem)
     }
     
+    private func save<T: Model>(_ item: T) {
+        do {
+            try item.save(on: db).wait()
+        } catch {
+            print(error)
+        }
+    }
 }

@@ -84,9 +84,9 @@ class TelegramController {
             ]
             for c in CountryCodes.all {
                 let op = OperationPerCountry(country: c, operation: .addition)
-                DatabaseHelper.shared.save(op)
+                DatabaseHelper.shared.insertOrUpdate(operation: op)
                 let op2 = OperationPerCountry(country: c, operation: .deletion)
-                DatabaseHelper.shared.save(op2)
+                DatabaseHelper.shared.insertOrUpdate(operation: op2)
             }
             context.respondAsync(facts.randomElement()!)
             

@@ -31,8 +31,12 @@ final class OperationPerCountry: Model {
     init() {}
     
     init(country: CountryCodes, operation: NetflixOperation) {
-        id = "\(country.rawValue)_\(operation.rawValue)"
+        id = OperationPerCountry.getId(country, operation)
         countryId = country.rawValue
         self.operation = operation.rawValue
+    }
+    
+    static func getId(_ country: CountryCodes, _ operation: NetflixOperation) -> String {
+        return "\(country.rawValue)_\(operation.rawValue)"
     }
 }
