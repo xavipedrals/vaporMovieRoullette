@@ -9,25 +9,13 @@ import Foundation
 
 class UnoGSService {
     
-    private var apiKey: String {
-        guard let key = UnoGSAPIKeyManager().getKey() else {
-            fatalError("All UNOGS keys have been used to the limit")
-        }
-        return key
+    private var additionApiKey: String {
+        return "557617c510msh1b7951ecbeb795ap108561jsnae39c29b0d02"
     }
-    
-//    func getMoviesFor(page: Int, completion: @escaping (NetflixMovieWrapper) -> Void) {
-//        let request = UnoGSCurlUrl.getAll(page: page).urlString
-//        requestNetflixMovieWrapper(request, completion: completion)
-//    }
-    
-//    func getDetails(netflixId: String, completion: @escaping (DetailsNetflixMovie?) -> Void) {
-//        let request = UnoGSCurlUrl.getDetails(netflixId: netflixId).urlString
-//        let callback: (NetflixMovieDetailRoot) -> () = { wrapper in
-//            completion(wrapper.result)
-//        }
-//        requestNetflixMovieWrapper(request, completion: callback)
-//    }
+
+    private var deletionApiKey: String {
+        return "Pg39B9YjdemshbfsF4A9Zadzn129p19HO7wjsnDtkTLedgooCl"
+    }
     
     func getNewAdditions(countryCode: String, since daysBack: Int, completion: @escaping (NetflixMovieWrapper) -> Void) {
         let base = NetflixMovieWrapper(count: "0", movies: [])
@@ -36,7 +24,7 @@ class UnoGSService {
     
     func getNewDeletions(countryCode: String, since daysBack: Int, completion: @escaping (DeletedNetflixMovieWrapper) -> Void) {
         let request = UnoGSCurlUrl.getNewDeletionsSince(days: daysBack, country: countryCode).urlString
-        requestNetflixMovieWrapper(request) { (result: DeletedNetflixMovieWrapper?) in
+        requestNetflixMovieWrapper(request, apiKey: deletionApiKey) { (result: DeletedNetflixMovieWrapper?) in
             guard let r = result else {
                 completion(DeletedNetflixMovieWrapper(count: "0", movies: []))
                 return
@@ -51,7 +39,7 @@ class UnoGSService {
         
         let request = UnoGSCurlUrl.getNewAdditionsSince(days: daysBack, country: countryCode, page: page).urlString
         
-        requestNetflixMovieWrapper(request) { (result: NetflixMovieWrapper?) in
+        requestNetflixMovieWrapper(request, apiKey: additionApiKey) { (result: NetflixMovieWrapper?) in
             guard let r = result else {
                 print("ERROR: Could not interpret result")
                 completion(base)
@@ -80,7 +68,7 @@ class UnoGSService {
         }
     }
     
-    private func requestNetflixMovieWrapper<T: Codable>(_ req: String, completion: @escaping (T?) -> Void) {
+    private func requestNetflixMovieWrapper<T: Codable>(_ req: String, apiKey: String, completion: @escaping (T?) -> Void) {
         let header = "X-RapidAPI-Key: \(apiKey)"
         let helper = CCurlHelper()
         helper.doRequest(endpoint: req, headers: [header]) { data in

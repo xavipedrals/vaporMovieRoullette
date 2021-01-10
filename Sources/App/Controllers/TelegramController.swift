@@ -82,13 +82,13 @@ class TelegramController {
                 "Vaig tard perquè estava rentant els plats",
                 "Aquest estiu anem als karts"
             ]
-            for c in CountryCodes.all {
-                let op = OperationPerCountry(country: c, operation: .addition)
-                DatabaseHelper.shared.insertOrUpdate(operation: op)
-                let op2 = OperationPerCountry(country: c, operation: .deletion)
-                DatabaseHelper.shared.insertOrUpdate(operation: op2)
-            }
-            context.respondAsync(facts.randomElement()!)
+//            for c in CountryCodes.all {
+//                let op = OperationPerCountry(country: c, operation: .addition)
+//                DatabaseHelper.shared.insertOrUpdate(operation: op)
+//                let op2 = OperationPerCountry(country: c, operation: .deletion)
+//                DatabaseHelper.shared.insertOrUpdate(operation: op2)
+//            }
+//            context.respondAsync(facts.randomElement()!)
             
 //            OMDBEnricher (completion: { _ in
 //                context.respondAsync(facts.randomElement()!)
@@ -96,9 +96,9 @@ class TelegramController {
 //            TMDBEnricher().run {
 //                context.respondAsync(facts.randomElement()!)
 //            }
-//            WeeklyUpdateOption(completion: { _ in
-//                context.respondAsync(facts.randomElement()!)
-//            }).run()
+            WeeklyUpdateOption(completion: { _ in
+                context.respondAsync(facts.randomElement()!)
+            }).run()
             return true
         }
     }

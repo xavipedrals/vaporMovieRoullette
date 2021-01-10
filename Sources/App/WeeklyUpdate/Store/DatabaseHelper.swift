@@ -74,14 +74,20 @@ class DatabaseHelper {
         return audiovisualsWithoutRating ?? []
     }
     
-    func insertOrUpdate(operation: OperationPerCountry) {
-        guard let dbItem = try? OperationPerCountry.find(operation.id, on: db).wait() else {
+    func insertOrUpdate(country: CountryCodes, op: NetflixOperation) {
+        guard let dbOp = get(country: country, op: op) else {
+            let operation = OperationPerCountry(country: country, operation: op)
             save(operation)
             return
         }
         //This change does nothing except updating the timestamp
-        dbItem.operation = operation.operation
-        save(dbItem)
+        dbOp.operation = op.rawValue
+        save(dbOp)
+    }
+    
+    func get(country: CountryCodes, op: NetflixOperation) -> OperationPerCountry? {
+        let id = OperationPerCountry.getId(country, op)
+        return try? OperationPerCountry.find(id, on: db).wait()
     }
     
     //MARK: - Private
