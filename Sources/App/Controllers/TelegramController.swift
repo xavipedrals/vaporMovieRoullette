@@ -89,14 +89,7 @@ class TelegramController {
 //                DatabaseHelper.shared.insertOrUpdate(operation: op2)
 //            }
 //            context.respondAsync(facts.randomElement()!)
-            
-//            OMDBEnricher (completion: { _ in
-//                context.respondAsync(facts.randomElement()!)
-//            }).run()
-//            TMDBEnricher().run {
-//                context.respondAsync(facts.randomElement()!)
-//            }
-            WeeklyUpdateOption(completion: { _ in
+            DailyJob(completion: {
                 context.respondAsync(facts.randomElement()!)
             }).run()
             return true
