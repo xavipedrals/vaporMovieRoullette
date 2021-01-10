@@ -76,7 +76,7 @@ class UnoGSService {
                 print("Uh oh, something went wrong getting the data from the HTTP req")
                 return
             }
-            print(data.toString())
+//            print(data.toString())
             do {
                 let wrapper = try JSONDecoder().decode(T.self, from: data)
                 completion(wrapper)

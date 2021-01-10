@@ -27,9 +27,9 @@ class CCurlHelper {
     }
     
     func doRequest(endpoint: String, headers: [String], completion: @escaping (Data?) -> ()) {
-        print("REQUEST INFO")
-        print(endpoint)
-        print(headers)
+//        print("REQUEST INFO")
+//        print(endpoint)
+//        print(headers)
         DispatchQueue.global().async {
             guard let curl = curl_easy_init() else {
                 print("ERROR ON CURL INIT")
