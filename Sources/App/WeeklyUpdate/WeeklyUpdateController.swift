@@ -109,9 +109,9 @@ class WeeklyUpdateOption {
         print("operation")
         print(op)
         print(op?.updatedAt)
-        print(op?.$updatedAt)
-        print(op?.$updatedAt.timestamp)
-        guard let lastUpdate = op?.$updatedAt.timestamp else {
+        print(op?.$updatedAt.value)
+        print(op?.$updatedAt.wrappedValue)
+        guard let lastUpdate = op?.$updatedAt else {
             print("No date in database")
             return nil //If there's nothing in the db don't proceed
         }
