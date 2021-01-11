@@ -87,7 +87,14 @@ class DatabaseHelper {
     
     func get(country: CountryCodes, op: NetflixOperation) -> OperationPerCountry? {
         let id = OperationPerCountry.getId(country, op)
-        return try? OperationPerCountry.find(id, on: db).wait()
+        print("Operation id -> \(id)")
+        do {
+            return try OperationPerCountry.find(id, on: db).wait()
+        } catch {
+            print(error)
+            return nil
+        }
+        
     }
     
     //MARK: - Private
