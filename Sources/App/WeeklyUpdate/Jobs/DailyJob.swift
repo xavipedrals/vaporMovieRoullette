@@ -23,7 +23,8 @@ class DailyJob: ScheduledJob {
     
     func start() {
         WeeklyUpdateOption(completion: { _ in
-            self.refreshTMDBInfo()
+//            self.refreshTMDBInfo()
+            self.completion()
         }).run()
     }
     
