@@ -20,5 +20,5 @@ public func configure(_ app: Application) throws {
         print("Feina feta")
     }))
         .daily()
-        .at(9, 12)
+        .at(8, 38)
 }
