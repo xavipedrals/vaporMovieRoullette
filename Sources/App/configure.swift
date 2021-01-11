@@ -15,10 +15,11 @@ public func configure(_ app: Application) throws {
     try app.autoMigrate().wait()
     DatabaseHelper.shared.db = app.db
     try app.queues.use(.redis(url: "redis://127.0.0.1:6379"))
-    try routes(app)
     app.queues.schedule(DailyJob(completion: {
         print("Feina feta")
     }))
         .daily()
-        .at(8, 38)
+        .at(9, 25)
+    try app.queues.startScheduledJobs()
+    try routes(app)
 }
