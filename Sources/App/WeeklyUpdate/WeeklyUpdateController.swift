@@ -113,7 +113,7 @@ class WeeklyUpdateOption {
         print("Last update")
         print(lastUpdate)
         print("Current date")
-        print(date)
+        print(Date())
         return calendar.getMissingDays(from: lastUpdate, to: Date())
     }
 }
