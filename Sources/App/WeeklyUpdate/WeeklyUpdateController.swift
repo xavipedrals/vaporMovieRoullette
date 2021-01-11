@@ -108,7 +108,7 @@ class WeeklyUpdateOption {
         let op = db.get(country: country, op: operation)
         print("operation")
         print(op)
-        guard let lastUpdate = op?.updatedAt else {
+        guard let lastUpdate = op?.$updatedAt.timestamp else {
             print("No date in database")
             return nil //If there's nothing in the db don't proceed
         }
