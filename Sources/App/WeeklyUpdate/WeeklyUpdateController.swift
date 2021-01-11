@@ -107,8 +107,13 @@ class WeeklyUpdateOption {
     func getUpdateDiff(operation: NetflixOperation, country: CountryCodes) -> Int? {
         let op = db.get(country: country, op: operation)
         guard let lastUpdate = op?.updatedAt else {
+            print("No date in database")
             return nil //If there's nothing in the db don't proceed
         }
+        print("Last update")
+        print(lastUpdate)
+        print("Current date")
+        print(date)
         return calendar.getMissingDays(from: lastUpdate, to: Date())
     }
 }
