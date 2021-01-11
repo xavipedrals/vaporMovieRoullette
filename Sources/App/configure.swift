@@ -1,4 +1,5 @@
 import Vapor
+import QueuesRedisDriver
 
 // configures your application
 public func configure(_ app: Application) throws {
@@ -13,5 +14,11 @@ public func configure(_ app: Application) throws {
     app.logger.logLevel = .error
     try app.autoMigrate().wait()
     DatabaseHelper.shared.db = app.db
+    try app.queues.use(.redis(url: "redis://127.0.0.1:6379"))
     try routes(app)
+    app.queues.schedule(DailyJob(completion: {
+        print("Feina feta")
+    }))
+        .daily()
+        .at(9, 00)
 }

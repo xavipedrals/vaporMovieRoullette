@@ -27,7 +27,7 @@ class OMDBEnricher {
     func moveToNextItem() {
         print("Items left -> \(input.count - currentIndex)")
         currentIndex += 1
-        guard currentIndex < input.count else {
+        guard currentIndex < (input.count - 1) else {
             print("Finished with success!")
             completion(true)
             return

@@ -7,7 +7,6 @@
 
 import Foundation
 import TelegramBotSDK
-import Jobs
 
 class TelegramController {
     
@@ -89,9 +88,9 @@ class TelegramController {
 //                DatabaseHelper.shared.insertOrUpdate(operation: op2)
 //            }
 //            context.respondAsync(facts.randomElement()!)
-            DailyJob(completion: {
+//            DailyJob(completion: {
                 context.respondAsync(facts.randomElement()!)
-            }).run()
+//            }).run()
             return true
         }
     }

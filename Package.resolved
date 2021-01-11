@@ -65,15 +65,6 @@
         }
       },
       {
-        "package": "Jobs",
-        "repositoryURL": "https://github.com/BrettRToomey/Jobs.git",
-        "state": {
-          "branch": null,
-          "revision": "2051cc49b64692534225ea9d347051f64ac682ee",
-          "version": "1.1.2"
-        }
-      },
-      {
         "package": "postgres-kit",
         "repositoryURL": "https://github.com/vapor/postgres-kit.git",
         "state": {
@@ -89,6 +80,42 @@
           "branch": null,
           "revision": "3cf24967e54e3e63809593273b45b4e8135da6aa",
           "version": "1.4.0"
+        }
+      },
+      {
+        "package": "queues",
+        "repositoryURL": "https://github.com/vapor/queues.git",
+        "state": {
+          "branch": null,
+          "revision": "9418af49ca3ca779c2fab7aa0cedecb1aa6779b6",
+          "version": "1.5.1"
+        }
+      },
+      {
+        "package": "queues-redis-driver",
+        "repositoryURL": "https://github.com/vapor/queues-redis-driver.git",
+        "state": {
+          "branch": null,
+          "revision": "04306b81ef25b3bc42d9634c7c657b3eb498ed0e",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "redis",
+        "repositoryURL": "https://github.com/vapor/redis.git",
+        "state": {
+          "branch": null,
+          "revision": "00fdd687ec56468a3e21204ac0a9b6337d7e79ed",
+          "version": "4.0.0"
+        }
+      },
+      {
+        "package": "RediStack",
+        "repositoryURL": "https://gitlab.com/mordil/RediStack.git",
+        "state": {
+          "branch": null,
+          "revision": "b2367ac33eb8632011c1ec7afff12307838a4dab",
+          "version": "1.1.0"
         }
       },
       {

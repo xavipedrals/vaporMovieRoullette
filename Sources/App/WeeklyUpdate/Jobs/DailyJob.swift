@@ -5,9 +5,10 @@
 //  Created by Xavier Pedrals Camprubí on 10/1/21.
 //
 
-import Foundation
+import Vapor
+import Queues
 
-class DailyJob {
+class DailyJob: ScheduledJob {
     
     var completion: () -> ()
     
@@ -15,7 +16,12 @@ class DailyJob {
         self.completion = completion
     }
     
-    func run() {
+    func run(context: QueueContext) -> EventLoopFuture<Void> {
+        start()
+        return context.eventLoop.makeSucceededFuture(())
+    }
+    
+    func start() {
         WeeklyUpdateOption(completion: { _ in
             self.refreshTMDBInfo()
         }).run()
