@@ -81,21 +81,19 @@ class TelegramController {
                 "Vaig tard perquè estava rentant els plats",
                 "Aquest estiu anem als karts"
             ]
-//            for c in CountryCodes.all {
-//                let op = OperationPerCountry(country: c, operation: .addition)
-//                DatabaseHelper.shared.insertOrUpdate(operation: op)
-//                let op2 = OperationPerCountry(country: c, operation: .deletion)
-//                DatabaseHelper.shared.insertOrUpdate(operation: op2)
-//            }
+            for c in CountryCodes.all {
+                let op = OperationPerCountry(country: c, operation: .addition)
+                op.$updatedAt.timestamp = "2021-01-11T18:32:01Z"
+                DatabaseHelper.shared.insertOrUpdate(operation: op)
+                let op2 = OperationPerCountry(country: c, operation: .deletion)
+                op2.$updatedAt.timestamp = "2021-01-11T18:32:01Z"
+                DatabaseHelper.shared.insertOrUpdate(operation: op2)
+            }
 //            context.respondAsync(facts.randomElement()!)
 //            DailyJob(completion: {
 //                context.respondAsync(facts.randomElement()!)
 //            }).start()
             
-            DatabaseHelper.shared.createSidote()
-            let s = DatabaseHelper.shared.getSidote()
-            print(s)
-            print(s?.updatedAt)
             return true
         }
     }

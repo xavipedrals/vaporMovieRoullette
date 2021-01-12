@@ -10,7 +10,6 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateMoviesSchema())
     app.migrations.add(UpdateMoviesSchema())
     app.migrations.add(CreateNetflixCountryOperationSchema())
-    app.migrations.add(CreateSidoteSchema())
 //    app.logger.logLevel = .debug
     app.logger.logLevel = .error
     try app.autoMigrate().wait()

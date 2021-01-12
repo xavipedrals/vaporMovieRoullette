@@ -25,7 +25,7 @@ final class OperationPerCountry: Model {
     @Field(key: "operation")
     var operation: String
     
-    @Timestamp(key: "updated_at", on: .update)
+    @Timestamp(key: "updated_at", on: .update, format: .iso8601)
     var updatedAt: Date?
     
     init() {}
