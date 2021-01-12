@@ -70,38 +70,40 @@ class WeeklyUpdateOption {
     
     func getNewAdditions() {
         guard var diff = getUpdateDiff(operation: .addition, country: currentCountry),
-              diff > 0 else {
-            print("Info: Last update was today, skipping add")
+              diff > 0,
+              diff < 7 else {
+            print("Info: Either last update was today or longer than 7 days, skipping add")
             self.group.leave()
             return
         }
-//        diff += 1 //This is to ensure no info is lost, repeated updates should not be a problem
-//        service.getNewAdditions(countryCode: currentCountry.rawValue, since: diff) { (wrapper) in
-//            print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
-//            self.db.insertOrUpdateNetflix(items: wrapper.movies, country: self.currentCountry.rawValue)
-//            self.db.insertOrUpdate(country: self.currentCountry, op: .addition)
-//            print("Leaving additions group (group 1)")
-//            self.group.leave()
-//        }
+        diff += 1 //This is to ensure no info is lost, repeated updates should not be a problem
+        service.getNewAdditions(countryCode: currentCountry.rawValue, since: diff) { (wrapper) in
+            print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
+            self.db.insertOrUpdateNetflix(items: wrapper.movies, country: self.currentCountry.rawValue)
+            self.db.insertOrUpdate(country: self.currentCountry, op: .addition)
+            print("Leaving additions group (group 1)")
+            self.group.leave()
+        }
     }
     
     func getNewDeletions() {
         guard var diff = getUpdateDiff(operation: .deletion, country: currentCountry),
-              diff > 0 else {
-            print("Info: Last update was today, skipping delete")
+              diff > 0,
+              diff < 7 else {
+            print("Info: Either last update was today or longer than 7 days, skipping delete")
             self.group.leave()
             return
         }
-//        diff += 1 //This is to ensure no info is lost, repeated updates should not be a problem
-//        service.getNewDeletions(countryCode: currentCountry.rawValue, since: diff) { (wrapper) in
-//            let ids = wrapper.movies.compactMap{ $0.netflixId }
-//            for id in ids {
-//                self.db.delete(netflixId: id, country: self.currentCountry.rawValue)
-//            }
-//            self.db.insertOrUpdate(country: self.currentCountry, op: .deletion)
-//            print("Leaving deletions group (group 2)")
-//            self.group.leave()
-//        }
+        diff += 1 //This is to ensure no info is lost, repeated updates should not be a problem
+        service.getNewDeletions(countryCode: currentCountry.rawValue, since: diff) { (wrapper) in
+            let ids = wrapper.movies.compactMap{ $0.netflixId }
+            for id in ids {
+                self.db.delete(netflixId: id, country: self.currentCountry.rawValue)
+            }
+            self.db.insertOrUpdate(country: self.currentCountry, op: .deletion)
+            print("Leaving deletions group (group 2)")
+            self.group.leave()
+        }
     }
     
     func getUpdateDiff(operation: NetflixOperation, country: CountryCodes) -> Int? {

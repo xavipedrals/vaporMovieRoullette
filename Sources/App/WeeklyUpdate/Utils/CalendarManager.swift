@@ -17,8 +17,6 @@ class CalendarManager {
     }
     
     func getMissingDays(from: Date, to: Date) -> Int {
-        print(from)
-        print(to)
         let first = calendar.startOfDay(for: from)
         let last = calendar.startOfDay(for: to)
         let components = calendar.dateComponents([.day], from: first, to: last)

@@ -90,9 +90,9 @@ class TelegramController {
 //                DatabaseHelper.shared.insertOrUpdate23(operation: op2)
 //            }
 //            context.respondAsync(facts.randomElement()!)
-            DailyJob(completion: {
+//            DailyJob(completion: {
                 context.respondAsync(facts.randomElement()!)
-            }).start()
+//            }).start()
             
             return true
         }
