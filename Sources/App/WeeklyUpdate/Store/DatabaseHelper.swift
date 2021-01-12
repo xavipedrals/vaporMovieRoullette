@@ -97,6 +97,15 @@ class DatabaseHelper {
         
     }
     
+    func createSidote() {
+        let s = Sidote(id: "a")
+        save(s)
+    }
+    
+    func getSidote() -> Sidote? {
+        return try? Sidote.find("a", on: db).wait()
+    }
+    
     //MARK: - Private
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {

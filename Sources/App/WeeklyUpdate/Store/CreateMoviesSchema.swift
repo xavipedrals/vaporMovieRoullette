@@ -60,3 +60,32 @@ struct CreateNetflixCountryOperationSchema: Migration {
         database.schema("netflix_operations").delete()
     }
 }
+
+struct CreateSidoteSchema: Migration {
+    func prepare(on database: Database) -> EventLoopFuture<Void> {
+        database.schema("sida")
+            .field("id_auto", .string, .identifier(auto: false))
+            .field("updated_at", .string)
+            .create()
+    }
+        
+    func revert(on database: Database) -> EventLoopFuture<Void> {
+        database.schema("sida").delete()
+    }
+}
+
+final class Sidote: Model {
+    static let schema = "sida"
+    
+    @ID(custom: "id_auto", generatedBy: .user)
+    var id: String? //Auto-generated
+    
+    @Timestamp(key: "updated_at", on: .update, format: .iso8601)
+    var updatedAt: Date?
+    
+    init() {}
+    
+    init(id: String) {
+        self.id = id
+    }
+}

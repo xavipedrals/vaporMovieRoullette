@@ -88,9 +88,14 @@ class TelegramController {
 //                DatabaseHelper.shared.insertOrUpdate(operation: op2)
 //            }
 //            context.respondAsync(facts.randomElement()!)
-            DailyJob(completion: {
-                context.respondAsync(facts.randomElement()!)
-            }).start()
+//            DailyJob(completion: {
+//                context.respondAsync(facts.randomElement()!)
+//            }).start()
+            
+            DatabaseHelper.shared.createSidote()
+            let s = DatabaseHelper.shared.getSidote()
+            print(s)
+            print(s?.updatedAt)
             return true
         }
     }
