@@ -84,10 +84,10 @@ class TelegramController {
             for c in CountryCodes.all {
                 let op = OperationPerCountry(country: c, operation: .addition)
                 op.$updatedAt.timestamp = "2021-01-11T18:32:01Z"
-                DatabaseHelper.shared.insertOrUpdate(operation: op)
+                DatabaseHelper.shared.insertOrUpdate23(operation: op)
                 let op2 = OperationPerCountry(country: c, operation: .deletion)
                 op2.$updatedAt.timestamp = "2021-01-11T18:32:01Z"
-                DatabaseHelper.shared.insertOrUpdate(operation: op2)
+                DatabaseHelper.shared.insertOrUpdate23(operation: op2)
             }
 //            context.respondAsync(facts.randomElement()!)
 //            DailyJob(completion: {

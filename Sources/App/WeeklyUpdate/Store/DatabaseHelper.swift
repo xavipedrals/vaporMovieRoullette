@@ -85,6 +85,16 @@ class DatabaseHelper {
         save(dbOp)
     }
     
+    func insertOrUpdate23(operation: OperationPerCountry) {
+        guard let dbItem = try? OperationPerCountry.find(operation.id, on: db).wait() else {
+            save(operation)
+            return
+        }
+        //This change does nothing except updating the timestamp
+        dbItem.operation = operation.operation
+        save(dbItem)
+    }
+    
     func get(country: CountryCodes, op: NetflixOperation) -> OperationPerCountry? {
         let id = OperationPerCountry.getId(country, op)
         print("Operation id -> \(id)")
@@ -95,15 +105,6 @@ class DatabaseHelper {
             return nil
         }
         
-    }
-    
-    func createSidote() {
-        let s = Sidote(id: "a")
-        save(s)
-    }
-    
-    func getSidote() -> Sidote? {
-        return try? Sidote.find("a", on: db).wait()
     }
     
     //MARK: - Private
