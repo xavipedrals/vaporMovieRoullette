@@ -30,13 +30,15 @@ class DailyJob: ScheduledJob {
     //MARK: - Private
     
     func refreshTMDBInfo() {
-        TMDBEnricher().run {
+        let itemsToEnrich = DatabaseHelper.shared.getItemsToTMDBEnrich()
+        TMDBEnricher(input: itemsToEnrich).run {
             self.refreshRatings()
         }
     }
     
     func refreshRatings() {
-        OMDBEnricher (completion: { _ in
+        let noRatingItems = DatabaseHelper.shared.getItemsWithoutRating()
+        OMDBEnricher(input: noRatingItems, completion: { _ in
             self.completion()
         }).run()
     }

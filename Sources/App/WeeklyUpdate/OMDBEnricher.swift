@@ -15,29 +15,30 @@ class OMDBEnricher {
     var completion: (_ success: Bool) -> ()
     var currentIndex = -1
     
-    init(completion: @escaping (_ success: Bool) -> ()) {
+    init(input: [AudioVisual], completion: @escaping (_ success: Bool) -> ()) {
         self.completion = completion
-        input = DatabaseHelper.shared.getItemsWithoutRating()
+        self.input = input
     }
     
     func run() {
         getNextRating()
     }
     
-    func moveToNextItem() {
+    func moveToNextItem() -> Bool {
         print("Items left -> \(input.count - currentIndex)")
         currentIndex += 1
         guard currentIndex < (input.count - 1) else {
             print("Finished with success!")
             completion(true)
-            return
+            return false
         }
+        return true
     }
     
     func getNextRating() {
         group = DispatchGroup()
         let queue = DispatchQueue.global(qos: .userInitiated)
-        moveToNextItem()
+        guard moveToNextItem() else { return }
         group.enter()
         queue.async {
             self.getRating()

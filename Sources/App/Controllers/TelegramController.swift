@@ -37,6 +37,10 @@ class TelegramController {
         startListening()
     }
     
+    func sendMessage(text: String) {
+        bot.sendMessageSync(chatId: myChat, text: text)
+    }
+    
     func setupHelp() {
         router["help"] = { context in
             let actions = """

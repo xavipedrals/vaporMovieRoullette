@@ -52,9 +52,16 @@ class DatabaseHelper {
         }
     }
     
-    func getItemsToEnrich() -> [AudioVisual] {
+    func getItemsToTMDBEnrich() -> [AudioVisual] {
         let audiovisualsToEnrich = try? AudioVisual.query(on: db)
             .filter(\.$tmdbId == nil)
+            .all()
+            .wait()
+        return audiovisualsToEnrich ?? []
+    }
+    
+    func getAllAudioVisuals() -> [AudioVisual] {
+        let audiovisualsToEnrich = try? AudioVisual.query(on: db)
             .all()
             .wait()
         return audiovisualsToEnrich ?? []

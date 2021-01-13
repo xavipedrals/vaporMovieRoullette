@@ -16,8 +16,8 @@ class TMDBEnricher {
     let lowQueue = DispatchQueue.global(qos: .background)
     var lowerBound = 0
 
-    init() {
-        input = DatabaseHelper.shared.getItemsToEnrich()
+    init(input: [AudioVisual]) {
+        self.input = input
     }
 
     func run(completion: @escaping () -> ()) {

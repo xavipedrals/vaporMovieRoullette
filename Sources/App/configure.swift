@@ -14,12 +14,27 @@ public func configure(_ app: Application) throws {
     app.logger.logLevel = .error
     try app.autoMigrate().wait()
     DatabaseHelper.shared.db = app.db
+    
+    let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!)
+    controller.setupRoutes()
+    
     try app.queues.use(.redis(url: "redis://127.0.0.1:6379"))
-    app.queues.schedule(DailyJob(completion: {
-        print("Feina feta")
-    }))
+    let dailyJob = DailyJob() {
+        print("Daily job finished")
+        controller.sendMessage(text: "Finished Daily job successfully")
+    }
+    app.queues.schedule(dailyJob)
         .daily()
         .at(9, 25)
+    let biWeeklyJob = WeeklyJob() {
+        print("Weekly job finished")
+        controller.sendMessage(text: "Finished Weekly job successfully")
+    }
+    app.queues.schedule(biWeeklyJob)
+        .weekly()
+        .on(.thursday)
+        .at(.noon)
+    
     try app.queues.startScheduledJobs()
     try routes(app)
 }
