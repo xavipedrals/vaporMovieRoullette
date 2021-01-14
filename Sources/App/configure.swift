@@ -25,7 +25,8 @@ public func configure(_ app: Application) throws {
     }
     app.queues.schedule(dailyJob)
         .daily()
-        .at(9, 25)
+        .at(11, 12)
+    
     let biWeeklyJob = WeeklyJob() {
         print("Weekly job finished")
         controller.sendMessage(text: "Finished Weekly job successfully")
