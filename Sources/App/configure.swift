@@ -25,16 +25,16 @@ public func configure(_ app: Application) throws {
     }
     app.queues.schedule(dailyJob)
         .daily()
-        .at(11, 12)
+        .at(18, 20)
     
-    let biWeeklyJob = WeeklyJob() {
-        print("Weekly job finished")
-        controller.sendMessage(text: "Finished Weekly job successfully")
-    }
-    app.queues.schedule(biWeeklyJob)
-        .weekly()
-        .on(.thursday)
-        .at(.noon)
+//    let biWeeklyJob = WeeklyJob() {
+//        print("Weekly job finished")
+//        controller.sendMessage(text: "Finished Weekly job successfully")
+//    }
+//    app.queues.schedule(biWeeklyJob)
+//        .weekly()
+//        .on(.thursday)
+//        .at(.noon)
     
     try app.queues.startScheduledJobs()
     try routes(app)
