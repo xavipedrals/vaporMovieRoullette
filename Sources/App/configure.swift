@@ -15,17 +15,17 @@ public func configure(_ app: Application) throws {
     try app.autoMigrate().wait()
     DatabaseHelper.shared.db = app.db
     
-    let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!)
-    controller.setupRoutes()
+//    let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!)
+//    controller.setupRoutes()
     
     try app.queues.use(.redis(url: "redis://127.0.0.1:6379"))
     let dailyJob = DailyJob() {
         print("Daily job finished")
-        controller.sendMessage(text: "Finished Daily job successfully")
+//        controller.sendMessage(text: "Finished Daily job successfully")
     }
     app.queues.schedule(dailyJob)
         .daily()
-        .at(18, 20)
+        .at(18, 36)
     
 //    let biWeeklyJob = WeeklyJob() {
 //        print("Weekly job finished")
