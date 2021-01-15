@@ -10,6 +10,7 @@ import TelegramBotSDK
 
 class TelegramController {
     
+    static var shared: TelegramController?
     var bot: TelegramBot
     var myChat: ChatId
     let router: Router
@@ -26,6 +27,7 @@ class TelegramController {
         self.bot = TelegramBot(token: token)
         self.myChat = .chat(xaviUserId) // your user id
         self.router = Router(bot: bot)
+        TelegramController.shared = self
     }
     
     func setupRoutes() {
