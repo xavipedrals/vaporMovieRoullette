@@ -16,24 +16,26 @@ public func configure(_ app: Application) throws {
     DatabaseHelper.shared.db = app.db
     
     try app.queues.use(.redis(url: "redis://127.0.0.1:6379"))
-    let dailyJob = DailyJob() {
-        print("Daily job finished")
-        TelegramController.shared?.sendMessage(text: "Finished Daily job successfully")
-    }
-    app.queues.schedule(dailyJob)
-        .daily()
-        .at(9, 50)
+//    let dailyJob = DailyJob() {
+//        print("Daily job finished")
+//        TelegramController.shared?.sendMessage(text: "Finished Daily job successfully")
+//    }
+//    app.queues.schedule(dailyJob)
+//        .daily()
+//        .at(9, 50)
     
     let weeklyJob = WeeklyJob() {
         print("Weekly job finished")
         TelegramController.shared?.sendMessage(text: "Finished Weekly job successfully")
     }
     app.queues.schedule(weeklyJob)
-        .weekly()
-        .on(.friday)
-        .at(.noon)
+//        .weekly()
+//        .on(.friday)
+//        .at(.noon)
+        .daily()
+        .at(17, 42)
     
-    try app.queues.startScheduledJobs()
+//    try app.queues.startScheduledJobs()
     let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!)
     controller.setupRoutes()
     try routes(app)
