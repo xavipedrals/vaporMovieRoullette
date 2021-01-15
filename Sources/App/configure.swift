@@ -33,10 +33,10 @@ public func configure(_ app: Application) throws {
 //        .on(.friday)
 //        .at(.noon)
         .daily()
-        .at(17, 47)
+        .at(17, 50)
     
 //    try app.queues.startScheduledJobs()
-    try app.queues.startInProcessJobs(on: .default)
+    try app.queues.startInProcessJobs(on: .init(string: "prova"))
     let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!)
     controller.setupRoutes()
     try routes(app)
