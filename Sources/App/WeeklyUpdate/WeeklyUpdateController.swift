@@ -75,6 +75,7 @@ class WeeklyUpdateOption {
             self.group.leave()
             return
         }
+        print("I'm alive")
         diff += 1 //This is to ensure no info is lost, repeated updates should not be a problem
         service.getNewAdditions(countryCode: currentCountry.rawValue, since: diff) { (wrapper) in
             print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
@@ -93,6 +94,7 @@ class WeeklyUpdateOption {
             self.group.leave()
             return
         }
+        print("I'm alive")
         diff += 1 //This is to ensure no info is lost, repeated updates should not be a problem
         service.getNewDeletions(countryCode: currentCountry.rawValue, since: diff) { (wrapper) in
             let ids = wrapper.movies.compactMap{ $0.netflixId }
@@ -107,10 +109,12 @@ class WeeklyUpdateOption {
     
     func getUpdateDiff(operation: NetflixOperation, country: CountryCodes) -> Int? {
         let op = db.get(country: country, op: operation)
+        print("Got something from db")
         guard let lastUpdate = op?.updatedAt else {
             print("No date in database")
             return nil //If there's nothing in the db don't proceed
         }
+        print("Heloooo")
         let diff = calendar.getMissingDays(from: lastUpdate, to: Date())
         print("Difference between updates -> \(diff) days")
         return diff

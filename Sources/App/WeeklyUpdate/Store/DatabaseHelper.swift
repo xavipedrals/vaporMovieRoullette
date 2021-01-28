@@ -112,7 +112,6 @@ class DatabaseHelper {
             print(error)
             return nil
         }
-        
     }
     
     //MARK: - Private

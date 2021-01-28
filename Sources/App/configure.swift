@@ -22,15 +22,15 @@ public func configure(_ app: Application) throws {
     }
     app.queues.schedule(dailyJob)
         .daily()
-        .at(08, 02)
+        .at(16, 41)
     
-    let recoveryDailyJob = RecoveryDailyJob() {
-        print("Daily job finished")
-        TelegramController.shared?.sendMessage(text: "Finished recovery Daily job successfully")
-    }
-    app.queues.schedule(recoveryDailyJob)
-        .daily()
-        .at(17, 00)
+//    let recoveryDailyJob = RecoveryDailyJob() {
+//        print("Daily job finished")
+//        TelegramController.shared?.sendMessage(text: "Finished recovery Daily job successfully")
+//    }
+//    app.queues.schedule(recoveryDailyJob)
+//        .daily()
+//        .at(17, 00)
     
     let weeklyJob = WeeklyJob() {
         print("Weekly job finished")
