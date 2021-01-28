@@ -15,8 +15,10 @@ class TMDBEnricher {
     let topQueue = DispatchQueue.global(qos: .userInitiated)
     let lowQueue = DispatchQueue.global(qos: .background)
     var lowerBound = 0
+    var db: DatabaseHelper
 
-    init(input: [AudioVisual]) {
+    init(db: DatabaseHelper = DatabaseHelper.shared, input: [AudioVisual]) {
+        self.db = db
         self.input = input
     }
 
@@ -50,7 +52,7 @@ class TMDBEnricher {
 
 extension TMDBEnricher: TMDBatchDelegate {
     func batchFinished(output: [AudioVisual]) {
-        DatabaseHelper.shared.update(items: output)
+        db.update(items: output)
         lowerBound += rateLimit.calls
         doNextBatch()
     }

@@ -7,22 +7,30 @@
 
 import Vapor
 import Queues
+import Fluent
+import FluentPostgresDriver
 
 class DailyJob: ScheduledJob {
     
     var completion: () -> ()
+    var db: Database!
+    var databaseHelper: DatabaseHelper!
     
     init(completion: @escaping () -> ()) {
         self.completion = completion
     }
     
     func run(context: QueueContext) -> EventLoopFuture<Void> {
+        let db = context.application.db
+        self.db = db
+        databaseHelper = DatabaseHelper()
+        databaseHelper.db = db
         start()
         return context.eventLoop.makeSucceededFuture(())
     }
     
     func start() {
-        WeeklyUpdateOption(completion: { _ in
+        WeeklyUpdateOption(db: databaseHelper, completion: { _ in
             self.refreshTMDBInfo()
         }).run()
     }
@@ -30,15 +38,15 @@ class DailyJob: ScheduledJob {
     //MARK: - Private
     
     func refreshTMDBInfo() {
-        let itemsToEnrich = DatabaseHelper.shared.getItemsToTMDBEnrich()
-        TMDBEnricher(input: itemsToEnrich).run {
+        let itemsToEnrich = databaseHelper.getItemsToTMDBEnrich()
+        TMDBEnricher(db: databaseHelper, input: itemsToEnrich).run {
             self.refreshRatings()
         }
     }
     
     func refreshRatings() {
-        let noRatingItems = DatabaseHelper.shared.getItemsWithoutRating()
-        OMDBEnricher(input: noRatingItems, completion: { _ in
+        let noRatingItems = databaseHelper.getItemsWithoutRating()
+        OMDBEnricher(db: databaseHelper, input: noRatingItems, completion: { _ in
             self.completion()
         }).run()
     }
@@ -48,12 +56,18 @@ class DailyJob: ScheduledJob {
 class RecoveryDailyJob: ScheduledJob {
     
     var completion: () -> ()
+    var db: Database!
+    var databaseHelper: DatabaseHelper!
     
     init(completion: @escaping () -> ()) {
         self.completion = completion
     }
     
     func run(context: QueueContext) -> EventLoopFuture<Void> {
+        let db = context.application.db
+        self.db = db
+        databaseHelper = DatabaseHelper()
+        databaseHelper.db = db
         start()
         return context.eventLoop.makeSucceededFuture(())
     }
@@ -64,7 +78,7 @@ class RecoveryDailyJob: ScheduledJob {
             print("No need for a recovery daily job")
             return
         }
-        WeeklyUpdateOption(completion: { _ in
+        WeeklyUpdateOption(db: databaseHelper, completion: { _ in
             self.refreshTMDBInfo()
         }).run()
     }
@@ -72,7 +86,7 @@ class RecoveryDailyJob: ScheduledJob {
     //MARK: - Private
     
     func getUpdateDiff(operation: NetflixOperation, country: CountryCodes) -> Int? {
-        let op = DatabaseHelper.shared.get(country: country, op: operation)
+        let op = databaseHelper.get(country: country, op: operation)
         guard let lastUpdate = op?.updatedAt else {
             print("No date in database")
             return nil //If there's nothing in the db don't proceed
@@ -83,15 +97,15 @@ class RecoveryDailyJob: ScheduledJob {
     }
     
     func refreshTMDBInfo() {
-        let itemsToEnrich = DatabaseHelper.shared.getItemsToTMDBEnrich()
-        TMDBEnricher(input: itemsToEnrich).run {
+        let itemsToEnrich = databaseHelper.getItemsToTMDBEnrich()
+        TMDBEnricher(db: databaseHelper, input: itemsToEnrich).run {
             self.refreshRatings()
         }
     }
     
     func refreshRatings() {
-        let noRatingItems = DatabaseHelper.shared.getItemsWithoutRating()
-        OMDBEnricher(input: noRatingItems, completion: { _ in
+        let noRatingItems = databaseHelper.getItemsWithoutRating()
+        OMDBEnricher(db: databaseHelper, input: noRatingItems, completion: { _ in
             self.completion()
         }).run()
     }

@@ -13,7 +13,8 @@ class DatabaseHelper {
     static let shared = DatabaseHelper()
     var db: Database!
     
-    private init() {}
+    //Try to call this from the custom scheduled workers
+    init() {}
     
     //MARK: - Public
     

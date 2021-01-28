@@ -17,14 +17,13 @@ class WeeklyUpdateOption {
     let service = UnoGSService()
     var group = DispatchGroup()
     var completion: (_ success: Bool) -> ()
-    var db: DatabaseHelper {
-        return DatabaseHelper.shared
-    }
+    var db: DatabaseHelper
     var calendar: CalendarManager = {
         return CalendarManager()
     }()
     
-    init(completion: @escaping (_ success: Bool) -> ()) {
+    init(db: DatabaseHelper = DatabaseHelper.shared, completion: @escaping (_ success: Bool) -> ()) {
+        self.db = db
         self.completion = completion
     }
     

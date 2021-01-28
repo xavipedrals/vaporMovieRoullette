@@ -14,8 +14,10 @@ class OMDBEnricher {
     var group = DispatchGroup()
     var completion: (_ success: Bool) -> ()
     var currentIndex = -1
+    var db: DatabaseHelper
     
-    init(input: [AudioVisual], completion: @escaping (_ success: Bool) -> ()) {
+    init(db: DatabaseHelper = DatabaseHelper.shared, input: [AudioVisual], completion: @escaping (_ success: Bool) -> ()) {
+        self.db = db
         self.completion = completion
         self.input = input
     }
@@ -61,7 +63,7 @@ class OMDBEnricher {
             }
             let audiovisual = self.input[self.currentIndex]
             audiovisual.combined(with: o)
-            DatabaseHelper.shared.update(items: [audiovisual])
+            self.db.update(items: [audiovisual])
         }
     }
 }
