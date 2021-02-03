@@ -89,11 +89,11 @@ class TelegramController {
             ]
 //                context.respondAsync(facts.randomElement()!)
 
-            let j = RecoveryDailyJob() {
-                print("Daily job finished")
-                TelegramController.shared?.sendMessage(text: "Finished recovery Daily job successfully")
-            }
-            j.start()
+//            let j = RecoveryDailyJob() {
+//                print("Daily job finished")
+//                TelegramController.shared?.sendMessage(text: "Finished recovery Daily job successfully")
+//            }
+//            j.start()
             return true
         }
     }

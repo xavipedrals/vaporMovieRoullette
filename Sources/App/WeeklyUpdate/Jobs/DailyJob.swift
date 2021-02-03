@@ -55,31 +55,43 @@ class DailyJob: ScheduledJob {
 
 class RecoveryDailyJob: ScheduledJob {
     
-    var completion: () -> ()
+//    var completion: () -> ()
     var db: Database!
     var databaseHelper: DatabaseHelper!
     
-    init(completion: @escaping () -> ()) {
-        self.completion = completion
-    }
+//    init(completion: @escaping () -> ()) {
+//        self.completion = completion
+//    }
     
     func run(context: QueueContext) -> EventLoopFuture<Void> {
         let db = context.application.db
         self.db = db
         databaseHelper = DatabaseHelper()
         databaseHelper.db = db
-        start()
-        return context.eventLoop.makeSucceededFuture(())
+        let promise = context.eventLoop.makePromise(of: Void.self)
+//        someAsyncOperationWithACallback(args) { result -> Void in
+//            // when finished...
+//
+//            // if error...
+//            promise.fail(error)
+//        }
+        
+        
+        start() {
+            promise.succeed(())
+        }
+        return promise.futureResult
+//        return context.eventLoop.makeSucceededFuture(())
     }
     
-    func start() {
+    func start(completion: @escaping () -> ()) {
         guard let n = getUpdateDiff(operation: .addition, country: .argentina),
               n > 0 else {
             print("No need for a recovery daily job")
             return
         }
         WeeklyUpdateOption(db: databaseHelper, completion: { _ in
-            self.refreshTMDBInfo()
+            self.refreshTMDBInfo(completion: completion)
         }).run()
     }
     
@@ -96,17 +108,17 @@ class RecoveryDailyJob: ScheduledJob {
         return diff
     }
     
-    func refreshTMDBInfo() {
+    func refreshTMDBInfo(completion: @escaping () -> ()) {
         let itemsToEnrich = databaseHelper.getItemsToTMDBEnrich()
         TMDBEnricher(db: databaseHelper, input: itemsToEnrich).run {
-            self.refreshRatings()
+            self.refreshRatings(completion: completion)
         }
     }
     
-    func refreshRatings() {
+    func refreshRatings(completion: @escaping () -> ()) {
         let noRatingItems = databaseHelper.getItemsWithoutRating()
         OMDBEnricher(db: databaseHelper, input: noRatingItems, completion: { _ in
-            self.completion()
+            completion()
         }).run()
     }
 }
