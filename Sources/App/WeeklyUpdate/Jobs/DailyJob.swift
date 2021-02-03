@@ -68,15 +68,8 @@ class RecoveryDailyJob: ScheduledJob {
         self.db = db
         databaseHelper = DatabaseHelper()
         databaseHelper.db = db
+        print("Setting up promise")
         let promise = context.eventLoop.makePromise(of: Void.self)
-//        someAsyncOperationWithACallback(args) { result -> Void in
-//            // when finished...
-//
-//            // if error...
-//            promise.fail(error)
-//        }
-        
-        
         start() {
             promise.succeed(())
         }
