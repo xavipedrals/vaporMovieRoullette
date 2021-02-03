@@ -16,13 +16,21 @@ public func configure(_ app: Application) throws {
     DatabaseHelper.shared.db = app.db
     
     try app.queues.use(.redis(url: "redis://127.0.0.1:6379"))
-    let dailyJob = DailyJob() {
+//    let dailyJob = DailyJob() {
+//        print("Daily job finished")
+//        TelegramController.shared?.sendMessage(text: "Finished Daily job successfully")
+//    }
+//    app.queues.schedule(dailyJob)
+//        .daily()
+//        .at(16, 41)
+    
+    let dailyJob = RecoveryDailyJob() {
         print("Daily job finished")
         TelegramController.shared?.sendMessage(text: "Finished Daily job successfully")
     }
     app.queues.schedule(dailyJob)
         .daily()
-        .at(16, 41)
+        .at(16, 58)
     
 //    let recoveryDailyJob = RecoveryDailyJob() {
 //        print("Daily job finished")
