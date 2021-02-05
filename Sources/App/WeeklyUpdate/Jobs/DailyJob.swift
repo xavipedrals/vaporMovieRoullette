@@ -126,39 +126,54 @@ class SidaJob: ScheduledJob {
         databaseHelper.db = context.application.db
         eventLoop = context.eventLoop
         let country = CountryCodes.japan
-        let start = databaseHelper.getFuture(country: country, op: .addition)
-        let op = start.flatMap { (op) ->
-            EventLoopFuture<[NetfilxMovie]> in
-            self.getNetfixAdditions(op: op, country: country)
+        return databaseHelper.getFuture(country: country, op: .deletion).flatMap { (op) -> EventLoopFuture<Void> in
+            guard let diff = self.getUpdateDiff(operation: op) else {
+                print("No need for an update in country -> \(op)")
+                return self.eventLoop.makeSucceededFuture(())
+            }
+            let c = NetflixDeletionsFuture(
+                databaseHelper: self.databaseHelper,
+                eventLoop: self.eventLoop,
+                country: country,
+                updateDiff: diff
+            )
+            return c.run()
         }
-        let pit = op.flatMap { (movies) -> EventLoopFuture<Void> in
-            self.saveMovies(movies, country: country)
-        }
-        let culo = pit.flatMap { () -> EventLoopFuture<Void> in
-            self.databaseHelper.insertOrUpdateFuture(country: country, op: .addition)
-        }
-        return culo
+        
+        
+//        let start = databaseHelper.getFuture(country: country, op: .addition)
+//        let op = start.flatMap { (op) ->
+//            EventLoopFuture<[NetfilxMovie]> in
+//            self.getNetfixAdditions(op: op, country: country)
+//        }
+//        let pit = op.flatMap { (movies) -> EventLoopFuture<Void> in
+//            self.saveMovies(movies, country: country)
+//        }
+//        let culo = pit.flatMap { () -> EventLoopFuture<Void> in
+//            self.databaseHelper.insertOrUpdateFuture(country: country, op: .addition)
+//        }
+//        return culo
     }
     
     //MARK: - Private
     
-    func saveMovies(_ movies: [NetfilxMovie], country: CountryCodes) -> EventLoopFuture<Void> {
-        print("Got movies -> \(movies.count)")
-        let bdOps = self.databaseHelper.insertOrUpdateNetflixfdsf(items: movies, country: country.rawValue)
-        return EventLoopFuture.reduce((), bdOps, on: eventLoop) { (accumulated, newValue) -> () in
-            return ()
-        }
-    }
-    
-    func getNetfixAdditions(op: OperationPerCountry?, country: CountryCodes) -> EventLoopFuture<[NetfilxMovie]> {
-        print("Got op -> \(op)")
-        guard let diff = self.getUpdateDiff(operation: op) else {
-            print("No need for an update in country -> \(op)")
-            return eventLoop.makeSucceededFuture([])
-        }
-        let s = NetflixUpdateController(country: country, updateDiffDays: diff)
-        return s.run(eventLoop: eventLoop)
-    }
+//    func saveMovies(_ movies: [NetfilxMovie], country: CountryCodes) -> EventLoopFuture<Void> {
+//        print("Got movies -> \(movies.count)")
+//        let bdOps = self.databaseHelper.insertOrUpdateNetflixFuture(items: movies, country: country.rawValue)
+//        return EventLoopFuture.reduce((), bdOps, on: eventLoop) { (accumulated, newValue) -> () in
+//            return ()
+//        }
+//    }
+//
+//    func getNetfixAdditions(op: OperationPerCountry?, country: CountryCodes) -> EventLoopFuture<[NetfilxMovie]> {
+//        print("Got op -> \(op)")
+//        guard let diff = self.getUpdateDiff(operation: op) else {
+//            print("No need for an update in country -> \(op)")
+//            return eventLoop.makeSucceededFuture([])
+//        }
+//        let s = NetflixUpdateController(country: country, updateDiffDays: diff)
+//        return s.getAdditions(eventLoop: eventLoop)
+//    }
     
     func getUpdateDiff(operation: OperationPerCountry?) -> Int? {
         guard let lastUpdate = operation?.updatedAt else {
@@ -169,6 +184,4 @@ class SidaJob: ScheduledJob {
         print("Difference between updates -> \(diff) days")
         return diff
     }
-    
-    
 }

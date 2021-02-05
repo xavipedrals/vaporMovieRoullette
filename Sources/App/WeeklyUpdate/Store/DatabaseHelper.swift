@@ -30,7 +30,7 @@ class DatabaseHelper {
         }
     }
     
-    func insertOrUpdateNetflixfdsf(items: [NetfilxMovie], country: String) -> [EventLoopFuture<Void>] {
+    func insertOrUpdateNetflixFuture(items: [NetfilxMovie], country: String) -> [EventLoopFuture<Void>] {
         let audiovisuals = items.compactMap { AudioVisual(item: $0) }
         return audiovisuals.compactMap { (a) -> EventLoopFuture<Void> in
             AudioVisual.find(a.id, on: db).flatMap { (av) -> EventLoopFuture<Void> in
@@ -60,6 +60,23 @@ class DatabaseHelper {
         } catch {
             print(error)
         }
+    }
+    
+    func deleteFuture(netflixId: String, country: String, eventLoop: EventLoop) -> EventLoopFuture<Void> {
+        return AudioVisual.query(on: db)
+            .filter(\.$netflixId == netflixId)
+            .first()
+            .flatMap { (av) -> EventLoopFuture<Void> in
+                guard let audiovisual = av else {
+                    return eventLoop.makeSucceededFuture(())
+                }
+                audiovisual.remove(country: country)
+                guard audiovisual.availableCountries.count > 0 else {
+                    print("Deleting all record from movie with netflixId -> \(netflixId)")
+                    return audiovisual.delete(force: true, on: self.db)
+                }
+                return audiovisual.save(on: self.db)
+            }
     }
     
     func getItemsToTMDBEnrich() -> [AudioVisual] {

@@ -136,7 +136,7 @@ class NetflixUpdateController {
         self.updateDiffDays = updateDiffDays
     }
     
-    func run(eventLoop: EventLoop) -> EventLoopFuture<[NetfilxMovie]> {
+    func getAdditions(eventLoop: EventLoop) -> EventLoopFuture<[NetfilxMovie]> {
         let promise = eventLoop.makePromise(of: [NetfilxMovie].self)
         getNewAdditions() { movies in
             promise.succeed(movies)
@@ -144,27 +144,7 @@ class NetflixUpdateController {
         return promise.futureResult
     }
     
-    func getNewAdditions(completion: @escaping ([NetfilxMovie]) -> ()) {
-        service.getNewAdditions(countryCode: country.rawValue, since: updateDiffDays) { (wrapper) in
-            print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
-            completion(wrapper.movies)
-        }
-    }
-
-}
-
-class NetflixDeletionsUpdateController {
-    
-    var country: CountryCodes
-    var updateDiffDays: Int
-    let service = UnoGSService()
-    
-    init(country: CountryCodes, updateDiffDays: Int) {
-        self.country = country
-        self.updateDiffDays = updateDiffDays
-    }
-    
-    func run(eventLoop: EventLoop) -> EventLoopFuture<[String]> {
+    func getDeletions(eventLoop: EventLoop) -> EventLoopFuture<[String]> {
         let promise = eventLoop.makePromise(of: [String].self)
         getNewDeletions() { ids in
             promise.succeed(ids)
@@ -172,6 +152,43 @@ class NetflixDeletionsUpdateController {
         return promise.futureResult
     }
     
+    //MARK: - Private
+    
+    private func getNewAdditions(completion: @escaping ([NetfilxMovie]) -> ()) {
+        service.getNewAdditions(countryCode: country.rawValue, since: updateDiffDays) { (wrapper) in
+            print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
+            completion(wrapper.movies)
+        }
+    }
+    
+    private func getNewDeletions(completion: @escaping ([String]) -> ()) {
+        service.getNewDeletions(countryCode: country.rawValue, since: updateDiffDays) { (wrapper) in
+            print("GOT \(wrapper.movies.count) NEW ITEMS TO DELETE")
+            completion(wrapper.movies.compactMap{ $0.netflixId })
+        }
+    }
+
+}
+
+class NetflixDeletionsUpdateController {
+
+    var country: CountryCodes
+    var updateDiffDays: Int
+    let service = UnoGSService()
+
+    init(country: CountryCodes, updateDiffDays: Int) {
+        self.country = country
+        self.updateDiffDays = updateDiffDays
+    }
+
+    func run(eventLoop: EventLoop) -> EventLoopFuture<[String]> {
+        let promise = eventLoop.makePromise(of: [String].self)
+        getNewDeletions() { ids in
+            promise.succeed(ids)
+        }
+        return promise.futureResult
+    }
+
     func getNewDeletions(completion: @escaping ([String]) -> ()) {
         service.getNewDeletions(countryCode: country.rawValue, since: updateDiffDays) { (wrapper) in
             print("GOT \(wrapper.movies.count) NEW ITEMS TO DELETE")
