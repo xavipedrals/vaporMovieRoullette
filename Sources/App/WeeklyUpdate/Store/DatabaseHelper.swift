@@ -68,8 +68,10 @@ class DatabaseHelper {
             .first()
             .flatMap { (av) -> EventLoopFuture<Void> in
                 guard let audiovisual = av else {
+                    print("Can't delete item with netflixId -> \(netflixId), not found")
                     return eventLoop.makeSucceededFuture(())
                 }
+                print("Deleting item with netflixId -> \(audiovisual.netflixId)")
                 audiovisual.remove(country: country)
                 guard audiovisual.availableCountries.count > 0 else {
                     print("Deleting all record from movie with netflixId -> \(netflixId)")
