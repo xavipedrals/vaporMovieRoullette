@@ -130,8 +130,6 @@ class NetflixUpdateController {
     var country: CountryCodes
     var updateDiffDays: Int
     let service = UnoGSService()
-    var resultAdditions: [CountryCodes: [NetfilxMovie]] = [:]
-    var resultDeletions: [CountryCodes: [String]] = [:]
     
     init(country: CountryCodes, updateDiffDays: Int) {
         self.country = country
@@ -150,6 +148,34 @@ class NetflixUpdateController {
         service.getNewAdditions(countryCode: country.rawValue, since: updateDiffDays) { (wrapper) in
             print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
             completion(wrapper.movies)
+        }
+    }
+
+}
+
+class NetflixDeletionsUpdateController {
+    
+    var country: CountryCodes
+    var updateDiffDays: Int
+    let service = UnoGSService()
+    
+    init(country: CountryCodes, updateDiffDays: Int) {
+        self.country = country
+        self.updateDiffDays = updateDiffDays
+    }
+    
+    func run(eventLoop: EventLoop) -> EventLoopFuture<[String]> {
+        let promise = eventLoop.makePromise(of: [String].self)
+        getNewDeletions() { ids in
+            promise.succeed(ids)
+        }
+        return promise.futureResult
+    }
+    
+    func getNewDeletions(completion: @escaping ([String]) -> ()) {
+        service.getNewDeletions(countryCode: country.rawValue, since: updateDiffDays) { (wrapper) in
+            print("GOT \(wrapper.movies.count) NEW ITEMS TO DELETE")
+            completion(wrapper.movies.compactMap{ $0.netflixId })
         }
     }
 

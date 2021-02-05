@@ -119,47 +119,46 @@ class RecoveryDailyJob: ScheduledJob {
 class SidaJob: ScheduledJob {
     
     var databaseHelper: DatabaseHelper!
+    var eventLoop: EventLoop!
     
     func run(context: QueueContext) -> EventLoopFuture<Void> {
-        let db = context.application.db
         databaseHelper = DatabaseHelper()
-        databaseHelper.db = db
-        let start = databaseHelper.getFuture(country: .argentina, op: .addition)
+        databaseHelper.db = context.application.db
+        eventLoop = context.eventLoop
+        let country = CountryCodes.japan
+        let start = databaseHelper.getFuture(country: country, op: .addition)
         let op = start.flatMap { (op) ->
             EventLoopFuture<[NetfilxMovie]> in
-            print("Got op -> \(op)")
-            let diff = self.getUpdateDiff(operation: op)!
-            let s = NetflixUpdateController(country: .argentina, updateDiffDays: diff)
-            return s.run(eventLoop: context.eventLoop)
+            self.getNetfixAdditions(op: op, country: country)
         }
-        let result = EventLoopFuture.reduce([NetfilxMovie](), [op], on: context.eventLoop) { (accumulated, newValue) -> [NetfilxMovie] in
-            return accumulated + newValue
+        let pit = op.flatMap { (movies) -> EventLoopFuture<Void> in
+            self.saveMovies(movies, country: country)
         }
-        let pit = result.flatMap { (movies) -> EventLoopFuture<Void> in
-            print("Got movies -> \(movies.count)")
-            let bdOps = self.databaseHelper.insertOrUpdateNetflixfdsf(items: movies, country: CountryCodes.argentina.rawValue)
-            return EventLoopFuture.reduce((), bdOps, on: context.eventLoop) { (accumulated, newValue) -> () in
-                return ()
-            }
+        let culo = pit.flatMap { () -> EventLoopFuture<Void> in
+            self.databaseHelper.insertOrUpdateFuture(country: country, op: .addition)
         }
-    
-        return pit
-//        let caca = NetflixUpdateController(country: .argentina, updateDiffDays: <#T##Int#>)
-        
-
-//        return context.eventLoop.makeSucceededFuture(())
-    }
-    
-    func start() {
-//        guard let n = getUpdateDiff(operation: .addition, country: .argentina),
-//              n > 0 else {
-//            print("No need for a recovery daily job")
-//            return
-//        }
-//        NetflixUpdateController(country: .argentina, updateDiffDays: <#T##Int#>)
+        return culo
     }
     
     //MARK: - Private
+    
+    func saveMovies(_ movies: [NetfilxMovie], country: CountryCodes) -> EventLoopFuture<Void> {
+        print("Got movies -> \(movies.count)")
+        let bdOps = self.databaseHelper.insertOrUpdateNetflixfdsf(items: movies, country: country.rawValue)
+        return EventLoopFuture.reduce((), bdOps, on: eventLoop) { (accumulated, newValue) -> () in
+            return ()
+        }
+    }
+    
+    func getNetfixAdditions(op: OperationPerCountry?, country: CountryCodes) -> EventLoopFuture<[NetfilxMovie]> {
+        print("Got op -> \(op)")
+        guard let diff = self.getUpdateDiff(operation: op) else {
+            print("No need for an update in country -> \(op)")
+            return eventLoop.makeSucceededFuture([])
+        }
+        let s = NetflixUpdateController(country: country, updateDiffDays: diff)
+        return s.run(eventLoop: eventLoop)
+    }
     
     func getUpdateDiff(operation: OperationPerCountry?) -> Int? {
         guard let lastUpdate = operation?.updatedAt else {
@@ -170,4 +169,6 @@ class SidaJob: ScheduledJob {
         print("Difference between updates -> \(diff) days")
         return diff
     }
+    
+    
 }

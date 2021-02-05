@@ -102,6 +102,19 @@ class DatabaseHelper {
         save(dbOp)
     }
     
+    func insertOrUpdateFuture(country: CountryCodes, op: NetflixOperation) -> EventLoopFuture<Void> {
+        return getFuture(country: country, op: op).flatMap { [self] (dbOperation) -> EventLoopFuture<Void> in
+            guard let dbOperation = dbOperation else {
+                let operation = OperationPerCountry(country: country, operation: op)
+                return operation.save(on: self.db)
+                
+            }
+            //This change does nothing except updating the timestamp
+            dbOperation.operation = op.rawValue
+            return dbOperation.save(on: self.db)
+        }
+    }
+    
     func insertOrUpdate23(operation: OperationPerCountry) {
         guard let dbItem = try? OperationPerCountry.find(operation.id, on: db).wait() else {
             save(operation)
