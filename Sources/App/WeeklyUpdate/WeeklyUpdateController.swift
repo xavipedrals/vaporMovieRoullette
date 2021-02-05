@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Vapor
 
 class WeeklyUpdateOption {
     
@@ -17,13 +18,15 @@ class WeeklyUpdateOption {
     let service = UnoGSService()
     var group = DispatchGroup()
     var completion: (_ success: Bool) -> ()
-    var db: DatabaseHelper
+//    var db: DatabaseHelper
     var calendar: CalendarManager = {
         return CalendarManager()
     }()
+    var resultAdditions: [CountryCodes: [NetfilxMovie]] = [:]
+    var resultDeletions: [CountryCodes: [String]] = [:]
+//    init(db: DatabaseHelper = DatabaseHelper.shared, completion: @escaping (_ success: Bool) -> ()) {
     
-    init(db: DatabaseHelper = DatabaseHelper.shared, completion: @escaping (_ success: Bool) -> ()) {
-        self.db = db
+    init(completion: @escaping (Bool) -> ()) {
         self.completion = completion
     }
     
@@ -79,8 +82,8 @@ class WeeklyUpdateOption {
         diff += 1 //This is to ensure no info is lost, repeated updates should not be a problem
         service.getNewAdditions(countryCode: currentCountry.rawValue, since: diff) { (wrapper) in
             print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
-            self.db.insertOrUpdateNetflix(items: wrapper.movies, country: self.currentCountry.rawValue)
-            self.db.insertOrUpdate(country: self.currentCountry, op: .addition)
+//            self.db.insertOrUpdateNetflix(items: wrapper.movies, country: self.currentCountry.rawValue)
+//            self.db.insertOrUpdate(country: self.currentCountry, op: .addition)
             print("Leaving additions group (group 1)")
             self.group.leave()
         }
@@ -98,25 +101,56 @@ class WeeklyUpdateOption {
         diff += 1 //This is to ensure no info is lost, repeated updates should not be a problem
         service.getNewDeletions(countryCode: currentCountry.rawValue, since: diff) { (wrapper) in
             let ids = wrapper.movies.compactMap{ $0.netflixId }
-            for id in ids {
-                self.db.delete(netflixId: id, country: self.currentCountry.rawValue)
-            }
-            self.db.insertOrUpdate(country: self.currentCountry, op: .deletion)
+//            for id in ids {
+//                self.db.delete(netflixId: id, country: self.currentCountry.rawValue)
+//            }
+//            self.db.insertOrUpdate(country: self.currentCountry, op: .deletion)
             print("Leaving deletions group (group 2)")
             self.group.leave()
         }
     }
     
     func getUpdateDiff(operation: NetflixOperation, country: CountryCodes) -> Int? {
-        let op = db.get(country: country, op: operation)
-        print("Got something from db")
-        guard let lastUpdate = op?.updatedAt else {
-            print("No date in database")
-            return nil //If there's nothing in the db don't proceed
-        }
-        print("Heloooo")
-        let diff = calendar.getMissingDays(from: lastUpdate, to: Date())
-        print("Difference between updates -> \(diff) days")
-        return diff
+        return nil
+//        let op = db.get(country: country, op: operation)
+//        print("Got something from db")
+//        guard let lastUpdate = op?.updatedAt else {
+//            print("No date in database")
+//            return nil //If there's nothing in the db don't proceed
+//        }
+//        print("Heloooo")
+//        let diff = calendar.getMissingDays(from: lastUpdate, to: Date())
+//        print("Difference between updates -> \(diff) days")
+//        return diff
     }
+}
+
+class NetflixUpdateController {
+    
+    var country: CountryCodes
+    var updateDiffDays: Int
+    let service = UnoGSService()
+    var resultAdditions: [CountryCodes: [NetfilxMovie]] = [:]
+    var resultDeletions: [CountryCodes: [String]] = [:]
+    
+    init(country: CountryCodes, updateDiffDays: Int) {
+        self.country = country
+        self.updateDiffDays = updateDiffDays
+    }
+    
+    func run(eventLoop: EventLoop) -> EventLoopFuture<[NetfilxMovie]> {
+        let promise = eventLoop.makePromise(of: [NetfilxMovie].self)
+        getNewAdditions() { movies in
+            promise.succeed(movies)
+        }
+        return promise.futureResult
+    }
+    
+    func getNewAdditions(completion: @escaping ([NetfilxMovie]) -> ()) {
+        service.getNewAdditions(countryCode: country.rawValue, since: updateDiffDays) { (wrapper) in
+            print("GOT \(wrapper.movies.count) NEW ITEMS TO INSERT")
+            completion(wrapper.movies)
+        }
+    }
+
 }

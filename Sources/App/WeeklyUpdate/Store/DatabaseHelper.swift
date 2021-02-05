@@ -30,6 +30,15 @@ class DatabaseHelper {
         }
     }
     
+    func insertOrUpdateNetflixfdsf(items: [NetfilxMovie], country: String) -> [EventLoopFuture<Void>] {
+        let audiovisuals = items.compactMap { AudioVisual(item: $0) }
+        return audiovisuals.compactMap { (a) -> EventLoopFuture<Void> in
+            AudioVisual.find(a.id, on: db).flatMap { (av) -> EventLoopFuture<Void> in
+                self.insertOrUpdateFuture(dbItem: av, newItem: a, country: country)
+            }
+        }
+    }
+    
     func delete(netflixId: String, country: String) {
         do {
             let item = try AudioVisual.query(on: db)
@@ -114,6 +123,12 @@ class DatabaseHelper {
         }
     }
     
+    func getFuture(country: CountryCodes, op: NetflixOperation) -> EventLoopFuture<OperationPerCountry?> {
+        let id = OperationPerCountry.getId(country, op)
+        print("Operation id -> \(id)")
+        return OperationPerCountry.find(id, on: db)
+    }
+    
     //MARK: - Private
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {
@@ -126,6 +141,16 @@ class DatabaseHelper {
         dbItem.combined(with: newItem, country: country)
         print("UPDATING EXISTING ITEM WITH IMDB \(newItem.id)")
         save(dbItem)
+    }
+    
+    private func insertOrUpdateFuture(dbItem: AudioVisual?, newItem: AudioVisual, country: String) -> EventLoopFuture<Void> {
+        guard let dbItem = dbItem else {
+            print("INSERTING NEW ITEM WITH IMDB \(newItem.id)")
+            newItem.add(country: country)
+            return newItem.save(on: db)
+        }
+        dbItem.combined(with: newItem, country: country)
+        return dbItem.save(on: db)
     }
     
     private func save<T: Model>(_ item: T) {

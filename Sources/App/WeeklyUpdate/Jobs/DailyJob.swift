@@ -30,7 +30,7 @@ class DailyJob: ScheduledJob {
     }
     
     func start() {
-        WeeklyUpdateOption(db: databaseHelper, completion: { _ in
+        WeeklyUpdateOption(completion: { _ in
             self.refreshTMDBInfo()
         }).run()
     }
@@ -83,7 +83,7 @@ class RecoveryDailyJob: ScheduledJob {
             print("No need for a recovery daily job")
             return
         }
-        WeeklyUpdateOption(db: databaseHelper, completion: { _ in
+        WeeklyUpdateOption(completion: { _ in
             self.refreshTMDBInfo(completion: completion)
         }).run()
     }
@@ -114,4 +114,50 @@ class RecoveryDailyJob: ScheduledJob {
             completion()
         }).run()
     }
+}
+
+class SidaJob: ScheduledJob {
+    
+    var databaseHelper: DatabaseHelper!
+    
+    func run(context: QueueContext) -> EventLoopFuture<Void> {
+        let db = context.application.db
+        databaseHelper = DatabaseHelper()
+        databaseHelper.db = db
+        let start = databaseHelper.getFuture(country: .argentina, op: .addition)
+        let op = start.flatMap { (op) -> EventLoopFuture<[NetfilxMovie]> in
+            let s = NetflixUpdateController(country: .argentina, updateDiffDays: 3)
+            return s.run(eventLoop: context.eventLoop)
+        }
+        let result = EventLoopFuture.reduce([NetfilxMovie](), [op], on: context.eventLoop) { (accumulated, newValue) -> [NetfilxMovie] in
+            return accumulated + newValue
+        }
+    
+//        let caca = NetflixUpdateController(country: .argentina, updateDiffDays: <#T##Int#>)
+        
+
+        return context.eventLoop.makeSucceededFuture(())
+    }
+    
+    func start() {
+//        guard let n = getUpdateDiff(operation: .addition, country: .argentina),
+//              n > 0 else {
+//            print("No need for a recovery daily job")
+//            return
+//        }
+//        NetflixUpdateController(country: .argentina, updateDiffDays: <#T##Int#>)
+    }
+    
+    //MARK: - Private
+    
+//    func getUpdateDiff(operation: NetflixOperation, country: CountryCodes) -> Int? {
+////        let op = databaseHelper.get(country: country, op: operation)
+////        guard let lastUpdate = op?.updatedAt else {
+////            print("No date in database")
+////            return nil //If there's nothing in the db don't proceed
+////        }
+//        let diff = CalendarManager().getMissingDays(from: lastUpdate, to: Date())
+//        print("Difference between updates -> \(diff) days")
+//        return diff
+//    }
 }
