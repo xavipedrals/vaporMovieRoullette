@@ -125,18 +125,29 @@ class SidaJob: ScheduledJob {
         databaseHelper = DatabaseHelper()
         databaseHelper.db = db
         let start = databaseHelper.getFuture(country: .argentina, op: .addition)
-        let op = start.flatMap { (op) -> EventLoopFuture<[NetfilxMovie]> in
-            let s = NetflixUpdateController(country: .argentina, updateDiffDays: 3)
+        let op = start.flatMap { (op) ->
+            EventLoopFuture<[NetfilxMovie]> in
+            print("Got op -> \(op)")
+            let diff = self.getUpdateDiff(operation: op)!
+            let s = NetflixUpdateController(country: .argentina, updateDiffDays: diff)
             return s.run(eventLoop: context.eventLoop)
         }
         let result = EventLoopFuture.reduce([NetfilxMovie](), [op], on: context.eventLoop) { (accumulated, newValue) -> [NetfilxMovie] in
             return accumulated + newValue
         }
+        let pit = result.flatMap { (movies) -> EventLoopFuture<Void> in
+            print("Got movies -> \(movies.count)")
+            let bdOps = self.databaseHelper.insertOrUpdateNetflixfdsf(items: movies, country: CountryCodes.argentina.rawValue)
+            return EventLoopFuture.reduce((), bdOps, on: context.eventLoop) { (accumulated, newValue) -> () in
+                return ()
+            }
+        }
     
+        return pit
 //        let caca = NetflixUpdateController(country: .argentina, updateDiffDays: <#T##Int#>)
         
 
-        return context.eventLoop.makeSucceededFuture(())
+//        return context.eventLoop.makeSucceededFuture(())
     }
     
     func start() {
@@ -150,14 +161,13 @@ class SidaJob: ScheduledJob {
     
     //MARK: - Private
     
-//    func getUpdateDiff(operation: NetflixOperation, country: CountryCodes) -> Int? {
-////        let op = databaseHelper.get(country: country, op: operation)
-////        guard let lastUpdate = op?.updatedAt else {
-////            print("No date in database")
-////            return nil //If there's nothing in the db don't proceed
-////        }
-//        let diff = CalendarManager().getMissingDays(from: lastUpdate, to: Date())
-//        print("Difference between updates -> \(diff) days")
-//        return diff
-//    }
+    func getUpdateDiff(operation: OperationPerCountry?) -> Int? {
+        guard let lastUpdate = operation?.updatedAt else {
+            print("No date in database")
+            return nil //If there's nothing in the db don't proceed
+        }
+        let diff = CalendarManager().getMissingDays(from: lastUpdate, to: Date())
+        print("Difference between updates -> \(diff) days")
+        return diff
+    }
 }
