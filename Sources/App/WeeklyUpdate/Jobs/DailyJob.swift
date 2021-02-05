@@ -127,7 +127,8 @@ class SidaJob: ScheduledJob {
         eventLoop = context.eventLoop
         let country = CountryCodes.japan
         return databaseHelper.getFuture(country: country, op: .deletion).flatMap { (op) -> EventLoopFuture<Void> in
-            guard let diff = self.getUpdateDiff(operation: op) else {
+            guard let diff = self.getUpdateDiff(operation: op),
+                  diff > 0 else {
                 print("No need for an update in country -> \(op)")
                 return self.eventLoop.makeSucceededFuture(())
             }
