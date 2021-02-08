@@ -36,9 +36,7 @@ class NetflixDeletionsFuture {
         let bdOps = ids.compactMap {
             self.databaseHelper.deleteFuture(netflixId: $0, country: self.country.rawValue, eventLoop: self.eventLoop)
         }
-        return EventLoopFuture.reduce((), bdOps, on: eventLoop) { (accumulated, newValue) -> () in
-            return ()
-        }
+        return EventLoopFuture.andAllComplete(bdOps, on: eventLoop)
     }
     
     private func getNetfixDeletions(op: OperationPerCountry?) -> EventLoopFuture<[String]> {

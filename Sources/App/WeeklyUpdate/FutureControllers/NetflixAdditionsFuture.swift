@@ -34,9 +34,7 @@ class NetflixAdditionsFuture {
     private func saveMovies(_ movies: [NetfilxMovie]) -> EventLoopFuture<Void> {
         print("Got movies -> \(movies.count)")
         let bdOps = databaseHelper.insertOrUpdateNetflixFuture(items: movies, country: country.rawValue)
-        return EventLoopFuture.reduce((), bdOps, on: eventLoop) { (accumulated, newValue) -> () in
-            return ()
-        }
+        return EventLoopFuture.andAllComplete(bdOps, on: eventLoop)
     }
     
     private func getNetfixAdditions(op: OperationPerCountry?) -> EventLoopFuture<[NetfilxMovie]> {
