@@ -177,10 +177,11 @@ class DatabaseHelper {
     
     private func insertOrUpdateFuture(dbItem: AudioVisual?, newItem: AudioVisual, country: String) -> EventLoopFuture<Void> {
         guard let dbItem = dbItem else {
-            print("INSERTING NEW ITEM WITH IMDB \(newItem.id)")
+            print("DB: INSERTING NEW ITEM WITH IMDB \(newItem.id)")
             newItem.add(country: country)
             return newItem.save(on: db)
         }
+        print("DB: UPDATING ITEM WITH IMDB \(newItem.id)")
         dbItem.combined(with: newItem, country: country)
         return dbItem.save(on: db)
     }
