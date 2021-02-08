@@ -126,7 +126,7 @@ class SidaJob: ScheduledJob {
         databaseHelper.db = context.application.db
         eventLoop = context.eventLoop
         var operations = [EventLoopFuture<Void>]()
-        for country in CountryCodes.all {
+        for country in [CountryCodes.japan] {
             let op = getAdditionsFuture(country: country).flatMap { () -> EventLoopFuture<Void> in
                 self.getDeletionsFuture(country: country)
             }
