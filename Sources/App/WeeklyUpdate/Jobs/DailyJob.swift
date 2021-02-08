@@ -133,9 +133,6 @@ class SidaJob: ScheduledJob {
             operations.append(op)
         }
         return EventLoopFuture.andAllComplete(operations, on: eventLoop)
-//        return EventLoopFuture.reduce((), operations, on: eventLoop) { (accumulated, newValue) -> () in
-//            return ()
-//        }
     }
     
     //MARK: - Private

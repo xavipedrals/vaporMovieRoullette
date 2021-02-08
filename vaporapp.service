@@ -4,7 +4,6 @@ After=network.target
 StartLimitIntervalSec=0
 
 [Service]
-WorkingDirectory=/home/ubuntu/server/vaporMovieRoullette
 RestartSec=2s
 ExecStart=/home/ubuntu/server/vaporMovieRoullette/.build/release/Run
 Restart=always
