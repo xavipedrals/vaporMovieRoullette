@@ -116,7 +116,7 @@ class RecoveryDailyJob: ScheduledJob {
     }
 }
 
-class SidaJob: ScheduledJob {
+class DailyJobFuture: ScheduledJob {
     
     var databaseHelper: DatabaseHelper!
     var eventLoop: EventLoop!

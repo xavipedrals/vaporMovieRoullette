@@ -10,6 +10,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateMoviesSchema())
     app.migrations.add(UpdateMoviesSchema())
     app.migrations.add(CreateNetflixCountryOperationSchema())
+    app.migrations.add(CreateNetflixNotFoundSchema())
 //    app.logger.logLevel = .debug
     app.logger.logLevel = .error
     try app.autoMigrate().wait()
@@ -24,10 +25,10 @@ public func configure(_ app: Application) throws {
 //        .daily()
 //        .at(16, 41)
     
-    let dailyJob = SidaJob()
+    let dailyJob = DailyJobFuture()
     app.queues.schedule(dailyJob)
         .daily()
-        .at(12, 40)
+        .at(9, 30)
     
 //    let recoveryDailyJob = RecoveryDailyJob() {
 //        print("Daily job finished")

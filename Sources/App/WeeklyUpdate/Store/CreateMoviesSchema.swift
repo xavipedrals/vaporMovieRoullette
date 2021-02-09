@@ -60,3 +60,18 @@ struct CreateNetflixCountryOperationSchema: Migration {
         database.schema("netflix_operations").delete()
     }
 }
+
+struct CreateNetflixNotFoundSchema: Migration {
+    func prepare(on database: Database) -> EventLoopFuture<Void> {
+        database.schema("not_found_netflix")
+            .field("netflix_id", .string, .identifier(auto: false))
+            .field("title", .string)
+            .field("created_at", .string)
+            .field("updated_at", .string)
+            .create()
+    }
+        
+    func revert(on database: Database) -> EventLoopFuture<Void> {
+        database.schema("not_found_netflix").delete()
+    }
+}

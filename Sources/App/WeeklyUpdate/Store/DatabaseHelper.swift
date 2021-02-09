@@ -32,11 +32,21 @@ class DatabaseHelper {
     
     func insertOrUpdateNetflixFuture(items: [NetfilxMovie], country: String) -> [EventLoopFuture<Void>] {
         let audiovisuals = items.compactMap { AudioVisual(item: $0) }
-        return audiovisuals.compactMap { (a) -> EventLoopFuture<Void> in
+        let audiovisualOps = audiovisuals.compactMap { (a) -> EventLoopFuture<Void> in
             AudioVisual.find(a.id, on: db).flatMap { (av) -> EventLoopFuture<Void> in
                 self.insertOrUpdateFuture(dbItem: av, newItem: a, country: country)
             }
         }
+        let notFoundOps = items.filter {
+            $0.imdbId == nil
+        }.compactMap {
+            NotFoundNetflix(netflixId: $0.netflixId, title: $0.title)
+        }.compactMap { (n) -> EventLoopFuture<Void> in
+            NotFoundNetflix.find(n.id, on: db).flatMap { (dbItem) -> EventLoopFuture<Void> in
+                self.insertOrUpdateFuture(dbItem: dbItem, newItem: n)
+            }
+        }
+        return audiovisualOps + notFoundOps
     }
     
     func delete(netflixId: String, country: String) {
@@ -183,6 +193,16 @@ class DatabaseHelper {
         }
         print("DB: UPDATING ITEM WITH IMDB \(newItem.id)")
         dbItem.combined(with: newItem, country: country)
+        return dbItem.save(on: db)
+    }
+    
+    private func insertOrUpdateFuture(dbItem: NotFoundNetflix?, newItem: NotFoundNetflix) -> EventLoopFuture<Void> {
+        guard let dbItem = dbItem else {
+            print("DB: INSERTING NOT FOUND ITEM WITH NETFLIXID \(newItem.id)")
+            return newItem.save(on: db)
+        }
+        print("DB: UPDATING NOT FOUND ITEM WITH NETFLIXID \(newItem.id)")
+        dbItem.title = newItem.title
         return dbItem.save(on: db)
     }
     
