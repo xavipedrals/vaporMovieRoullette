@@ -38,7 +38,7 @@ class DatabaseHelper {
             }
         }
         let notFoundOps = items.filter {
-            $0.imdbId == nil
+            $0.imdbId == nil || $0.imdbId == "" || $0.imdbId == " "
         }.compactMap {
             NotFoundNetflix(netflixId: $0.netflixId, title: $0.title)
         }.compactMap { (n) -> EventLoopFuture<Void> in

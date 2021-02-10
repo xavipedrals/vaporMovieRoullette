@@ -139,16 +139,16 @@ class DailyJobFuture: ScheduledJob {
     
     func getAdditionsFuture(country: CountryCodes) -> EventLoopFuture<Void> {
         return databaseHelper.getFuture(country: country, op: .addition).flatMap { (op) -> EventLoopFuture<Void> in
-            guard let diff = self.getUpdateDiff(operation: op),
-                  diff > 0 else {
-                print("No need for an update in country -> \(op)")
-                return self.eventLoop.makeSucceededFuture(())
-            }
+//            guard let diff = self.getUpdateDiff(operation: op),
+//                  diff > 0 else {
+//                print("No need for an update in country -> \(op)")
+//                return self.eventLoop.makeSucceededFuture(())
+//            }
             let c = NetflixAdditionsFuture(
                 databaseHelper: self.databaseHelper,
                 eventLoop: self.eventLoop,
                 country: country,
-                updateDiff: diff
+                updateDiff: 2
             )
             return c.run()
         }
