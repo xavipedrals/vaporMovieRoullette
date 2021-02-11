@@ -122,18 +122,19 @@ class DailyJobFuture: ScheduledJob {
     var eventLoop: EventLoop!
     
     func run(context: QueueContext) -> EventLoopFuture<Void> {
-        databaseHelper = DatabaseHelper()
-        databaseHelper.db = context.application.db
-        eventLoop = context.eventLoop
-        var operations = [EventLoopFuture<Void>]()
-        for country in CountryCodes.all {
-            let op = getAdditionsFuture(country: country).flatMap { () -> EventLoopFuture<Void> in
-                self.getDeletionsFuture(country: country)
-            }
-            operations.append(op)
-        }
-        let allNetflixEvents = EventLoopFuture.andAllComplete(operations, on: eventLoop)
-        return allNetflixEvents.flatMap(getTmdbInfoFuture)
+//        databaseHelper = DatabaseHelper()
+//        databaseHelper.db = context.application.db
+//        eventLoop = context.eventLoop
+//        var operations = [EventLoopFuture<Void>]()
+//        for country in CountryCodes.all {
+//            let op = getAdditionsFuture(country: country).flatMap { () -> EventLoopFuture<Void> in
+//                self.getDeletionsFuture(country: country)
+//            }
+//            operations.append(op)
+//        }
+//        let allNetflixEvents = EventLoopFuture.andAllComplete(operations, on: eventLoop)
+//        return allNetflixEvents.flatMap(getTmdbInfoFuture)
+        return getTmdbInfoFuture()
     }
     
     //MARK: - Private
