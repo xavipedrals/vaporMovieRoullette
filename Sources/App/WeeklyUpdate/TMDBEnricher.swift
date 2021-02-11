@@ -77,6 +77,7 @@ class TMDBEnricherFuture {
     
     func run() -> EventLoopFuture<Void> {
         guard audiovisuals.count > 0 else {
+            print("No movies to enrich")
             return eventLoop.makeSucceededFuture(())
         }
         let allEvents = audiovisuals.compactMap(getDetails)
@@ -93,6 +94,7 @@ class TMDBEnricherFuture {
             let event = EventLoopFuture.andAllComplete(c, on: eventLoop)
             chunkResults.append(event)
         }
+        print("Splited all info into \(chunks.count) chunks")
         var finalEvent = chunkResults.first!
         for i in 1..<(chunkResults.count) {
             finalEvent = finalEvent.flatMap { () -> EventLoopFuture<Void> in
@@ -112,7 +114,10 @@ class TMDBEnricherFuture {
     //MARK: - Private
     
     func getDetails(target: AudioVisual) -> EventLoopFuture<AudioVisual> {
-        let safeId = target.id!.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let safeId = target.id?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+            print("ERROR: Audiovisual with nexflixId -> \(target.netflixId) has a wrong id")
+            return eventLoop.makeSucceededFuture(target)
+        }
         let promise = eventLoop.makePromise(of: AudioVisual.self)
         service.getDetailsFrom(imdbId: safeId) { movie in
             guard let m = movie else {
