@@ -122,9 +122,9 @@ class DailyJobFuture: ScheduledJob {
     var eventLoop: EventLoop!
     
     func run(context: QueueContext) -> EventLoopFuture<Void> {
-//        databaseHelper = DatabaseHelper()
-//        databaseHelper.db = context.application.db
-//        eventLoop = context.eventLoop
+        databaseHelper = DatabaseHelper()
+        databaseHelper.db = context.application.db
+        eventLoop = context.eventLoop
 //        var operations = [EventLoopFuture<Void>]()
 //        for country in CountryCodes.all {
 //            let op = getAdditionsFuture(country: country).flatMap { () -> EventLoopFuture<Void> in
