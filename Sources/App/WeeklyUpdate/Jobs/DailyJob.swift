@@ -132,23 +132,24 @@ class DailyJobFuture: ScheduledJob {
             }
             operations.append(op)
         }
-        return EventLoopFuture.andAllComplete(operations, on: eventLoop)
+        let allNetflixEvents = EventLoopFuture.andAllComplete(operations, on: eventLoop)
+        return allNetflixEvents.flatMap(getTmdbInfoFuture)
     }
     
     //MARK: - Private
     
     func getAdditionsFuture(country: CountryCodes) -> EventLoopFuture<Void> {
         return databaseHelper.getFuture(country: country, op: .addition).flatMap { (op) -> EventLoopFuture<Void> in
-//            guard let diff = self.getUpdateDiff(operation: op),
-//                  diff > 0 else {
-//                print("No need for an update in country -> \(op)")
-//                return self.eventLoop.makeSucceededFuture(())
-//            }
+            guard let diff = self.getUpdateDiff(operation: op),
+                  diff > 0 else {
+                print("No need for an update in country -> \(op)")
+                return self.eventLoop.makeSucceededFuture(())
+            }
             let c = NetflixAdditionsFuture(
                 databaseHelper: self.databaseHelper,
                 eventLoop: self.eventLoop,
                 country: country,
-                updateDiff: 2
+                updateDiff: diff
             )
             return c.run()
         }
@@ -168,6 +169,17 @@ class DailyJobFuture: ScheduledJob {
                 updateDiff: diff
             )
             return c.run()
+        }
+    }
+    
+    func getTmdbInfoFuture() -> EventLoopFuture<Void> {
+        return databaseHelper.getItemsToTMDBEnrichFuture().flatMap { (audiovisuals) -> EventLoopFuture<Void> in
+            let tmdbEnrichEvents = TMDBEnricherFuture(
+                audiovisuals: audiovisuals,
+                eventLoop: self.eventLoop,
+                db: self.databaseHelper.db
+            )
+            return tmdbEnrichEvents.run()
         }
     }
     

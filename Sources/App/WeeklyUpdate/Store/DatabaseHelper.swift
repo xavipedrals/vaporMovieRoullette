@@ -99,6 +99,12 @@ class DatabaseHelper {
         return audiovisualsToEnrich ?? []
     }
     
+    func getItemsToTMDBEnrichFuture() -> EventLoopFuture<[AudioVisual]> {
+        return AudioVisual.query(on: db)
+            .filter(\.$tmdbId == nil)
+            .all()
+    }
+    
     func getAllAudioVisuals() -> [AudioVisual] {
         let audiovisualsToEnrich = try? AudioVisual.query(on: db)
             .all()
