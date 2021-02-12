@@ -70,6 +70,7 @@ class TMDBEnricherFuture {
     private let rateLimit = RateLimit(calls: 30, timeInSecs: 13)
     
     init(audiovisuals: [AudioVisual], eventLoop: EventLoop, db: Database) {
+        print("Got \(audiovisuals.count) movies to enrich")
         self.audiovisuals = audiovisuals
         self.eventLoop = eventLoop
         self.db = db
@@ -100,6 +101,7 @@ class TMDBEnricherFuture {
             finalEvent = finalEvent.flatMap { () -> EventLoopFuture<Void> in
                 let promise = self.eventLoop.makePromise(of: Void.self)
                 let q = DispatchQueue(label: "waitQueue-\(i)")
+                print("Going to sleep for \(self.rateLimit.timeInSecs) seconds")
                 q.asyncAfter(deadline: .now() + Double(self.rateLimit.timeInSecs)) {
                     promise.succeed(())
                 }
@@ -118,12 +120,14 @@ class TMDBEnricherFuture {
             print("ERROR: Audiovisual with nexflixId -> \(target.netflixId) has a wrong id")
             return eventLoop.makeSucceededFuture(target)
         }
+        print("Enriching movie with \(target.id)")
         let promise = eventLoop.makePromise(of: AudioVisual.self)
         service.getDetailsFrom(imdbId: safeId) { movie in
             guard let m = movie else {
                 promise.succeed(target)
                 return
             }
+            print("Got TMDB result")
             let result = self.enrich(original: target, addition: m)
             promise.succeed(result)
         }
