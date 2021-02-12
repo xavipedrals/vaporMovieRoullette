@@ -126,6 +126,12 @@ class DatabaseHelper {
         return audiovisualsWithoutRating ?? []
     }
     
+    func getItemsWithoutRatingFuture() -> EventLoopFuture<[AudioVisual]> {
+        return AudioVisual.query(on: db)
+            .filter(\.$rottenTomatoesRating == nil)
+            .all()
+    }
+    
     func insertOrUpdate(country: CountryCodes, op: NetflixOperation) {
         guard let dbOp = get(country: country, op: op) else {
             let operation = OperationPerCountry(country: country, operation: op)

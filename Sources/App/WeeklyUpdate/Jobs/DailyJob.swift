@@ -134,7 +134,7 @@ class DailyJobFuture: ScheduledJob {
 //        }
 //        let allNetflixEvents = EventLoopFuture.andAllComplete(operations, on: eventLoop)
 //        return allNetflixEvents.flatMap(getTmdbInfoFuture)
-        return getTmdbInfoFuture()
+        return getOmdbRatingsFuture()
     }
     
     //MARK: - Private
@@ -181,6 +181,17 @@ class DailyJobFuture: ScheduledJob {
                 db: self.databaseHelper.db
             )
             return tmdbEnrichEvents.run()
+        }
+    }
+    
+    func getOmdbRatingsFuture() -> EventLoopFuture<Void> {
+        return databaseHelper.getItemsWithoutRatingFuture().flatMap { (audiovisuals) -> EventLoopFuture<Void> in
+            let omdbRatingEvents = OMDBEnricherFuture(
+                audiovisuals: audiovisuals,
+                eventLoop: self.eventLoop,
+                db: self.databaseHelper.db
+            )
+            return omdbRatingEvents.run()
         }
     }
     
