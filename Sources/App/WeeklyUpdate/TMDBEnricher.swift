@@ -115,6 +115,7 @@ class TMDBEnricherFuture {
         let chunks = audiovisuals.chunked(into: rateLimit.calls)
         var finalEvent = eventLoop.makeSucceededFuture(())
         for (i, c) in chunks.enumerated() {
+            print("Starting chunk \(i) of \(chunks.count)")
             finalEvent = finalEvent.flatMap{ () -> EventLoopFuture<Void> in
                 self.getChunk(chunk: c).flatMap {
                     self.getWaitBetweenChunks(i: i)
@@ -127,7 +128,7 @@ class TMDBEnricherFuture {
     //MARK: - Private
     
     func getChunk(chunk: [AudioVisual]) -> EventLoopFuture<Void> {
-        let allEvents = audiovisuals.compactMap(getDetails)
+        let allEvents = chunk.compactMap(getDetails)
         var resultEvents = [EventLoopFuture<Void>]()
         for e in allEvents {
             let dbEvent = e.flatMap { (a) -> EventLoopFuture<Void> in
