@@ -96,9 +96,9 @@ class TMDBEnricherFuture {
             chunkResults.append(event)
         }
         print("Splited all info into \(chunks.count) chunks")
-        var finalEvent = chunkResults.first!
+        var finalEvent: EventLoopFuture<(Void, Void)> = chunkResults.first!.and(value: ())
         for i in 1..<(chunkResults.count) {
-            finalEvent = finalEvent.flatMap { () -> EventLoopFuture<Void> in
+            finalEvent = finalEvent.flatMap { _ in
                 let promise = self.eventLoop.makePromise(of: Void.self)
                 let q = DispatchQueue(label: "waitQueue-\(i)")
                 print("Going to sleep for \(self.rateLimit.timeInSecs) seconds")
@@ -106,11 +106,11 @@ class TMDBEnricherFuture {
                     promise.succeed(())
                 }
                 return promise.futureResult
-            }.flatMap{ () -> EventLoopFuture<Void> in
-                chunkResults[i]
-            }
+            }.and(chunkResults[i])
         }
-        return finalEvent
+        return finalEvent.map({ _ in
+            return
+        })
     }
     
     //MARK: - Private
