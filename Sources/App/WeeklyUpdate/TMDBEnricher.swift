@@ -81,37 +81,6 @@ class TMDBEnricherFuture {
             print("No movies to enrich")
             return eventLoop.makeSucceededFuture(())
         }
-//        let allEvents = audiovisuals.compactMap(getDetails)
-//        var resultEvents = [EventLoopFuture<Void>]()
-//        for e in allEvents {
-//            let dbEvent = e.flatMap { (a) -> EventLoopFuture<Void> in
-//                a.save(on: self.db)
-//            }
-//            resultEvents.append(dbEvent)
-//        }
-//        let chunks = resultEvents.chunked(into: rateLimit.calls)
-//        var chunkResults = [EventLoopFuture<Void>]()
-//        for c in chunks {
-//            let event = EventLoopFuture.andAllComplete(c, on: eventLoop)
-//            chunkResults.append(event)
-//        }
-//        print("Splited all info into \(chunks.count) chunks")
-//        var finalEvent: EventLoopFuture<(Void, Void)> = chunkResults.first!.and(value: ())
-//        for i in 1..<(chunkResults.count) {
-//            finalEvent = finalEvent.flatMap { _ in
-//                let promise = self.eventLoop.makePromise(of: Void.self)
-//                let q = DispatchQueue(label: "waitQueue-\(i)")
-//                print("Going to sleep for \(self.rateLimit.timeInSecs) seconds")
-//                q.asyncAfter(deadline: .now() + Double(self.rateLimit.timeInSecs)) {
-//                    promise.succeed(())
-//                }
-//                return promise.futureResult
-//            }.and(chunkResults[i])
-//        }
-//        return finalEvent.map({ _ in
-//            return
-//        })
-        
         let chunks = audiovisuals.chunked(into: rateLimit.calls)
         var finalEvent = eventLoop.makeSucceededFuture(())
         for (i, c) in chunks.enumerated() {
