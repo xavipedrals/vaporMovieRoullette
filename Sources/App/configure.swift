@@ -21,7 +21,7 @@ public func configure(_ app: Application) throws {
     let dailyJob = DailyJobFuture()
     app.queues.schedule(dailyJob)
         .daily()
-        .at(08, 15)
+        .at(10, 13)
     
     let refreshViewsJob = RefreshMaterializedViewsJob()
     app.queues.schedule(refreshViewsJob)

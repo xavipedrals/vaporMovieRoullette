@@ -195,6 +195,20 @@ class DatabaseHelper {
         }
     }
     
+    func getMoviesToExport(eventLoop: EventLoop, country: CountryCodes) -> EventLoopFuture<[ExportMovie]> {
+        guard let database = db as? SQLDatabase else {
+            print("Error: Could not parse database to SQLDatabase")
+            return eventLoop.makeSucceededFuture([])
+        }
+        return database.raw("""
+        SELECT imdb_id, netflix_id, tmdb_id, title, type, genres, release_year, duration, netflix_rating, imdb_rating, tmdb_rating, rotten_tomatoes_rating, metacritic_rating
+            FROM netflix_\(country.rawValue)
+        """).all().map { (rows) -> ([ExportMovie]) in
+                print("GOT \(rows.count) ROWS TO EXPORT")
+                return rows.compactMap{ try? $0.decode(model: ExportMovie.self) }
+        }
+    }
+    
     //MARK: - Private
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {

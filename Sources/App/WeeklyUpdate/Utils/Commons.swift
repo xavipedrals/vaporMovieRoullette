@@ -20,30 +20,3 @@ class Commons {
         print("Estimated time: \(hours) hours & \(minutes) minutes")
     }
 }
-
-protocol BatchWriter: class {
-    var writeFilenamePrefix: String { get }
-    var notFoundFilename: String { get }
-    var directory: FileDirectory { get }
-}
-
-extension BatchWriter {
-    func writeBatch<T: Codable>(items: Set<T>, batchIndex: Int) -> Bool {
-        guard items.count > 0 else {
-            print("Not enough items to write a batch")
-            return false
-        }
-        print("Gonna write batch number -> \(batchIndex)")
-        writeToFile(batch: items.map({ $0 }), filename: "\(writeFilenamePrefix)-\(batchIndex).json")
-        return true
-    }
-    
-    func writeFailures<T: Codable>(items: Set<T>) {
-        guard items.count > 0 else { return }
-        writeToFile(batch: items.map({ $0 }), filename: "\(notFoundFilename).json")
-    }
-    
-    private func writeToFile<T: Codable>(batch: [T], filename: String) {
-        CustomFileManager.instance.write(array: batch, directory: directory, filename: filename)
-    }
-}

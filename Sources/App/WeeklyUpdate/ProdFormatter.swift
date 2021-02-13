@@ -78,20 +78,20 @@ class ProdFormatter {
     }
     
     func writeAllUpdatedMovies() {
-        let batchSize = 500
-        var i = 0
-        CustomFileManager.instance.deleteAllFiles(in: .prodAllMovies)
-        while i < allMovies.count {
-            var upperBound = i + batchSize
-            if upperBound > allMovies.count { upperBound = allMovies.count }
-            let batch = allMovies[i..<upperBound]
-            writeToFile(batch: Array(batch), filename: "s-clean-tmdb-batch-\(i).json")
-            i += batchSize
-        }
+//        let batchSize = 500
+//        var i = 0
+//        CustomFileManager.instance.deleteAllFiles(in: .prodAllMovies)
+//        while i < allMovies.count {
+//            var upperBound = i + batchSize
+//            if upperBound > allMovies.count { upperBound = allMovies.count }
+//            let batch = allMovies[i..<upperBound]
+//            writeToFile(batch: Array(batch), filename: "s-clean-tmdb-batch-\(i).json")
+//            i += batchSize
+//        }
     }
     
     func writeToFile<T: Codable>(batch: [T], filename: String) {
-        CustomFileManager.instance.write(array: batch, directory: .prodAllMovies, filename: filename)
+//        CustomFileManager.instance.write(array: batch, directory: .prodAllMovies, filename: filename)
     }
     
     //MARK: - Loading inputs

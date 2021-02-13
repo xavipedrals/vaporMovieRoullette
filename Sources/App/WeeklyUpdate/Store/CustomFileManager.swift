@@ -27,11 +27,9 @@ class CustomFileManager {
     static let instance = CustomFileManager()
     
     var serverStoreFolder: Folder
-    var outputFolder: Folder
     
     private init() {
         serverStoreFolder = try! Folder.home.createSubfolderIfNeeded(withName: "serverStore")
-        outputFolder = try! serverStoreFolder.createSubfolderIfNeeded(withName: "outputFiles")
     }
     
     func formatJSONDataToString(_ data: Data) -> String {
@@ -39,8 +37,8 @@ class CustomFileManager {
         return string.replacingOccurrences(of: "\\", with: "")
     }
     
-    func write<T: Codable>(array: [T], directory: FileDirectory, filename: String) {
-        let folder = getFolder(from: directory)
+    func write<T: Codable>(array: [T], filename: String) {
+        let folder = serverStoreFolder
         let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(array)
@@ -51,40 +49,40 @@ class CustomFileManager {
         }
     }
     
-    func write<T: Codable>(obj: T, directory: FileDirectory, filename: String) {
-        let folder = getFolder(from: directory)
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(obj)
-            let wellFormattedString = formatJSONDataToString(data)
-            writeToFile(in: folder, name: filename, string: wellFormattedString)
-        } catch {
-            print(error)
-        }
-    }
+//    func write<T: Codable>(obj: T, directory: FileDirectory, filename: String) {
+//        let folder = getFolder(from: directory)
+//        let encoder = JSONEncoder()
+//        do {
+//            let data = try encoder.encode(obj)
+//            let wellFormattedString = formatJSONDataToString(data)
+//            writeToFile(in: folder, name: filename, string: wellFormattedString)
+//        } catch {
+//            print(error)
+//        }
+//    }
     
-    func getInputListFileNames() -> [String] {
-        return getFileNames(in: outputFolder)
-    }
-    
-    func getFileNames(in directory: FileDirectory) -> [String] {
-        return getFileNames(in: getFolder(from: directory))
-    }
-    
-    func readTopList(with name: String) -> Data {
-        return readFile(from: outputFolder, name: name)
-    }
-    
-    func readFile(from directory: FileDirectory, name: String) -> Data {
-        return readFile(from: getFolder(from: directory), name: name)
-    }
-    
-    func deleteAllFiles(in directory: FileDirectory) {
-        let folder = getFolder(from: directory)
-        for file in folder.files {
-            try? file.delete()
-        }
-    }
+//    func getInputListFileNames() -> [String] {
+//        return getFileNames(in: outputFolder)
+//    }
+//
+//    func getFileNames(in directory: FileDirectory) -> [String] {
+//        return getFileNames(in: getFolder(from: directory))
+//    }
+//
+//    func readTopList(with name: String) -> Data {
+//        return readFile(from: outputFolder, name: name)
+//    }
+//
+//    func readFile(from directory: FileDirectory, name: String) -> Data {
+//        return readFile(from: getFolder(from: directory), name: name)
+//    }
+//
+//    func deleteAllFiles(in directory: FileDirectory) {
+//        let folder = getFolder(from: directory)
+//        for file in folder.files {
+//            try? file.delete()
+//        }
+//    }
     
     //MARK: - Private
     
@@ -105,16 +103,5 @@ class CustomFileManager {
     
     private func getFileNames(in folder: Folder) -> [String] {
         return folder.files.compactMap({ $0.name })
-    }
-    
-    private func getFolder(from directory: FileDirectory) -> Folder {
-        switch directory {
-        case .root:
-            return serverStoreFolder
-        case .input:
-            return outputFolder
-        default:
-            return serverStoreFolder
-        }
     }
 }
