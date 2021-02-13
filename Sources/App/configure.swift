@@ -23,6 +23,11 @@ public func configure(_ app: Application) throws {
         .daily()
         .at(08, 15)
     
+    let refreshViewsJob = RefreshMaterializedViewsJob()
+    app.queues.schedule(refreshViewsJob)
+        .daily()
+        .at(18, 00)
+    
 //    let weeklyJob = WeeklyJob() {
 //        print("Weekly job finished")
 //        TelegramController.shared?.sendMessage(text: "Finished Weekly job successfully")

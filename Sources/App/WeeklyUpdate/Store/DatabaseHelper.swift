@@ -183,15 +183,16 @@ class DatabaseHelper {
         return OperationPerCountry.find(id, on: db)
     }
     
-    func generateMaterializedViews(eventLoop: EventLoop) -> EventLoopFuture<Void> {
+    func generateMaterializedViews(eventLoop: EventLoop, country: CountryCodes) -> EventLoopFuture<Void> {
+        print("Trying to refresh materialized view \(country)")
         guard let database = db as? PostgresDatabase else {
             print("Can't cast PostgresDatabase")
             return eventLoop.makeSucceededFuture(())
         }
-        return database.query("REFRESH MATERIALIZED VIEW netflix_us").map { (_) -> (Void) in
+        return database.query("REFRESH MATERIALIZED VIEW netflix_\(country.rawValue)").map { _ -> Void in
+            print("Refreshed materialized view \(country)")
             return
         }
-//        return database.raw("REFRESH MATERIALIZED VIEW sales_summary").run()
     }
     
     //MARK: - Private
