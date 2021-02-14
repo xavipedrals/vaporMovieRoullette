@@ -10,15 +10,17 @@ import Queues
 import Fluent
 import FluentPostgresDriver
 
-class RefreshMaterializedViewsJob: ScheduledJob {
+class RefreshMaterializedViewsJob {
     
     var databaseHelper: DatabaseHelper!
     var eventLoop: EventLoop!
     
-    func run(context: QueueContext) -> EventLoopFuture<Void> {
-        databaseHelper = DatabaseHelper()
-        databaseHelper.db = context.application.db
-        eventLoop = context.eventLoop
+    init(databaseHelper: DatabaseHelper, eventLoop: EventLoop) {
+        self.databaseHelper = databaseHelper
+        self.eventLoop = eventLoop
+    }
+    
+    func run() -> EventLoopFuture<Void> {
         var event = eventLoop.makeSucceededFuture(())
         for c in CountryCodes.all {
             event = event.flatMap({ () -> EventLoopFuture<Void> in

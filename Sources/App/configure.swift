@@ -21,12 +21,7 @@ public func configure(_ app: Application) throws {
     let dailyJob = DailyJobFuture()
     app.queues.schedule(dailyJob)
         .daily()
-        .at(10, 23)
-    
-    let refreshViewsJob = RefreshMaterializedViewsJob()
-    app.queues.schedule(refreshViewsJob)
-        .daily()
-        .at(18, 00)
+        .at(06, 56)
     
 //    let weeklyJob = WeeklyJob() {
 //        print("Weekly job finished")
