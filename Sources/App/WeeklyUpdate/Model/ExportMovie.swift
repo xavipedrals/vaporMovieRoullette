@@ -16,11 +16,11 @@ struct ExportMovie: Codable {
     var genres: [Int]
     var releaseYear: Int?
     var duration: String?
-    var netflixRating: String?
-    var imdbRating: String?
-    var tmdbRating: String?
-    var rottenTomatoesRating: String?
-    var metacriticRating: String?
+    var netflixRating: Double?
+    var imdbRating: Double?
+    var tmdbRating: Double?
+    var rottenTomatoesRating: Double?
+    var metacriticRating: Double?
         
     enum CodingKeys: String, CodingKey {
         case imdbId = "imdb_id"
