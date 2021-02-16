@@ -76,7 +76,7 @@ class OMDBEnricherFuture {
     var audiovisuals: [AudioVisual]
     var eventLoop: EventLoop
     var db: Database
-    private let rateLimit = RateLimit(calls: 30, timeInSecs: 13)
+    private let rateLimit = RateLimit(calls: 30, timeInSecs: 8)
     
     init(audiovisuals: [AudioVisual], eventLoop: EventLoop, db: Database) {
         print("Got \(audiovisuals.count) movies to enrich")
