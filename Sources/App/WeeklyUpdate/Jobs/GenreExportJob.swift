@@ -34,7 +34,7 @@ class GenreExportJob {
         var event: EventLoopFuture<Void> = eventLoop.makeSucceededFuture(())
         for g in genres {
             event = event.flatMap { () -> EventLoopFuture<Void> in
-                guard g.isMovie else {
+                guard g.isMovie! else {
                     return self.getSeriesFor(genre: g)
                 }
                 return self.getMoviesFor(genre: g)
