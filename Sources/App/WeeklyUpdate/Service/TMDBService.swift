@@ -40,25 +40,11 @@ class TMDBService {
     }
     
     func getMoviesOfGenre(id: Int, completion: @escaping ([Movie]) -> Void) {
-        let req = TMDBCurlUrl.getMoviesBy(genreId: "\(id)").urlString
-        let helper = CCurlHelper()
-        helper.doRequest(endpoint: req, headers: []) { data in
-            guard let data = data else {
-                print("Uh oh, something went wrong getting the data from the HTTP req")
-                completion([])
-                return
-            }
-            print(data.toString())
-            do {
-                let wrapper = try JSONDecoder().decode(MovieWrapper.self, from: data)
-                completion(wrapper.results)
-            } catch {
-                print(error)
-                print("DATA ERROR")
-                print(data.toString())
-                completion([])
-            }
-        }
+        getAudiovisuals(route: .getMoviesBy(genreId: "\(id)"), completion: completion)
+    }
+    
+    func getSeriesOfGenre(id: Int, completion: @escaping ([Movie]) -> Void) {
+        getAudiovisuals(route: .getSeriesBy(genreId: "\(id)"), completion: completion)
     }
     
     //MARK: - Private
@@ -83,5 +69,28 @@ class TMDBService {
                 completion([])
             }
         }
+    }
+    
+    private func getAudiovisuals(route: TMDBCurlUrl, completion: @escaping ([Movie]) -> Void) {
+        let req = route.urlString
+        let helper = CCurlHelper()
+        helper.doRequest(endpoint: req, headers: []) { data in
+            guard let data = data else {
+                print("Uh oh, something went wrong getting the data from the HTTP req")
+                completion([])
+                return
+            }
+            print(data.toString())
+            do {
+                let wrapper = try JSONDecoder().decode(MovieWrapper.self, from: data)
+                completion(wrapper.results)
+            } catch {
+                print(error)
+                print("DATA ERROR")
+                print(data.toString())
+                completion([])
+            }
+        }
+        
     }
 }

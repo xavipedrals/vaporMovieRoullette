@@ -34,7 +34,10 @@ class GenreExportJob {
         var event: EventLoopFuture<Void> = eventLoop.makeSucceededFuture(())
         for g in genres {
             event = event.flatMap { () -> EventLoopFuture<Void> in
-                self.getMoviesFor(genre: g)
+                guard g.isMovie else {
+                    return self.getSeriesFor(genre: g)
+                }
+                return self.getMoviesFor(genre: g)
             }
         }
         return event
@@ -67,6 +70,15 @@ class GenreExportJob {
     func getMoviesFor(genre: Genre) -> EventLoopFuture<Void> {
         let promise = eventLoop.makePromise(of: Void.self)
         service.getMoviesOfGenre(id: genre.id) { movies in
+            self.addBackdropFor(targetGenre: genre, movies: movies)
+            promise.succeed(())
+        }
+        return promise.futureResult
+    }
+    
+    func getSeriesFor(genre: Genre) -> EventLoopFuture<Void> {
+        let promise = eventLoop.makePromise(of: Void.self)
+        service.getSeriesOfGenre(id: genre.id) { movies in
             self.addBackdropFor(targetGenre: genre, movies: movies)
             promise.succeed(())
         }

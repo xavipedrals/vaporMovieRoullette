@@ -12,6 +12,7 @@ enum TMDBCurlUrl {
     case getMovieGenres
     case getSeriesGenres
     case getMoviesBy(genreId: String)
+    case getSeriesBy(genreId: String)
     
     private var baseUrl: String {
         return "https://api.themoviedb.org/3"
@@ -27,6 +28,8 @@ enum TMDBCurlUrl {
             return "/genre/tv/list"
         case .getMoviesBy:
             return "/discover/movie"
+        case .getSeriesBy:
+            return "/discover/tv"
         }
     }
     
@@ -47,7 +50,8 @@ enum TMDBCurlUrl {
                 "api_key": apiKey,
                 "language": "en-US"
             ]
-        case .getMoviesBy(let genreId):
+        case .getMoviesBy(let genreId),
+             .getSeriesBy(let genreId):
             return [
                 "api_key": apiKey,
                 "language": "en-US",
