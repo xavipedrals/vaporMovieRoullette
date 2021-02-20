@@ -19,7 +19,7 @@ public struct Genre: Codable {
     public var id: Int
     public var name: String
     public var backdropImage: String?
-    public var isMovie = false
+    public var isMovie: Bool?
     
     public init(id: Int, name: String, backdropImage: String?) {
         self.id = id

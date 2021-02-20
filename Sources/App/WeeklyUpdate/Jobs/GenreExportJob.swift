@@ -43,7 +43,11 @@ class GenreExportJob {
     func getMovieGenres() -> EventLoopFuture<[Genre]> {
         let promise = eventLoop.makePromise(of: [Genre].self)
         service.getMovieGenres { genres in
-            promise.succeed(genres)
+            var result = genres
+            for i in 0 ..< result.count {
+                result[i].isMovie = true
+            }
+            promise.succeed(result)
         }
         return promise.futureResult
     }
