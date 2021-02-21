@@ -19,22 +19,23 @@ class DailyJobFuture: ScheduledJob {
         databaseHelper = DatabaseHelper()
         databaseHelper.db = context.application.db
         eventLoop = context.eventLoop
-//        var operations = [EventLoopFuture<Void>]()
-//        for country in CountryCodes.all {
-//            let op = getAdditionsFuture(country: country).flatMap { () -> EventLoopFuture<Void> in
-//                self.getDeletionsFuture(country: country)
-//            }
-//            operations.append(op)
-//        }
-//        let allNetflixEvents = EventLoopFuture.andAllComplete(operations, on: eventLoop)
-//        let refreshDBJob = RefreshMaterializedViewsJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
-//        let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
-//        return allNetflixEvents
-//            .flatMap(getTmdbInfoFuture)
-//            .flatMap(getOmdbRatingsFuture)
-//            .flatMap(refreshDBJob.run)
-//            .flatMap(exportJob.run)
-        return GenreExportJob(eventLoop: eventLoop).run()
+        var operations = [EventLoopFuture<Void>]()
+        for country in CountryCodes.all {
+            let op = getAdditionsFuture(country: country).flatMap { () -> EventLoopFuture<Void> in
+                self.getDeletionsFuture(country: country)
+            }
+            operations.append(op)
+        }
+        let allNetflixEvents = EventLoopFuture.andAllComplete(operations, on: eventLoop)
+        let refreshDBJob = RefreshMaterializedViewsJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+        let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+        let genreExportJob = GenreExportJob(eventLoop: eventLoop)
+        return allNetflixEvents
+            .flatMap(getTmdbInfoFuture)
+            .flatMap(getOmdbRatingsFuture)
+            .flatMap(refreshDBJob.run)
+            .flatMap(exportJob.run)
+            .flatMap(genreExportJob.run)
     }
     
     //MARK: - Private
