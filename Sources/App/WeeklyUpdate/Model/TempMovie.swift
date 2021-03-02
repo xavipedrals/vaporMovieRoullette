@@ -14,11 +14,15 @@ struct TempMovie: Codable {
     var title: String
 }
 
+struct TempMovieContainer: Codable {
+    var add: [TempMovie]
+}
+
 class TempMovieManager {
     
     func addMoviesToNotFound() {
         let data = CustomFileManager.instance.readFile(name: "moviesInput.json")
-        let movies = (try? JSONDecoder().decode([TempMovie].self, from: data)) ?? []
+        let movies = (try? JSONDecoder().decode(TempMovieContainer.self, from: data).add) ?? []
         print("Got \(movies.count) movies to insert")
         let db = DatabaseHelper.shared.db
         for movie in movies {
