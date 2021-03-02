@@ -87,7 +87,8 @@ class TelegramController {
                 "Vaig tard perquè estava rentant els plats",
                 "Aquest estiu anem als karts"
             ]
-//                context.respondAsync(facts.randomElement()!)
+            TempMovieManager().addMoviesToNotFound()
+            context.respondAsync(facts.randomElement()!)
 
 //            let j = RecoveryDailyJob() {
 //                print("Daily job finished")

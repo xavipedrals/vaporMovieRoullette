@@ -49,6 +49,10 @@ class CustomFileManager {
         }
     }
     
+    func readFile(name: String) -> Data {
+        return readFile(from: serverStoreFolder, name: name)
+    }
+    
 //    func write<T: Codable>(obj: T, directory: FileDirectory, filename: String) {
 //        let folder = getFolder(from: directory)
 //        let encoder = JSONEncoder()
@@ -71,10 +75,6 @@ class CustomFileManager {
 //
 //    func readTopList(with name: String) -> Data {
 //        return readFile(from: outputFolder, name: name)
-//    }
-//
-//    func readFile(from directory: FileDirectory, name: String) -> Data {
-//        return readFile(from: getFolder(from: directory), name: name)
 //    }
 //
 //    func deleteAllFiles(in directory: FileDirectory) {
