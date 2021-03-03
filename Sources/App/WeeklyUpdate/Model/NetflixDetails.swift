@@ -17,7 +17,7 @@ struct NetflixDetailsWrapper: Codable {
 
 struct NetflixDetails: Codable {
     fileprivate var nfinfo: NetflixDetailsNfInfo
-    fileprivate var imdbinfo: NetflixDetailsImdbInfo
+    fileprivate var imdbinfo: NetflixDetailsImdbInfo?
     fileprivate var country: [NetflixDetailsCountry]
     var countries: [CountryCodes] {
         return country.compactMap{ CountryCodes(rawValue: $0.code) }

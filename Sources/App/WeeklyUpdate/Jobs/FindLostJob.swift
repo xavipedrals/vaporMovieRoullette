@@ -20,7 +20,7 @@ class FindLostJob {
     
     func run() -> EventLoopFuture<Void> {
         return databaseHelper.getOldestNotFound().flatMap { (movies) -> EventLoopFuture<Void> in
-            let top = 90 > movies.count ? movies.count : 90
+            let top = 2 > movies.count ? movies.count : 2
             return self.handle(movies: Array(movies[0 ..< top]))
         }
     }
@@ -41,8 +41,11 @@ class FindLostJob {
                 return self.eventLoop.makeSucceededFuture(())
             }
             guard self.canMovieBeInserted(movie: details) else {
+                print("movie with id -> \(movie.id) can't be made into audiovisual")
                 return self.reinsert(notFound: movie)
             }
+            print("INSERTING new audiovisual")
+            print(details)
             return self.insertNew(details: details).flatMap { () -> EventLoopFuture<Void> in
                 self.delete(notFound: movie)
             }
