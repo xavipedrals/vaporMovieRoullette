@@ -22,7 +22,6 @@ struct NetfilxMovie: Codable {
         return NetflixItemType(rawValue: type ?? "movie") ?? .movie
     }
     var netflixRating: String? //Most new additions have rating = 0
-//    var releaseYear: String?
     
     enum CodingKeys: String, CodingKey {
         case imdbId = "imdbid"
@@ -30,7 +29,6 @@ struct NetfilxMovie: Codable {
         case title = "title"
         case type = "type"
         case netflixRating = "rating"
-//        case releaseYear = "released"
     }
 }
 

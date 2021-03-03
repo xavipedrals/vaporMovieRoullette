@@ -33,6 +33,28 @@ class UnoGSService {
         }
     }
     
+    func getDetailsFor(netflixId: String, completion: @escaping (NetflixDetails?) -> ()) {
+        let request = UnoGSCurlUrl.getDetails(netflixId: netflixId).urlString
+        let header = "X-RapidAPI-Key: \(deletionApiKey)"
+        let helper = CCurlHelper()
+        helper.doRequest(endpoint: request, headers: [header]) { data in
+            guard let data = data else {
+                print("Uh oh, something went wrong getting the data from the HTTP req")
+                return
+            }
+//            print(data.toString())
+            do {
+                let wrapper = try JSONDecoder().decode(NetflixDetailsWrapper.self, from: data)
+                completion(wrapper.item)
+            } catch {
+                print(error)
+                print("DATA ERROR")
+                print(data.toString())
+                completion(nil)
+            }
+        }
+    }
+    
     //MARK: - Private
     
     private func getNewAdditionsRecursive(page: Int, countryCode: String, daysBack: Int, base: NetflixMovieWrapper, completion: @escaping (NetflixMovieWrapper) -> Void) {
