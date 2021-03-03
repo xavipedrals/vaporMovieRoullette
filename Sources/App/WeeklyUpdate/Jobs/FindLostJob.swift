@@ -64,7 +64,7 @@ class FindLostJob {
     }
     
     func canMovieBeInserted(movie: NetflixDetails) -> Bool {
-        return movie.countries.count > 0
+        return movie.countries.count > 0 && movie.imdbId != nil
     }
     
     func reinsert(notFound: NotFoundNetflix) -> EventLoopFuture<Void> {

@@ -22,15 +22,18 @@ struct NetflixDetails: Codable {
     var countries: [CountryCodes] {
         return country.compactMap{ CountryCodes(rawValue: $0.code) }
     }
+    var imdbId: String? {
+        return imdbinfo?.imdbId
+    }
     
     func transform() -> AudioVisual {
         let a = AudioVisual()
-        a.id = imdbinfo.imdbId
+        a.id = imdbinfo?.imdbId
         a.availableCountries = countries.compactMap{ $0.rawValue }
         a.netflixId = nfinfo.netflixId
         a.title = nfinfo.title
         a.netflixRating = Double(nfinfo.rating ?? "")
-        a.imdbRating = Double(imdbinfo.rating ?? "")
+        a.imdbRating = Double(imdbinfo?.rating ?? "")
         a.type = nfinfo.type
         return a
     }
