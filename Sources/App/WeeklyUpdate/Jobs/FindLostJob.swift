@@ -37,10 +37,8 @@ class FindLostJob {
     
     func treat(movie: NotFoundNetflix) -> EventLoopFuture<Void> {
         return getDetails(movie: movie).flatMap { (m) -> EventLoopFuture<Void> in
-            guard let details = m else {
-                return self.eventLoop.makeSucceededFuture(())
-            }
-            guard self.canMovieBeInserted(movie: details) else {
+            guard let details = m,
+                  self.canMovieBeInserted(movie: details) else {
                 print("movie with id -> \(movie.id) can't be made into audiovisual")
                 return self.reinsert(notFound: movie)
             }
