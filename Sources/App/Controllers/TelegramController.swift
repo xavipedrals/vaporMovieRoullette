@@ -87,7 +87,8 @@ class TelegramController {
                 "Vaig tard perquè estava rentant els plats",
                 "Aquest estiu anem als karts"
             ]
-            context.respondAsync(context.message?.text ?? "No text")
+            let word1 = context.args.scanWord()
+            context.respondAsync(word1 ?? "No text")
 //            context.respondAsync(facts.randomElement()!)
 
 //            let j = RecoveryDailyJob() {
