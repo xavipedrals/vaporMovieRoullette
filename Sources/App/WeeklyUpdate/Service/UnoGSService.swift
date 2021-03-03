@@ -35,7 +35,7 @@ class UnoGSService {
     
     func getDetailsFor(netflixId: String, completion: @escaping (NetflixDetails?) -> ()) {
         let request = UnoGSCurlUrl.getDetails(netflixId: netflixId).urlString
-        let header = "X-RapidAPI-Key: \(deletionApiKey)"
+        let header = "X-RapidAPI-Key: \(additionApiKey)"
         let helper = CCurlHelper()
         helper.doRequest(endpoint: request, headers: [header]) { data in
             guard let data = data else {
