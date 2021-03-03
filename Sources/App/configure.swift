@@ -21,7 +21,7 @@ public func configure(_ app: Application) throws {
     let dailyJob = DailyJobFuture()
     app.queues.schedule(dailyJob)
         .daily()
-        .at(12, 05)
+        .at(10, 28)
     
 //    let weeklyJob = WeeklyJob() {
 //        print("Weekly job finished")

@@ -209,6 +209,10 @@ class DatabaseHelper {
         }
     }
     
+    func getOldestNotFound() -> EventLoopFuture<[NotFoundNetflix]> {
+        return NotFoundNetflix.query(on: db).sort(\.$updatedAt).all()
+    }
+    
     //MARK: - Private
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {
