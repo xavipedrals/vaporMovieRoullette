@@ -42,8 +42,8 @@ class FindLostJob {
                 print("movie with id -> \(movie.id) can't be made into audiovisual")
                 return self.reinsert(notFound: movie)
             }
-            print(details)
-            print("INSERTING new audiovisual")
+//            print(details)
+//            print("INSERTING new audiovisual")
             return self.insertOrUpdate(details: details).flatMap { () -> EventLoopFuture<Void> in
                 self.delete(notFound: movie)
             }
@@ -96,6 +96,29 @@ class FindLostJob {
     func getDetailsFor(netflixId: String) -> EventLoopFuture<Void> {
         let m = NotFoundNetflix(netflixId: netflixId, title: nil)
         return treat(movie: m)
+    }
+    
+    func getDetailsFor(netflixIds: [String]) -> EventLoopFuture<Void> {
+        let uniqueIds = Set(netflixIds).compactMap{ $0 }
+        var event = eventLoop.makeSucceededFuture(())
+        for id in uniqueIds {
+            event = event.flatMap{ () -> EventLoopFuture<Void> in
+                return AudioVisual.query(on: self.databaseHelper.db).filter(\.$netflixId == id)
+                    .first().flatMap { (a) -> EventLoopFuture<Void> in
+                        guard let audiovisual = a else {
+                            print("Fetching new movie with id \(id)")
+                            return self.getDetailsFor(netflixId: id)
+                        }
+                        guard audiovisual.availableCountries.count < 15 else {
+                            print("Movie with id \(id) has all countries already")
+                            return self.eventLoop.makeSucceededFuture(())
+                        }
+                        print("Adding countries to movie with id \(id)")
+                        return self.getDetailsFor(netflixId: id)
+                    }
+            }
+        }
+        return event
     }
     
 }
