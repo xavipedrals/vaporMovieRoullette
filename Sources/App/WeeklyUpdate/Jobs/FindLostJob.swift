@@ -81,4 +81,11 @@ class FindLostJob {
         return notFound.delete(force: true, on: databaseHelper.db)
     }
     
+    //MARK: - Telegram single insert
+    
+    func getDetailsFor(netflixId: String) -> EventLoopFuture<Void> {
+        let m = NotFoundNetflix(netflixId: netflixId, title: nil)
+        return treat(movie: m)
+    }
+    
 }

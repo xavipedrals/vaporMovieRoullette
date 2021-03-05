@@ -7,13 +7,16 @@
 
 import Foundation
 import TelegramBotSDK
+import Vapor
 
 class TelegramController {
     
     static var shared: TelegramController?
     var bot: TelegramBot
     var myChat: ChatId
-    let router: Router
+    let router: TelegramBotSDK.Router
+    
+    var eventLoop: EventLoop
     
     let updateMoviesId = "updateNetflixMovies"
     let rebootId = "reboot"
@@ -23,10 +26,11 @@ class TelegramController {
     
     let xaviUserId: Int64 = 8930441
     
-    init(token: String) {
+    init(token: String, eventLoop: EventLoop) {
         self.bot = TelegramBot(token: token)
         self.myChat = .chat(xaviUserId) // your user id
         self.router = Router(bot: bot)
+        self.eventLoop = eventLoop
         TelegramController.shared = self
     }
     
@@ -87,8 +91,13 @@ class TelegramController {
                 "Vaig tard perquè estava rentant els plats",
                 "Aquest estiu anem als karts"
             ]
-            let word1 = context.args.scanWord()
-            context.respondAsync(word1 ?? "No text")
+            guard let word1 = context.args.scanWord(),
+                  word1.count == 8 else {
+                context.respondAsync("Can't get movie with id -> \(context.args.scanWord()!)")
+                return true
+            }
+            try? FindLostJob(databaseHelper: DatabaseHelper.shared, eventLoop: self.eventLoop).getDetailsFor(netflixId: word1).wait()
+            context.respondAsync(word1)
 //            context.respondAsync(facts.randomElement()!)
 
 //            let j = RecoveryDailyJob() {

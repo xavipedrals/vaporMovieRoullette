@@ -33,7 +33,10 @@ public func configure(_ app: Application) throws {
 //        .at(.noon)
     
     try app.queues.startScheduledJobs()
-    let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!)
+    
+    let sida = app.eventLoopGroup.next()
+    
+    let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!, eventLoop: sida)
     controller.setupRoutes()
     try routes(app)
 }
