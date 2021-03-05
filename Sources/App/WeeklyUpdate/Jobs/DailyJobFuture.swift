@@ -31,13 +31,18 @@ class DailyJobFuture: ScheduledJob {
         let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
         let genreExportJob = GenreExportJob(eventLoop: eventLoop)
         let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
-        return allNetflixEvents
-            .flatMap(getTmdbInfoFuture)
+//        return allNetflixEvents
+//            .flatMap(getTmdbInfoFuture)
+//            .flatMap(getOmdbRatingsFuture)
+//            .flatMap(refreshDBJob.run)
+//            .flatMap(exportJob.run)
+//            .flatMap(genreExportJob.run)
+//        return findLostJob.run()
+        return getTmdbInfoFuture()
             .flatMap(getOmdbRatingsFuture)
             .flatMap(refreshDBJob.run)
             .flatMap(exportJob.run)
             .flatMap(genreExportJob.run)
-//        return findLostJob.run()
     }
     
     //MARK: - Private

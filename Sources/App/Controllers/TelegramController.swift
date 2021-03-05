@@ -102,12 +102,6 @@ class TelegramController {
             try? FindLostJob(databaseHelper: DatabaseHelper.shared, eventLoop: self.eventLoop).getDetailsFor(netflixIds: sidote).wait()
             context.respondAsync(word1)
 //            context.respondAsync(facts.randomElement()!)
-
-//            let j = RecoveryDailyJob() {
-//                print("Daily job finished")
-//                TelegramController.shared?.sendMessage(text: "Finished recovery Daily job successfully")
-//            }
-//            j.start()
             return true
         }
     }
