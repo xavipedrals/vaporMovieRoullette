@@ -93,7 +93,7 @@ class TelegramController {
             ]
             guard let word1 = context.args.scanWord(),
                   word1.count == 8 else {
-                context.respondAsync("Can't get movie with id -> \(context.args.scanWord()!)")
+                context.respondAsync("Can't get movie with id -> \(context.args.scanWord() ?? "")")
                 return true
             }
             try? FindLostJob(databaseHelper: DatabaseHelper.shared, eventLoop: self.eventLoop).getDetailsFor(netflixId: word1).wait()
