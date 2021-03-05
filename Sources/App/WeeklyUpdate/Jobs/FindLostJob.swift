@@ -42,8 +42,8 @@ class FindLostJob {
                 print("movie with id -> \(movie.id) can't be made into audiovisual")
                 return self.reinsert(notFound: movie)
             }
-            print("INSERTING new audiovisual")
             print(details)
+            print("INSERTING new audiovisual")
             return self.insertOrUpdate(details: details).flatMap { () -> EventLoopFuture<Void> in
                 self.delete(notFound: movie)
             }
@@ -72,14 +72,17 @@ class FindLostJob {
     func insertOrUpdate(details: NetflixDetails) -> EventLoopFuture<Void> {
         let audiovisual = details.transform()
         guard audiovisual.id != nil else {
+            print("Audiovisual does not have an id, skipping")
             return eventLoop.makeSucceededFuture(())
         }
         return AudioVisual.find(audiovisual.id, on: databaseHelper.db).flatMap { a -> EventLoopFuture<Void> in
             guard let dbAudiovisual = a else {
+                print("Inserting new audiovisual")
                 return audiovisual.save(on: self.databaseHelper.db)
             }
             dbAudiovisual.availableCountries = audiovisual.availableCountries
             dbAudiovisual.netflixRating = audiovisual.netflixRating
+            print("Updating existing audiovisual")
             return dbAudiovisual.save(on: self.databaseHelper.db)
         }
     }
