@@ -30,7 +30,7 @@ class DailyJobFuture: ScheduledJob {
         let refreshDBJob = RefreshMaterializedViewsJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
         let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
         let genreExportJob = GenreExportJob(eventLoop: eventLoop)
-        let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+//        let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
 //        return allNetflixEvents
 //            .flatMap(getTmdbInfoFuture)
 //            .flatMap(getOmdbRatingsFuture)
@@ -83,6 +83,7 @@ class DailyJobFuture: ScheduledJob {
     
     func getTmdbInfoFuture() -> EventLoopFuture<Void> {
         return databaseHelper.getItemsToTMDBEnrichFuture().flatMap { (audiovisuals) -> EventLoopFuture<Void> in
+            print(audiovisuals.count)
             let tmdbEnrichEvents = TMDBEnricherFuture(
                 audiovisuals: audiovisuals,
                 eventLoop: self.eventLoop,
