@@ -99,7 +99,7 @@ class FindLostJob {
     }
     
     func getDetailsFor(netflixIds: [String]) -> EventLoopFuture<Void> {
-        return filter(netflixIds: netflixIds, limit: 60).flatMap { (uniqueIds) -> EventLoopFuture<Void> in
+        return filter(netflixIds: netflixIds, limit: 53).flatMap { (uniqueIds) -> EventLoopFuture<Void> in
             var event = self.eventLoop.makeSucceededFuture(())
             for id in uniqueIds {
                 event = event.flatMap{ () -> EventLoopFuture<Void> in
