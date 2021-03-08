@@ -99,22 +99,59 @@ class FindLostJob {
     }
     
     func getDetailsFor(netflixIds: [String]) -> EventLoopFuture<Void> {
-        let uniqueIds = Set(netflixIds).compactMap{ $0 }
-        var event = eventLoop.makeSucceededFuture(())
-        for id in uniqueIds {
-            event = event.flatMap{ () -> EventLoopFuture<Void> in
+//        let uniqueIds = Set(netflixIds).compactMap{ $0 }
+//        var event = eventLoop.makeSucceededFuture(())
+        return filter(netflixIds: netflixIds, limit: 60).flatMap { (uniqueIds) -> EventLoopFuture<Void> in
+            var event = self.eventLoop.makeSucceededFuture(())
+            for id in uniqueIds {
+                event = event.flatMap{ () -> EventLoopFuture<Void> in
+                    print("Adding countries to movie with id \(id)")
+                    return self.getDetailsFor(netflixId: id)
+                }
+            }
+            return event
+        }
+        
+//        for id in uniqueIds {
+//            event = event.flatMap{ () -> EventLoopFuture<Void> in
+//                return AudioVisual.query(on: self.databaseHelper.db).filter(\.$netflixId == id)
+//                    .first().flatMap { (a) -> EventLoopFuture<Void> in
+//                        guard let audiovisual = a else {
+//                            print("Fetching new movie with id \(id)")
+//                            return self.getDetailsFor(netflixId: id)
+//                        }
+//                        guard audiovisual.availableCountries.count < 15 else {
+//                            print("Movie with id \(id) has all countries already")
+//                            return self.eventLoop.makeSucceededFuture(())
+//                        }
+//                        print("Adding countries to movie with id \(id)")
+//                        return self.getDetailsFor(netflixId: id)
+//                    }
+//            }
+//        }
+//        return event
+    }
+    
+    private func filter(netflixIds: [String], limit: Int) -> EventLoopFuture<[String]> {
+        var event = eventLoop.makeSucceededFuture([String]())
+        for id in netflixIds {
+            event = event.flatMap{ (accum) -> EventLoopFuture<[String]> in
                 return AudioVisual.query(on: self.databaseHelper.db).filter(\.$netflixId == id)
-                    .first().flatMap { (a) -> EventLoopFuture<Void> in
+                    .first().map { (a) -> [String] in
                         guard let audiovisual = a else {
                             print("Fetching new movie with id \(id)")
-                            return self.getDetailsFor(netflixId: id)
+                            var arrWithExtra = accum
+                            arrWithExtra.append(id)
+                            return arrWithExtra
                         }
                         guard audiovisual.availableCountries.count < 15 else {
                             print("Movie with id \(id) has all countries already")
-                            return self.eventLoop.makeSucceededFuture(())
+                            return accum
                         }
                         print("Adding countries to movie with id \(id)")
-                        return self.getDetailsFor(netflixId: id)
+                        var arrWithExtra = accum
+                        arrWithExtra.append(id)
+                        return arrWithExtra
                     }
             }
         }
