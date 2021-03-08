@@ -214,7 +214,9 @@ class DatabaseHelper {
     }
     
     func update(notFound: NotFoundNetflix) -> EventLoopFuture<Void> {
-        return insertOrUpdateFuture(dbItem: notFound, newItem: notFound)
+        return NotFoundNetflix.find(notFound.id, on: db).flatMap { (dbItem) -> EventLoopFuture<Void> in
+            return self.insertOrUpdateFuture(dbItem: dbItem, newItem: notFound)
+        }
     }
     
     //MARK: - Private
