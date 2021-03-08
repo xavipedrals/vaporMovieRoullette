@@ -136,6 +136,9 @@ class FindLostJob {
         var event = eventLoop.makeSucceededFuture([String]())
         for id in netflixIds {
             event = event.flatMap{ (accum) -> EventLoopFuture<[String]> in
+                guard accum.count <= limit else {
+                    return self.eventLoop.makeSucceededFuture(accum)
+                }
                 return AudioVisual.query(on: self.databaseHelper.db).filter(\.$netflixId == id)
                     .first().map { (a) -> [String] in
                         guard let audiovisual = a else {
