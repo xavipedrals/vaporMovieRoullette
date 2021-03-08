@@ -10,11 +10,11 @@ import Foundation
 class UnoGSService {
     
     private var additionApiKey: String {
-        return "557617c510msh1b7951ecbeb795ap108561jsnae39c29b0d02"
+        return "557617c510msh1b7951ecbeb795ap108561jsnae39c29b0d02" //SBA
     }
 
     private var deletionApiKey: String {
-        return "Pg39B9YjdemshbfsF4A9Zadzn129p19HO7wjsnDtkTLedgooCl"
+        return "Pg39B9YjdemshbfsF4A9Zadzn129p19HO7wjsnDtkTLedgooCl" //xavi.pedrals
     }
     
     func getNewAdditions(countryCode: String, since daysBack: Int, completion: @escaping (NetflixMovieWrapper) -> Void) {
@@ -35,7 +35,7 @@ class UnoGSService {
     
     func getDetailsFor(netflixId: String, completion: @escaping (NetflixDetails?) -> ()) {
         let request = UnoGSCurlUrl.getDetails(netflixId: netflixId).urlString
-        let header = "X-RapidAPI-Key: \(deletionApiKey)"
+        let header = "X-RapidAPI-Key: \(additionApiKey)"
         let helper = CCurlHelper()
         helper.doRequest(endpoint: request, headers: [header]) { data in
             guard let data = data else {
