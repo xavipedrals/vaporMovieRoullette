@@ -197,9 +197,13 @@ class TelegramController {
                 81200716,
                 81219073
             ].compactMap{ String($0) }
+            do {
+                try FindLostJob(databaseHelper: DatabaseHelper.shared, eventLoop: self.eventLoop).getDetailsFor(netflixIds: sidote).wait()
+                context.respondAsync(word1)
+            } catch {
+                context.respondAsync(error.localizedDescription)
+            }
             
-            try? FindLostJob(databaseHelper: DatabaseHelper.shared, eventLoop: self.eventLoop).getDetailsFor(netflixIds: sidote).wait()
-            context.respondAsync(word1)
 //            context.respondAsync(facts.randomElement()!)
             return true
         }
