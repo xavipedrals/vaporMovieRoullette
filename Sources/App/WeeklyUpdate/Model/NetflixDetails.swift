@@ -35,6 +35,7 @@ struct NetflixDetails: Codable {
         a.netflixRating = Double(nfinfo.rating ?? "")
         a.imdbRating = Double(imdbinfo?.rating ?? "")
         a.type = nfinfo.type
+        a.genres = []
         return a
     }
 }
