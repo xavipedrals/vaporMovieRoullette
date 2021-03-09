@@ -118,6 +118,7 @@ class FindLostJob {
                 guard accum.count <= limit else {
                     return self.eventLoop.makeSucceededFuture(accum)
                 }
+                print("Querying item id ->\(id)")
                 return AudioVisual.query(on: self.databaseHelper.db).filter(\.$netflixId == id)
                     .first().map { (a) -> [String] in
                         guard let audiovisual = a else {
