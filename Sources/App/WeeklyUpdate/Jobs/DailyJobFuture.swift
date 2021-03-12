@@ -27,22 +27,22 @@ class DailyJobFuture: ScheduledJob {
 //            operations.append(op)
 //        }
 //        let allNetflixEvents = EventLoopFuture.andAllComplete(operations, on: eventLoop)
-        let refreshDBJob = RefreshMaterializedViewsJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
-        let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
-        let genreExportJob = GenreExportJob(eventLoop: eventLoop)
-//        let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+//        let refreshDBJob = RefreshMaterializedViewsJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+//        let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+//        let genreExportJob = GenreExportJob(eventLoop: eventLoop)
+        let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
 //        return allNetflixEvents
 //            .flatMap(getTmdbInfoFuture)
 //            .flatMap(getOmdbRatingsFuture)
 //            .flatMap(refreshDBJob.run)
 //            .flatMap(exportJob.run)
 //            .flatMap(genreExportJob.run)
-//        return findLostJob.run()
-        return getTmdbInfoFuture()
-            .flatMap(getOmdbRatingsFuture)
-            .flatMap(refreshDBJob.run)
-            .flatMap(exportJob.run)
-            .flatMap(genreExportJob.run)
+        return findLostJob.run()
+//        return getTmdbInfoFuture()
+//            .flatMap(getOmdbRatingsFuture)
+//            .flatMap(refreshDBJob.run)
+//            .flatMap(exportJob.run)
+//            .flatMap(genreExportJob.run)
     }
     
     //MARK: - Private
