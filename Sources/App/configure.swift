@@ -21,7 +21,7 @@ public func configure(_ app: Application) throws {
     let dailyJob = DailyJobFuture()
     app.queues.schedule(dailyJob)
         .daily()
-        .at(17, 10)
+        .at(17, 12)
     
 //    let weeklyJob = WeeklyJob() {
 //        print("Weekly job finished")
@@ -34,8 +34,8 @@ public func configure(_ app: Application) throws {
     
     try app.queues.startScheduledJobs()
     
-    let telegramEventLoop = app.eventLoopGroup.next()
-    let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!, eventLoop: telegramEventLoop)
-    controller.setupRoutes()
+//    let telegramEventLoop = app.eventLoopGroup.next()
+//    let controller = TelegramController(token: Environment.get("TELEGRAM_API_TOKEN")!, eventLoop: telegramEventLoop)
+//    controller.setupRoutes()
     try routes(app)
 }
