@@ -219,6 +219,16 @@ class DatabaseHelper {
         }
     }
     
+    func removeDoubleQuotes(eventLoop: EventLoop) -> EventLoopFuture<Void> {
+        guard let database = db as? SQLDatabase else {
+            print("Error: Could not parse database to SQLDatabase")
+            return eventLoop.makeSucceededFuture(())
+        }
+        return database.raw("""
+        UPDATE audiovisuals SET title = regexp_replace(title, '"', '', 'gi');
+        """).run()
+    }
+    
     //MARK: - Private
     
     private func insertOrUpdate(dbItem: AudioVisual?, newItem: AudioVisual, country: String) {
