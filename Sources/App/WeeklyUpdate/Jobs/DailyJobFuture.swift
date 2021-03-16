@@ -27,10 +27,10 @@ class DailyJobFuture: ScheduledJob {
 //            operations.append(op)
 //        }
 //        let allNetflixEvents = EventLoopFuture.andAllComplete(operations, on: eventLoop)
-        let refreshDBJob = RefreshMaterializedViewsJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
-        let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+//        let refreshDBJob = RefreshMaterializedViewsJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+//        let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
 //        let genreExportJob = GenreExportJob(eventLoop: eventLoop)
-//        let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+        let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
         
 //        return allNetflixEvents
 //            .flatMap(getTmdbInfoFuture)
@@ -41,16 +41,16 @@ class DailyJobFuture: ScheduledJob {
 //            .flatMap(refreshDBJob.run)
 //            .flatMap(exportJob.run)
 //            .flatMap(genreExportJob.run)
-//        return findLostJob.run()
+        return findLostJob.run()
 //        return getTmdbInfoFuture()
 //            .flatMap(getOmdbRatingsFuture)
 //            .flatMap(refreshDBJob.run)
 //            .flatMap(exportJob.run)
 //            .flatMap(genreExportJob.run)
         
-        return self.databaseHelper.removeDoubleQuotes(eventLoop: self.eventLoop)
-            .flatMap(refreshDBJob.run)
-            .flatMap(exportJob.run)
+//        return self.databaseHelper.removeDoubleQuotes(eventLoop: self.eventLoop)
+//            .flatMap(refreshDBJob.run)
+//            .flatMap(exportJob.run)
     }
     
     //MARK: - Private
