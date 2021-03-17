@@ -19,6 +19,7 @@ class FindLostJob {
     }
     
     func run() -> EventLoopFuture<Void> {
+        print("Starting findLost job")
         return databaseHelper.getOldestNotFound().flatMap { (movies) -> EventLoopFuture<Void> in
             let top = 99 > movies.count ? movies.count : 99
             return self.handle(movies: Array(movies[0 ..< top]))
