@@ -36,7 +36,7 @@ class DailyJobFuture: ScheduledJob {
         let refreshDBJob = RefreshMaterializedViewsJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
         let exportJob = ExportNetflixJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
         let genreExportJob = GenreExportJob(eventLoop: eventLoop)
-//        let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
+        let findLostJob = FindLostJob(databaseHelper: databaseHelper, eventLoop: eventLoop)
         
         return netflixOps
             .flatMap(getTmdbInfoFuture)
@@ -47,6 +47,7 @@ class DailyJobFuture: ScheduledJob {
             .flatMap(refreshDBJob.run)
             .flatMap(exportJob.run)
             .flatMap(genreExportJob.run)
+            .flatMap(findLostJob.run)
         
 //        return findLostJob.run()
         

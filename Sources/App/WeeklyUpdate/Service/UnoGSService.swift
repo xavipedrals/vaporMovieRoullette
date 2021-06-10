@@ -33,9 +33,9 @@ class UnoGSService {
         }
     }
     
-    func getDetailsFor(netflixId: String, completion: @escaping (NetflixDetails?) -> ()) {
+    func getDetailsFor(netflixId: String, useAddittionKey: Bool = true, completion: @escaping (NetflixDetails?) -> ()) {
         let request = UnoGSCurlUrl.getDetails(netflixId: netflixId).urlString
-        let header = "X-RapidAPI-Key: \(additionApiKey)"
+        let header = "X-RapidAPI-Key: \(useAddittionKey ? additionApiKey : deletionApiKey)"
         let helper = CCurlHelper()
         helper.doRequest(endpoint: request, headers: [header]) { data in
             guard let data = data else {

@@ -12,6 +12,7 @@ class FindLostJob {
     
     var databaseHelper: DatabaseHelper!
     var eventLoop: EventLoop!
+    let maxMoviesPerDay = 40
     
     init(databaseHelper: DatabaseHelper, eventLoop: EventLoop) {
         self.databaseHelper = databaseHelper
@@ -21,7 +22,7 @@ class FindLostJob {
     func run() -> EventLoopFuture<Void> {
         print("Starting findLost job")
         return databaseHelper.getOldestNotFound().flatMap { (movies) -> EventLoopFuture<Void> in
-            let top = 99 > movies.count ? movies.count : 99
+            let top = self.maxMoviesPerDay > movies.count ? movies.count : self.maxMoviesPerDay
             return self.handle(movies: Array(movies[0 ..< top]))
         }
     }
@@ -56,7 +57,7 @@ class FindLostJob {
         guard let id = movie.id else {
             return eventLoop.makeSucceededFuture(nil)
         }
-        UnoGSService().getDetailsFor(netflixId: id) { (details) in
+        UnoGSService().getDetailsFor(netflixId: id, useAddittionKey: false) { (details) in
             promise.succeed(details)
         }
         return promise.futureResult
@@ -100,7 +101,7 @@ class FindLostJob {
     }
     
     func getDetailsFor(netflixIds: [String]) -> EventLoopFuture<Void> {
-        return filter(netflixIds: netflixIds, limit: 99).flatMap { (uniqueIds) -> EventLoopFuture<Void> in
+        return filter(netflixIds: netflixIds, limit: maxMoviesPerDay).flatMap { (uniqueIds) -> EventLoopFuture<Void> in
             var event = self.eventLoop.makeSucceededFuture(())
             for id in uniqueIds {
                 event = event.flatMap{ () -> EventLoopFuture<Void> in
